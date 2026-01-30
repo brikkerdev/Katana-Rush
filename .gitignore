@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/.utmp/RelWithDebInfo/i2r6lz65
+/Library
+/Temp
