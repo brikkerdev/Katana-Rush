@@ -18,6 +18,7 @@ namespace Runner.Player
         private static readonly int JumpTrigger = Animator.StringToHash("Jump");
         private static readonly int DashTrigger = Animator.StringToHash("Dash");
         private static readonly int DieTrigger = Animator.StringToHash("Die");
+        private static readonly int ReviveTrigger = Animator.StringToHash("Revive");
 
         public void Initialize(Player player)
         {
@@ -25,6 +26,7 @@ namespace Runner.Player
             _controller = player.Controller;
 
             _player.OnPlayerDeath += PlayDeathAnimation;
+            _player.OnPlayerRevive += PlayReviveAnimation;
         }
 
         private void Update()
@@ -34,7 +36,6 @@ namespace Runner.Player
 
             animator.SetBool(IsRunning, _player.IsRunning);
             animator.SetBool(IsGrounded, _controller.IsGrounded);
-            //animator.SetBool(IsJumping, _controller.IsJumping);
             animator.SetBool(IsDashing, _controller.IsDashing);
             animator.SetFloat(Speed, _controller.CurrentSpeed);
         }
@@ -54,11 +55,34 @@ namespace Runner.Player
             animator?.SetTrigger(DieTrigger);
         }
 
+        public void PlayReviveAnimation()
+        {
+            animator?.SetTrigger(ReviveTrigger);
+        }
+
+        public void ResetAnimator()
+        {
+            if (animator == null) return;
+
+            // Reset all triggers to prevent stuck states
+            animator.ResetTrigger(JumpTrigger);
+            animator.ResetTrigger(DashTrigger);
+            animator.ResetTrigger(DieTrigger);
+            animator.ResetTrigger(ReviveTrigger);
+
+            // Reset to idle state
+            animator.SetBool(IsRunning, false);
+            animator.SetBool(IsGrounded, true);
+            animator.SetBool(IsDashing, false);
+            animator.SetFloat(Speed, 0f);
+        }
+
         private void OnDestroy()
         {
             if (_player != null)
             {
                 _player.OnPlayerDeath -= PlayDeathAnimation;
+                _player.OnPlayerRevive -= PlayReviveAnimation;
             }
         }
 

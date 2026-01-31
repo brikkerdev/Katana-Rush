@@ -21,6 +21,7 @@ namespace Runner.Player.Core
         private Player player;
         private PlayerMotor motor;
         private PlayerVisual visual;
+        private PlayerAnimator playerAnimator; // ADD THIS
         private InputReader inputReader;
         private PlayerPreset currentPreset;
 
@@ -74,6 +75,13 @@ namespace Runner.Player.Core
             if (visual != null)
             {
                 visual.Initialize(movementSettings, this);
+            }
+
+            // ADD THIS - Get animator reference
+            playerAnimator = GetComponent<PlayerAnimator>();
+            if (playerAnimator == null)
+            {
+                playerAnimator = GetComponentInChildren<PlayerAnimator>();
             }
         }
 
@@ -239,6 +247,9 @@ namespace Runner.Player.Core
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
                 Game.Instance?.CameraEffects?.PlayJumpEffect();
+
+                // ADD THIS - Play jump animation for buffered jump
+                playerAnimator?.PlayJumpAnimation();
             }
         }
 
@@ -256,6 +267,9 @@ namespace Runner.Player.Core
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
                 Game.Instance?.CameraEffects?.PlayJumpEffect();
+
+                // ADD THIS - Play jump animation
+                playerAnimator?.PlayJumpAnimation();
             }
             else
             {
@@ -283,6 +297,9 @@ namespace Runner.Player.Core
             {
                 visual?.PlayDashStretch();
                 Game.Instance?.CameraEffects?.PlayDashEffect();
+
+                // ADD THIS - Play dash animation
+                playerAnimator?.PlayDashAnimation();
             }
         }
 

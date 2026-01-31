@@ -10,9 +10,11 @@ namespace Runner.Player
         [SerializeField] private PlayerController controller;
         [SerializeField] private PlayerCollision playerCollision;
         [SerializeField] private PlayerVisual playerVisual;
+        [SerializeField] private PlayerAnimator animator;
 
         public PlayerController Controller => controller;
         public PlayerVisual Visual => playerVisual;
+        public PlayerAnimator Animator => animator; // ADD THIS - Public access if needed
         public PlayerState State { get; private set; }
         public bool IsAlive => State != PlayerState.Dead;
         public bool IsRunning => State == PlayerState.Running;
@@ -32,6 +34,11 @@ namespace Runner.Player
             {
                 playerCollision.Initialize(this);
             }
+
+            if (animator != null) // ADD NULL CHECK
+            {
+                animator.Initialize(this);
+            }
         }
 
         private void GatherComponents()
@@ -49,6 +56,15 @@ namespace Runner.Player
             if (playerVisual == null)
             {
                 playerVisual = GetComponentInChildren<PlayerVisual>();
+            }
+
+            if (animator == null)
+            {
+                animator = GetComponent<PlayerAnimator>();
+                if (animator == null)
+                {
+                    animator = GetComponentInChildren<PlayerAnimator>();
+                }
             }
         }
 
@@ -74,7 +90,7 @@ namespace Runner.Player
             State = PlayerState.Running;
             controller.EnableInput();
             controller.RestoreDashes();
-            OnPlayerRevive?.Invoke();
+            OnPlayerRevive?.Invoke(); // This triggers PlayReviveAnimation via event
         }
 
         public void Reset()
@@ -85,6 +101,12 @@ namespace Runner.Player
             if (playerVisual != null)
             {
                 playerVisual.Reset();
+            }
+
+            if (animator != null)
+            {
+                animator.ResetAnimator();
+                animator.PlayReviveAnimation();
             }
         }
 
