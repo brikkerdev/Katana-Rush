@@ -1,6 +1,7 @@
 using UnityEngine;
 using Runner.Core;
 using Runner.Player.Core;
+using Runner.Collectibles;
 
 namespace Runner.Player
 {
@@ -8,7 +9,7 @@ namespace Runner.Player
     {
         [Header("Tags")]
         [SerializeField] private string obstacleTag = "Obstacle";
-        [SerializeField] private string collectibleTag = "Collectible";
+        [SerializeField] private string collectibleTag = "Collectable";
         [SerializeField] private string enemyTag = "Enemy";
 
         [Header("Detection")]
@@ -31,10 +32,10 @@ namespace Runner.Player
             if (player == null) return;
             if (!player.IsRunning) return;
 
-            CheckEnemyCollisions();
+            CheckCollisions();
         }
 
-        private void CheckEnemyCollisions()
+        private void CheckCollisions()
         {
             Vector3 center = transform.position + detectionOffset;
             int hitCount = Physics.OverlapSphereNonAlloc(center, detectionRadius, hitBuffer, enemyLayer);
@@ -48,6 +49,12 @@ namespace Runner.Player
                 if (col.CompareTag(enemyTag))
                 {
                     HandleEnemyCollision(col.gameObject);
+                }
+
+                if (col.CompareTag(collectibleTag))
+                {
+                    col.GetComponent<Collectible>().Collect();
+                    col.gameObject.SetActive(false);
                 }
             }
         }
@@ -96,23 +103,6 @@ namespace Runner.Player
             if (hit.gameObject.CompareTag(enemyTag))
             {
                 HandleEnemyCollision(hit.gameObject);
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (player == null) return;
-            if (!player.IsRunning) return;
-
-            if (other.CompareTag(collectibleTag))
-            {
-                other.gameObject.SetActive(false);
-                UI.UIManager.Instance?.AddCoins(1);
-            }
-
-            if (other.CompareTag(enemyTag))
-            {
-                HandleEnemyCollision(other.gameObject);
             }
         }
 

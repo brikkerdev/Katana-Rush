@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6703422988963718021}
   - component: {fileID: 6438457257472779620}
   - component: {fileID: -4214440399133520785}
+  - component: {fileID: -6989703550485592384}
   m_Layer: 0
   m_Name: Level Generator
   m_TagString: Untagged
@@ -47,13 +48,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.LevelGenerator
   levelPrefabs:
   - {fileID: 6844235478968440788, guid: 4c6bf053e9b11d7428e1ee56fe1813b9, type: 3}
-  viewDistance: 100
+  - {fileID: 6844235478968440788, guid: 9c9b439d072acd84c981b106ce9bc4a1, type: 3}
+  - {fileID: 6844235478968440788, guid: 7cff71f595e8e5d4381002a6b650072a, type: 3}
+  viewDistance: 200
   despawnDistance: 30
   initialSegmentCount: 5
   maxDifficultyDistance: 1000
   useObjectPooling: 1
   poolSizePerPrefab: 3
   enemySpawner: {fileID: -4214440399133520785}
+  collectibleSpawner: {fileID: -6989703550485592384}
   showDebug: 1
 --- !u!114 &-4214440399133520785
 MonoBehaviour:
@@ -75,3 +79,24 @@ MonoBehaviour:
   difficultyMultiplier: 1
   maxDifficultyDistance: 10000
   showDebug: 1
+--- !u!114 &-6989703550485592384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7449324854767027930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33bd35aa44af5804684b3e6860ddb57c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawner
+  coinPrefab: {fileID: 8339860129099035600, guid: 49de00c97cd77c44dbd526100a5b04c7, type: 3}
+  healthPackPrefab: {fileID: 0}
+  speedBoostPrefab: {fileID: 0}
+  magnetPrefab: {fileID: 0}
+  multiplierPrefab: {fileID: 0}
+  coinPoolSize: 100
+  powerUpPoolSize: 10
+  powerUpChance: 0.1
+  showDebug: 0

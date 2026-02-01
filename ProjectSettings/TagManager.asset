@@ -8,6 +8,8 @@ TagManager:
   - Collectable
   - Enemy
   - Ground
+  - Bullet
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -17,9 +19,9 @@ TagManager:
   - UI
   - Player
   - Enemy
-  - 
+  - Collectable
   - Obstacle
-  - 
+  - Bullet
   - 
   - 
   - 

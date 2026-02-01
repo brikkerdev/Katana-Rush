@@ -11,13 +11,16 @@ namespace Runner.Player
         [SerializeField] private PlayerCollision playerCollision;
         [SerializeField] private PlayerVisual playerVisual;
         [SerializeField] private PlayerAnimator animator;
+        [SerializeField] private PlayerBlockDetector blockDetector;
 
         public PlayerController Controller => controller;
         public PlayerVisual Visual => playerVisual;
-        public PlayerAnimator Animator => animator; // ADD THIS - Public access if needed
+        public PlayerAnimator Animator => animator;
+        public PlayerBlockDetector BlockDetector => blockDetector;
         public PlayerState State { get; private set; }
         public bool IsAlive => State != PlayerState.Dead;
         public bool IsRunning => State == PlayerState.Running;
+        public bool IsBlocking => blockDetector != null && blockDetector.IsBlocking;
 
         public event Action OnPlayerDeath;
         public event Action OnPlayerRevive;
@@ -35,9 +38,14 @@ namespace Runner.Player
                 playerCollision.Initialize(this);
             }
 
-            if (animator != null) // ADD NULL CHECK
+            if (animator != null)
             {
                 animator.Initialize(this);
+            }
+
+            if (blockDetector != null)
+            {
+                blockDetector.Initialize(this);
             }
         }
 
@@ -66,6 +74,15 @@ namespace Runner.Player
                     animator = GetComponentInChildren<PlayerAnimator>();
                 }
             }
+
+            if (blockDetector == null)
+            {
+                blockDetector = GetComponent<PlayerBlockDetector>();
+                if (blockDetector == null)
+                {
+                    blockDetector = GetComponentInChildren<PlayerBlockDetector>();
+                }
+            }
         }
 
         public void StartRunning()
@@ -90,7 +107,7 @@ namespace Runner.Player
             State = PlayerState.Running;
             controller.EnableInput();
             controller.RestoreDashes();
-            OnPlayerRevive?.Invoke(); // This triggers PlayReviveAnimation via event
+            OnPlayerRevive?.Invoke();
         }
 
         public void Reset()

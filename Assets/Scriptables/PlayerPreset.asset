@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5e26f7046ec53448cf963229bc6fee, type: 3}
   m_Name: PlayerPreset
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.PlayerPreset
-  baseSpeed: 10
-  maxSpeed: 40
-  speedAcceleration: 0.5
+  baseSpeed: 20
+  maxSpeed: 60
+  speedAcceleration: 0.25
   laneSwitchSpeed: 10
   jumpForce: 24
   maxJumps: 0
-  gravity: -75
+  gravity: -50
   maxDashes: 3
   dashDuration: 0.2
   dashSpeedMultiplier: 4

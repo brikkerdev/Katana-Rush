@@ -6,6 +6,7 @@ using Runner.Inventory;
 using Runner.Player.Data;
 using Runner.Player.Movement;
 using Runner.Player.Visual;
+using Runner.Enemy;
 
 namespace Runner.Player.Core
 {
@@ -15,13 +16,22 @@ namespace Runner.Player.Core
         [SerializeField] private MovementSettings movementSettings;
         [SerializeField] private PlayerPreset defaultPreset;
 
+        [Header("Combat")]
+        [SerializeField] private float slashDetectionRange = 5f;
+        [SerializeField] private float slashDetectionAngle = 60f;
+        [SerializeField] private LayerMask enemyDetectionLayer = -1;
+
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
+
+        [Header("Block Effects")]
+        [SerializeField] private GameObject blockEffectPrefab;
+        [SerializeField] private AudioClip blockSound;
 
         private Player player;
         private PlayerMotor motor;
         private PlayerVisual visual;
-        private PlayerAnimator playerAnimator; // ADD THIS
+        private PlayerAnimator playerAnimator;
         private InputReader inputReader;
         private PlayerPreset currentPreset;
 
@@ -34,8 +44,15 @@ namespace Runner.Player.Core
         private Vector3 startPosition;
         private bool inputEnabled;
 
+        // Combat
+        private Collider[] enemyHitBuffer = new Collider[16];
+
         public event Action<int, int> OnDashCountChanged;
         public event Action<float> OnDashRegenProgress;
+        public event Action OnSlashPerformed;
+        public event Action OnBlockPerformed;
+
+        public event Action<Vector3> OnBulletDeflected;
 
         public float CurrentSpeed => currentSpeed;
         public float RunDistance => runDistance;
@@ -77,7 +94,6 @@ namespace Runner.Player.Core
                 visual.Initialize(movementSettings, this);
             }
 
-            // ADD THIS - Get animator reference
             playerAnimator = GetComponent<PlayerAnimator>();
             if (playerAnimator == null)
             {
@@ -226,7 +242,7 @@ namespace Runner.Player.Core
 
         private void UpdateRunDistance()
         {
-            runDistance = transform.position.z - startPosition.z;
+            runDistance = (transform.position.z - startPosition.z) / 2;
         }
 
         private void CheckLanding()
@@ -235,6 +251,25 @@ namespace Runner.Player.Core
             {
                 visual?.PlayLandSquash();
                 Game.Instance?.CameraEffects?.PlayLandEffect();
+            }
+        }
+
+        public void OnBulletBlocked()
+        {
+            playerAnimator?.PlayBlockHitReaction();
+            OnBlockPerformed?.Invoke();
+
+            // Spawn block effect
+            if (blockEffectPrefab != null)
+            {
+                Vector3 effectPos = transform.position + Vector3.up + transform.forward * 0.5f;
+                Instantiate(blockEffectPrefab, effectPos, Quaternion.identity);
+            }
+
+            // Play sound
+            if (blockSound != null)
+            {
+                AudioSource.PlayClipAtPoint(blockSound, transform.position);
             }
         }
 
@@ -247,8 +282,6 @@ namespace Runner.Player.Core
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
                 Game.Instance?.CameraEffects?.PlayJumpEffect();
-
-                // ADD THIS - Play jump animation for buffered jump
                 playerAnimator?.PlayJumpAnimation();
             }
         }
@@ -267,8 +300,6 @@ namespace Runner.Player.Core
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
                 Game.Instance?.CameraEffects?.PlayJumpEffect();
-
-                // ADD THIS - Play jump animation
                 playerAnimator?.PlayJumpAnimation();
             }
             else
@@ -297,10 +328,47 @@ namespace Runner.Player.Core
             {
                 visual?.PlayDashStretch();
                 Game.Instance?.CameraEffects?.PlayDashEffect();
-
-                // ADD THIS - Play dash animation
                 playerAnimator?.PlayDashAnimation();
+
+                // Check for enemies in front and play slash
+                if (CheckEnemiesInFront())
+                {
+                    playerAnimator?.PlaySlashAnimation();
+                    OnSlashPerformed?.Invoke();
+                }
             }
+        }
+
+        private bool CheckEnemiesInFront()
+        {
+            Vector3 origin = transform.position + Vector3.up;
+            int hitCount = Physics.OverlapSphereNonAlloc(origin, slashDetectionRange, enemyHitBuffer, enemyDetectionLayer);
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                Collider col = enemyHitBuffer[i];
+                if (col == null) continue;
+
+                // Check if enemy
+                Enemy.Enemy enemy = col.GetComponent<Enemy.Enemy>();
+                if (enemy == null)
+                {
+                    enemy = col.GetComponentInParent<Enemy.Enemy>();
+                }
+
+                if (enemy == null || enemy.IsDead) continue;
+
+                // Check if in front
+                Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
+                float angle = Vector3.Angle(transform.forward, toEnemy);
+
+                if (angle <= slashDetectionAngle * 0.5f)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void OnDashStarted()
@@ -346,6 +414,7 @@ namespace Runner.Player.Core
         {
             if (movementSettings == null) return;
 
+            // Lanes
             Gizmos.color = Color.yellow;
             for (int i = 0; i < movementSettings.laneCount; i++)
             {
@@ -354,6 +423,17 @@ namespace Runner.Player.Core
                 Vector3 pos = new Vector3(x, transform.position.y, transform.position.z);
                 Gizmos.DrawWireCube(pos, new Vector3(0.5f, 0.1f, 0.5f));
             }
+
+            // Slash detection
+            Gizmos.color = Color.red;
+            Vector3 origin = transform.position + Vector3.up;
+            Gizmos.DrawWireSphere(origin, slashDetectionRange);
+
+            // Slash cone
+            Vector3 leftDir = Quaternion.Euler(0, -slashDetectionAngle * 0.5f, 0) * transform.forward;
+            Vector3 rightDir = Quaternion.Euler(0, slashDetectionAngle * 0.5f, 0) * transform.forward;
+            Gizmos.DrawRay(origin, leftDir * slashDetectionRange);
+            Gizmos.DrawRay(origin, rightDir * slashDetectionRange);
         }
 
         private void OnGUI()

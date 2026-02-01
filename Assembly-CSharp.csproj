@@ -68,9 +68,13 @@
     <Compile Include="Assets\Scripts\Levels\LevelSegment.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\JumpMovement.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerCollision.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Bullet.cs" />
     <Compile Include="Assets\Input\GameInput.cs" />
     <Compile Include="Assets\Scripts\UI\Components\TapToStartHandler.cs" />
+    <Compile Include="Assets\Scripts\Collectible\CollectibleSpawnPoint.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyAnimator.cs" />
     <Compile Include="Assets\Scripts\Input\SwipeDirection.cs" />
+    <Compile Include="Assets\Scripts\Collectible\Collectible.cs" />
     <Compile Include="Assets\Scripts\Levels\IResettable.cs" />
     <Compile Include="Assets\Scripts\Core\Game.cs" />
     <Compile Include="Assets\Scripts\Core\MobileOptimizer.cs" />
@@ -81,7 +85,8 @@
     <Compile Include="Assets\Scripts\UI\Screens\PauseScreen.cs" />
     <Compile Include="Assets\Scripts\Player\Core\Player.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraShake.cs" />
-    <Compile Include="Assets\Scripts\Levels\Collectible.cs" />
+    <Compile Include="Assets\Scripts\Collectible\CollectibleSpawner.cs" />
+    <Compile Include="Assets\Scripts\Enemy\BulletPool.cs" />
     <Compile Include="Assets\Scripts\Inventory\PlayerPreset.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\SettingsScreen.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraEffects.cs" />
@@ -93,15 +98,18 @@
     <Compile Include="Assets\Scripts\Player\Core\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\MainMenuScreen.cs" />
     <Compile Include="Assets\Scripts\UI\Components\StaminaDisplay.cs" />
+    <Compile Include="Assets\Scripts\Player\Abilities\BulletDeflector.cs" />
     <Compile Include="Assets\Scripts\Levels\LevelGenerator.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemySpawnPoint.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryManager.cs" />
+    <Compile Include="Assets\Scripts\Player\Core\PlayerBlockDetector.cs" />
     <Compile Include="Assets\Scripts\Player\Data\MovementSettings.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraTarget.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerMotor.cs" />
     <Compile Include="Assets\Scripts\Player\Visual\PlayerVisual.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIButton.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIScreen.cs" />
+    <Compile Include="Assets\Scripts\Enemy\EnemyAimPredictor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

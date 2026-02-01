@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Runner.Enemy;
+using Runner.Collectibles;
 
 namespace Runner.LevelGeneration
 {
@@ -19,8 +20,9 @@ namespace Runner.LevelGeneration
         [SerializeField] private bool useObjectPooling = true;
         [SerializeField] private int poolSizePerPrefab = 5;
 
-        [Header("Enemy Spawning")]
+        [Header("Spawners")]
         [SerializeField] private EnemySpawner enemySpawner;
+        [SerializeField] private CollectibleSpawner collectibleSpawner;
 
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
@@ -57,19 +59,32 @@ namespace Runner.LevelGeneration
 
         private void Awake()
         {
+            FindSpawners();
+
+            if (useObjectPooling)
+            {
+                InitializePools();
+            }
+        }
+
+        private void FindSpawners()
+        {
             if (enemySpawner == null)
             {
                 enemySpawner = GetComponentInChildren<EnemySpawner>();
             }
-
             if (enemySpawner == null)
             {
                 enemySpawner = FindFirstObjectByType<EnemySpawner>();
             }
 
-            if (useObjectPooling)
+            if (collectibleSpawner == null)
             {
-                InitializePools();
+                collectibleSpawner = GetComponentInChildren<CollectibleSpawner>();
+            }
+            if (collectibleSpawner == null)
+            {
+                collectibleSpawner = FindFirstObjectByType<CollectibleSpawner>();
             }
         }
 
@@ -149,10 +164,9 @@ namespace Runner.LevelGeneration
                 activeSegments.RemoveAt(0);
             }
 
-            if (enemySpawner != null)
-            {
-                enemySpawner.DespawnEnemiesBeforeZ(despawnThreshold);
-            }
+            // Despawn enemies and collectibles behind player
+            enemySpawner?.DespawnEnemiesBeforeZ(despawnThreshold);
+            collectibleSpawner?.DespawnCollectiblesBeforeZ(despawnThreshold);
         }
 
         private void SpawnNextSegment()
@@ -175,15 +189,17 @@ namespace Runner.LevelGeneration
 
             activeSegments.Add(activeSegment);
 
-            if (enemySpawner != null)
-            {
-                float playerDistance = player != null ? player.position.z : 0f;
-                enemySpawner.SpawnEnemiesForSegment(segment, playerDistance);
-            }
+            float playerDistance = player != null ? player.position.z : 0f;
+
+            // Spawn enemies
+            enemySpawner?.SpawnEnemiesForSegment(segment, playerDistance);
+
+            // Spawn collectibles
+            collectibleSpawner?.SpawnCollectiblesForSegment(segment);
 
             if (showDebug)
             {
-                Debug.Log($"[LevelGenerator] Spawned segment at Z={nextSpawnZ}, enemies spawned");
+                Debug.Log($"[LevelGenerator] Spawned segment at Z={nextSpawnZ}");
             }
 
             nextSpawnZ += segment.Length;
@@ -251,15 +267,16 @@ namespace Runner.LevelGeneration
 
         public void ResetGenerator()
         {
-            if (enemySpawner != null)
-            {
-                enemySpawner.DespawnAllEnemies();
-            }
+            // Despawn all enemies and collectibles
+            enemySpawner?.DespawnAllEnemies();
+            collectibleSpawner?.DespawnAllCollectibles();
 
+            // Return all segments to pool
             foreach (var segment in activeSegments)
             {
                 if (segment.Instance != null)
                 {
+                    segment.Instance.ResetSegment();
                     segment.Instance.gameObject.SetActive(false);
 
                     if (useObjectPooling && segmentPools.TryGetValue(segment.Prefab, out var pool))

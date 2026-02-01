@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UpperBodyMask
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 0
+  - m_Path: chin
+    m_Weight: 0
+  - m_Path: chin/head
+    m_Weight: 1
+  - m_Path: chin/head/mesh_6
+    m_Weight: 1
+  - m_Path: chin/head/mesh_7
+    m_Weight: 1
+  - m_Path: chin/head/mesh_8
+    m_Weight: 1
+  - m_Path: chin/hull
+    m_Weight: 1
+  - m_Path: chin/hull/leftPlate
+    m_Weight: 0
+  - m_Path: chin/hull/leftPlate/mesh_38
+    m_Weight: 0
+  - m_Path: chin/hull/lhand
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/lelbow
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/lelbow/mesh_17
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/lelbow/mesh_18
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/lelbow/mesh_19
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/lelbow/mesh_23
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/mesh_20
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/mesh_21
+    m_Weight: 1
+  - m_Path: chin/hull/lhand/mesh_22
+    m_Weight: 1
+  - m_Path: chin/hull/mesh
+    m_Weight: 1
+  - m_Path: chin/hull/mesh_1
+    m_Weight: 1
+  - m_Path: chin/hull/mesh_2
+    m_Weight: 1
+  - m_Path: chin/hull/mesh_3
+    m_Weight: 1
+  - m_Path: chin/hull/mesh_4
+    m_Weight: 1
+  - m_Path: chin/hull/mesh_9
+    m_Weight: 1
+  - m_Path: chin/hull/rhand
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/mesh_35
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/mesh_36
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/mesh_37
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/relbow
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/relbow/KatanaSlot
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/relbow/KatanaSlot/mesh_41
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/relbow/mesh_31
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/relbow/mesh_32
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/relbow/mesh_33
+    m_Weight: 1
+  - m_Path: chin/hull/rhand/relbow/mesh_34
+    m_Weight: 1
+  - m_Path: chin/hull/rightPlate
+    m_Weight: 0
+  - m_Path: chin/hull/rightPlate/mesh_5
+    m_Weight: 0
+  - m_Path: chin/lleg
+    m_Weight: 0
+  - m_Path: chin/lleg/lknee
+    m_Weight: 0
+  - m_Path: chin/lleg/lknee/mesh_13
+    m_Weight: 0
+  - m_Path: chin/lleg/lknee/mesh_14
+    m_Weight: 0
+  - m_Path: chin/lleg/lknee/mesh_15
+    m_Weight: 0
+  - m_Path: chin/lleg/lknee/mesh_16
+    m_Weight: 0
+  - m_Path: chin/lleg/lknee/mesh_40
+    m_Weight: 0
+  - m_Path: chin/lleg/mesh_10
+    m_Weight: 0
+  - m_Path: chin/lleg/mesh_11
+    m_Weight: 0
+  - m_Path: chin/lleg/mesh_12
+    m_Weight: 0
+  - m_Path: chin/rleg
+    m_Weight: 0
+  - m_Path: chin/rleg/mesh_24
+    m_Weight: 0
+  - m_Path: chin/rleg/mesh_25
+    m_Weight: 0
+  - m_Path: chin/rleg/mesh_26
+    m_Weight: 0
+  - m_Path: chin/rleg/rknee
+    m_Weight: 0
+  - m_Path: chin/rleg/rknee/mesh_27
+    m_Weight: 0
+  - m_Path: chin/rleg/rknee/mesh_28
+    m_Weight: 0
+  - m_Path: chin/rleg/rknee/mesh_29
+    m_Weight: 0
+  - m_Path: chin/rleg/rknee/mesh_30
+    m_Weight: 0
+  - m_Path: chin/rleg/rknee/mesh_39
+    m_Weight: 0
+  - m_Path: head2
+    m_Weight: 0
+  - m_Path: relbow3
+    m_Weight: 0
+  - m_Path: relbow4
+    m_Weight: 0
+  - m_Path: rhand3
+    m_Weight: 0
+  - m_Path: rhand4
+    m_Weight: 0
+  - m_Path: rknee3
+    m_Weight: 0
+  - m_Path: rknee4
+    m_Weight: 0
+  - m_Path: rleg3
+    m_Weight: 0
+  - m_Path: rleg4
+    m_Weight: 0
