@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PlayerPreset
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.PlayerPreset
   baseSpeed: 20
-  maxSpeed: 60
-  speedAcceleration: 0.25
+  maxSpeed: 40
+  speedAcceleration: 0.1
   laneSwitchSpeed: 10
   jumpForce: 24
   maxJumps: 0

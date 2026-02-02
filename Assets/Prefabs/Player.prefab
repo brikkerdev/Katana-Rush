@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 246726481859504480}
   - component: {fileID: 8075143233085510226}
   - component: {fileID: 6507126174264226217}
+  - component: {fileID: -1687174122129337456}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -70,6 +71,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 904533682484373488}
+  - {fileID: 8106363360143023846}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &163081067853922888
@@ -225,6 +227,175 @@ MonoBehaviour:
   detectionInterval: 0.05
   maxBulletsToCheck: 100
   showDebug: 1
+--- !u!114 &-1687174122129337456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3791620074096128303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5f7f9235d226f4a887977c4a90820c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Enemy.BulletDeflector
+  enableRedirectAbility: 0
+  redirectRange: 180
+  redirectSpeed: 80
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  redirectEffect: {fileID: 0}
+  audioSource: {fileID: 0}
+  redirectSound: {fileID: 0}
+--- !u!1 &3903948339950895801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8106363360143023846}
+  - component: {fileID: 4783913001941736469}
+  - component: {fileID: 3813736586831433055}
+  - component: {fileID: 7807053259449588012}
+  m_Layer: 6
+  m_Name: StaminaBar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8106363360143023846
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903948339950895801}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.2113091, y: 0.2113091, z: -0.0468461, w: 0.9531539}
+  m_LocalPosition: {x: 2, y: 2, z: 0}
+  m_LocalScale: {x: 8, y: 8, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9026995513125648453}
+  m_LocalEulerAnglesHint: {x: 25, y: 25, z: 0}
+--- !u!212 &4783913001941736469
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903948339950895801}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 2cabb9c74f3fea74abf317afc9e04b59, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: -1728537709
+  m_SortingLayer: 1
+  m_SortingOrder: 100
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.16, y: 0.16}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &3813736586831433055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903948339950895801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95c04ab3bc8552e44aa8010e654411c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.CircularStaminaBar
+  radius: 0.258
+  thickness: 0.2
+  smoothness: 0.001
+  outlineThickness: 0.005
+  segmentCount: 3
+  segmentGap: 0.02
+  readyColor: {r: 0, g: 1, b: 0.32140875, a: 1}
+  rechargeColor: {r: 1, g: 0.868332, b: 0, a: 1}
+  rechargeBackgroundColor: {r: 0.29803923, g: 0.16309595, b: 0.10196077, a: 0.8}
+  emptyColor: {r: 0.24528301, g: 0.17007832, b: 0.17007832, a: 0.5}
+  useEffectColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineColor: {r: 0, g: 0, b: 0, a: 0.8}
+  pulseSpeed: 3
+  pulseIntensity: 0.3
+  glowIntensity: 0.2
+  useEffectFadeSpeed: 2
+  segmentFillSpeed: 5
+  segmentDrainSpeed: 8
+  autoHide: 1
+  hideDelay: 2
+  fadeSpeed: 3
+  showFadeSpeed: 8
+--- !u!114 &7807053259449588012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3903948339950895801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef78a063db135524d93ee23f1e9c79c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.StaminaBarController
+  staminaBar: {fileID: 3813736586831433055}
+  followTarget: {fileID: 9026995513125648453}
+  offset: {x: 2, y: 2.5, z: 0}
+  followPlayer: 1
+  billboardToCamera: 1
+  baseScale: 1
+  scaleWithDistance: 0
+  minScale: 0.5
+  maxScale: 1.5
+  scaleDistance: 10
 --- !u!1 &6334302132056704612
 GameObject:
   m_ObjectHideFlags: 0

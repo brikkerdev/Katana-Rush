@@ -35,6 +35,12 @@ namespace Runner.Enemy
 
         [Header("Visual")]
         [SerializeField] private GameObject visualRoot;
+        [SerializeField] private Animator animator;
+
+        [Header("Ragdoll")]
+        [SerializeField] private bool useRagdoll = true;
+        [SerializeField] private EnemyRagdoll ragdoll;
+        [SerializeField] private SimpleEnemyRagdoll simpleRagdoll;
 
         [Header("Effects")]
         [SerializeField] private ParticleSystem deathEffect;
@@ -44,6 +50,9 @@ namespace Runner.Enemy
         private bool isDead;
         private float currentHealth;
         private Vector3 spawnPosition;
+        private Quaternion spawnRotation;
+        private Vector3 lastHitDirection;
+        private bool hasBeenSetup;
 
         private Transform playerTarget;
         private float fireTimer;
@@ -75,6 +84,16 @@ namespace Runner.Enemy
             }
 
             enemyAnimator = GetComponentInChildren<EnemyAnimator>();
+
+            if (ragdoll == null)
+            {
+                ragdoll = GetComponent<EnemyRagdoll>();
+            }
+
+            if (simpleRagdoll == null)
+            {
+                simpleRagdoll = GetComponent<SimpleEnemyRagdoll>();
+            }
 
             if (predictionSettings == null)
             {
@@ -118,7 +137,8 @@ namespace Runner.Enemy
         private void Update()
         {
             if (isDead || !canShoot || playerTarget == null) return;
-            if (Game.Instance.State != GameState.Playing)
+
+            if (Game.Instance == null || Game.Instance.State != GameState.Playing)
             {
                 return;
             }
@@ -197,7 +217,10 @@ namespace Runner.Enemy
 
         public void Setup(Vector3 position, Quaternion rotation)
         {
+            ResetEnemy();
+
             spawnPosition = position;
+            spawnRotation = rotation;
             cachedTransform.position = position;
             cachedTransform.rotation = rotation;
 
@@ -206,6 +229,7 @@ namespace Runner.Enemy
             fireTimer = 0f;
             initialDelay = fireDelay;
             canFire = false;
+            lastHitDirection = Vector3.forward;
 
             FindPlayer();
 
@@ -214,14 +238,19 @@ namespace Runner.Enemy
                 visualRoot.SetActive(true);
             }
 
+            if (animator != null)
+            {
+                animator.enabled = true;
+                animator.Rebind();
+                animator.Update(0f);
+            }
+
             gameObject.SetActive(true);
-            enemyAnimator?.ResetAnimator();
+            hasBeenSetup = true;
         }
 
         private void FindPlayer()
         {
-            if (playerTarget != null) return;
-
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
             if (playerObj != null)
             {
@@ -240,11 +269,12 @@ namespace Runner.Enemy
             aimPredictor?.Initialize(player);
         }
 
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, Vector3 hitDirection)
         {
             if (isDead) return;
 
             currentHealth -= damage;
+            lastHitDirection = hitDirection;
 
             OnHit?.Invoke(this);
 
@@ -255,15 +285,42 @@ namespace Runner.Enemy
 
             if (currentHealth <= 0f)
             {
-                Die();
+                Die(hitDirection);
             }
         }
 
-        public void Die()
+        public void TakeDamage(float damage)
+        {
+            Vector3 direction = playerTarget != null
+                ? (cachedTransform.position - playerTarget.position).normalized
+                : Vector3.forward;
+
+            TakeDamage(damage, direction);
+        }
+
+        public void Die(Vector3 hitDirection)
         {
             if (isDead) return;
 
             isDead = true;
+            lastHitDirection = hitDirection;
+
+            if (animator != null)
+            {
+                animator.enabled = false;
+            }
+
+            if (useRagdoll)
+            {
+                ActivateRagdoll(hitDirection);
+            }
+            else
+            {
+                if (visualRoot != null)
+                {
+                    visualRoot.SetActive(false);
+                }
+            }
 
             if (deathEffect != null)
             {
@@ -272,12 +329,27 @@ namespace Runner.Enemy
 
             OnDeath?.Invoke(this);
 
-            if (visualRoot != null)
+            if (!useRagdoll)
             {
-                visualRoot.SetActive(false);
+                Invoke(nameof(Deactivate), 0.1f);
             }
+        }
 
-            Invoke(nameof(Deactivate), 0.1f);
+        public void Die()
+        {
+            Die(lastHitDirection);
+        }
+
+        private void ActivateRagdoll(Vector3 hitDirection)
+        {
+            if (ragdoll != null)
+            {
+                ragdoll.ActivateRagdoll(hitDirection, 1f);
+            }
+            else if (simpleRagdoll != null)
+            {
+                simpleRagdoll.Activate(hitDirection);
+            }
         }
 
         private void Deactivate()
@@ -294,13 +366,47 @@ namespace Runner.Enemy
             fireTimer = 0f;
             initialDelay = fireDelay;
             canFire = false;
+            lastHitDirection = Vector3.forward;
+
+            if (ragdoll != null)
+            {
+                ragdoll.ResetRagdoll();
+            }
+
+            if (simpleRagdoll != null)
+            {
+                simpleRagdoll.ResetRagdoll();
+            }
 
             if (visualRoot != null)
             {
                 visualRoot.SetActive(true);
             }
 
-            enemyAnimator?.ResetAnimator();
+            if (animator != null)
+            {
+                animator.enabled = true;
+                animator.Rebind();
+                animator.Update(0f);
+            }
+
+            if (enemyAnimator != null)
+            {
+                enemyAnimator.ResetAnimator();
+            }
+
+            if (hasBeenSetup)
+            {
+                cachedTransform.position = spawnPosition;
+                cachedTransform.rotation = spawnRotation;
+            }
+        }
+
+        public void FullReset()
+        {
+            ResetEnemy();
+            playerTarget = null;
+            hasBeenSetup = false;
         }
 
 #if UNITY_EDITOR
@@ -318,7 +424,7 @@ namespace Runner.Enemy
                 {
                     Gizmos.color = Color.cyan;
                     Gizmos.DrawWireSphere(firePoint.position, 0.1f);
-                    Gizmos.DrawRay(firePoint.position, transform.forward * 2f);
+                    Gizmos.DrawRay(firePoint.position, -transform.forward * 2f);
 
                     if (usePrediction && aimPredictor != null && playerTarget != null)
                     {

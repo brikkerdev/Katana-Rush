@@ -12,7 +12,8 @@ namespace Runner.UI
         Pause,
         GameOver,
         Settings,
-        Inventory
+        Inventory,
+        Loading
     }
 
     [RequireComponent(typeof(CanvasGroup))]

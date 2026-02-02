@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using Runner.Core;
 
@@ -14,13 +15,20 @@ namespace Runner.UI
         [SerializeField] private PauseScreen pauseScreen;
         [SerializeField] private GameOverScreen gameOverScreen;
         [SerializeField] private SettingsScreen settingsScreen;
+        [SerializeField] private LoadingScreen loadingScreen;
+
+        [Header("Loading Settings")]
+        [SerializeField] private float initialLoadDelay = 0.5f;
+        [SerializeField] private float restartLoadDelay = 0.3f;
 
         private Dictionary<ScreenType, UIScreen> screens;
         private ScreenType currentScreen;
         private ScreenType previousScreen;
         private int coinsCollectedThisRun;
+        private bool isInitialized;
 
         public ScreenType CurrentScreen => currentScreen;
+        public bool IsLoading => loadingScreen != null && loadingScreen.IsLoading;
 
         private void Awake()
         {
@@ -49,8 +57,71 @@ namespace Runner.UI
 
         private void Start()
         {
+            StartCoroutine(InitialLoadRoutine());
+        }
+
+        private IEnumerator InitialLoadRoutine()
+        {
+            if (loadingScreen != null)
+            {
+                loadingScreen.StartLoading("Initializing...");
+            }
+
+            yield return null;
+
+            float progress = 0f;
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetMessage("Loading Resources...");
+                loadingScreen.SetProgress(0.1f);
+            }
+
+            yield return new WaitForSecondsRealtime(initialLoadDelay * 0.3f);
+            progress = 0.3f;
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetMessage("Preparing Game...");
+                loadingScreen.SetProgress(progress);
+            }
+
+            while (Game.Instance == null || Game.Instance.State == GameState.Initializing)
+            {
+                yield return null;
+            }
+
+            progress = 0.6f;
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetMessage("Loading Level...");
+                loadingScreen.SetProgress(progress);
+            }
+
+            yield return new WaitForSecondsRealtime(initialLoadDelay * 0.3f);
+
+            progress = 0.9f;
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetMessage("Almost Ready...");
+                loadingScreen.SetProgress(progress);
+            }
+
+            yield return new WaitForSecondsRealtime(initialLoadDelay * 0.2f);
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.CompleteLoading();
+
+                while (loadingScreen.IsLoading)
+                {
+                    yield return null;
+                }
+            }
+
             ShowScreen(ScreenType.MainMenu, true);
             SubscribeToGameEvents();
+            isInitialized = true;
         }
 
         private void RegisterScreen(UIScreen screen)
@@ -92,6 +163,7 @@ namespace Runner.UI
         private void HandlePauseInput()
         {
             if (Game.Instance == null) return;
+            if (IsLoading) return;
 
             if (Game.Instance.State == GameState.Playing)
             {
@@ -161,6 +233,7 @@ namespace Runner.UI
         {
             if (Game.Instance == null) return;
             if (Game.Instance.State != GameState.Ready) return;
+            if (IsLoading) return;
 
             coinsCollectedThisRun = 0;
             ShowScreen(ScreenType.Gameplay);
@@ -171,6 +244,7 @@ namespace Runner.UI
         {
             if (Game.Instance == null) return;
             if (Game.Instance.State != GameState.Playing) return;
+            if (IsLoading) return;
 
             Game.Instance.PauseGame();
             ShowScreen(ScreenType.Pause);
@@ -180,6 +254,7 @@ namespace Runner.UI
         {
             if (Game.Instance == null) return;
             if (Game.Instance.State != GameState.Paused) return;
+            if (IsLoading) return;
 
             ShowScreen(ScreenType.Gameplay);
             Game.Instance.ResumeGame();
@@ -188,9 +263,52 @@ namespace Runner.UI
         public void RestartGame()
         {
             if (Game.Instance == null) return;
+            if (IsLoading) return;
 
+            StartCoroutine(RestartGameRoutine());
+        }
+
+        private IEnumerator RestartGameRoutine()
+        {
+            if (loadingScreen != null)
+            {
+                loadingScreen.StartLoading("Restarting...");
+                loadingScreen.SetProgress(0.2f);
+            }
+
+            yield return new WaitForSecondsRealtime(restartLoadDelay * 0.2f);
+
+            Time.timeScale = 1f;
             coinsCollectedThisRun = 0;
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetMessage("Resetting Level...");
+                loadingScreen.SetProgress(0.5f);
+            }
+
             Game.Instance.RestartGame();
+
+            yield return new WaitForSecondsRealtime(restartLoadDelay * 0.3f);
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetMessage("Ready!");
+                loadingScreen.SetProgress(0.9f);
+            }
+
+            yield return new WaitForSecondsRealtime(restartLoadDelay * 0.2f);
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.CompleteLoading();
+
+                while (loadingScreen.IsLoading)
+                {
+                    yield return null;
+                }
+            }
+
             ShowScreen(ScreenType.Gameplay);
             Game.Instance.StartGame();
         }
@@ -198,14 +316,57 @@ namespace Runner.UI
         public void GoToMainMenu()
         {
             if (Game.Instance == null) return;
+            if (IsLoading) return;
+
+            StartCoroutine(GoToMainMenuRoutine());
+        }
+
+        private IEnumerator GoToMainMenuRoutine()
+        {
+            if (loadingScreen != null)
+            {
+                loadingScreen.StartLoading("Returning to Menu...");
+                loadingScreen.SetProgress(0.3f);
+            }
+
+            yield return new WaitForSecondsRealtime(restartLoadDelay * 0.3f);
 
             Time.timeScale = 1f;
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetMessage("Resetting...");
+                loadingScreen.SetProgress(0.6f);
+            }
+
             Game.Instance.RestartGame();
+
+            yield return new WaitForSecondsRealtime(restartLoadDelay * 0.3f);
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetProgress(0.9f);
+            }
+
+            yield return new WaitForSecondsRealtime(restartLoadDelay * 0.2f);
+
+            if (loadingScreen != null)
+            {
+                loadingScreen.CompleteLoading();
+
+                while (loadingScreen.IsLoading)
+                {
+                    yield return null;
+                }
+            }
+
             ShowScreen(ScreenType.MainMenu);
         }
 
         public void ShowGameOver()
         {
+            if (IsLoading) return;
+
             float distance = Game.Instance != null ? Game.Instance.RunDistance : 0f;
 
             if (gameOverScreen != null)
@@ -228,6 +389,30 @@ namespace Runner.UI
             int totalCoins = PlayerPrefs.GetInt("Coins", 0);
             totalCoins += amount;
             PlayerPrefs.SetInt("Coins", totalCoins);
+        }
+
+        public void ShowLoading(string message, System.Action onComplete = null)
+        {
+            if (loadingScreen != null)
+            {
+                loadingScreen.StartLoading(message, onComplete);
+            }
+        }
+
+        public void SetLoadingProgress(float progress)
+        {
+            if (loadingScreen != null)
+            {
+                loadingScreen.SetProgress(progress);
+            }
+        }
+
+        public void CompleteLoading()
+        {
+            if (loadingScreen != null)
+            {
+                loadingScreen.CompleteLoading();
+            }
         }
 
         private void OnDestroy()

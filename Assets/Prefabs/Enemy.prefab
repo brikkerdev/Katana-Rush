@@ -1306,8 +1306,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4017430799839697029}
+  - component: {fileID: 3156062384999935832}
   m_Layer: 0
-  m_Name: chin
+  m_Name: hips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1332,6 +1333,33 @@ Transform:
   - {fileID: 3128767998948276877}
   m_Father: {fileID: 7178949030720742156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &3156062384999935832
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3411912735952352542}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3426128363990848156
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,6 +1676,7 @@ GameObject:
   - component: {fileID: 3136779134422009410}
   - component: {fileID: 4459670489452024852}
   - component: {fileID: -2867472375367532882}
+  - component: {fileID: -1614399677776835918}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -1688,7 +1717,7 @@ MonoBehaviour:
   collisionRadius: 1
   canShoot: 1
   firePoint: {fileID: 3697653183884624845}
-  fireRange: 80
+  fireRange: 40
   fireRate: 1
   fireDelay: 0.1
   bulletSpeed: 80
@@ -1705,6 +1734,10 @@ MonoBehaviour:
     randomSpread: 0.1
     verticalSpreadMultiplier: 0.5
   visualRoot: {fileID: 7560154777872431542}
+  animator: {fileID: 8071890984341187763}
+  useRagdoll: 1
+  ragdoll: {fileID: -1614399677776835918}
+  simpleRagdoll: {fileID: 0}
   deathEffect: {fileID: 0}
   hitEffect: {fileID: 0}
   muzzleFlash: {fileID: 0}
@@ -1748,7 +1781,7 @@ BoxCollider:
     m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1791,6 +1824,31 @@ MonoBehaviour:
     maxAccuracyDistance: 30
     randomSpread: 0.1
     verticalSpreadMultiplier: 0.5
+--- !u!114 &-1614399677776835918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3791620074096128303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1ddeb590edfee4ea4d09647c46dc44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Enemy.EnemyRagdoll
+  ragdollRoot: {fileID: 4017430799839697029}
+  headBone: {fileID: 2175181852402771028}
+  headRigidbody: {fileID: 1802912552194049752}
+  hipsRigidbody: {fileID: 3156062384999935832}
+  separateHeadOnDeath: 1
+  headForce: 30
+  headTorque: 20
+  headUpwardForce: 0.05
+  bodyForce: 5
+  bodyUpwardForce: 0
+  ragdollDuration: 3
+  simplifyDelay: 1
+  disableAfterSettle: 1
 --- !u!1 &3855485590728956308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,6 +2071,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2175181852402771028}
+  - component: {fileID: 1802912552194049752}
+  - component: {fileID: 2153500282191139345}
+  - component: {fileID: 2158194591782466292}
   m_Layer: 0
   m_Name: head
   m_TagString: Untagged
@@ -2038,6 +2099,71 @@ Transform:
   - {fileID: 6601143390521391983}
   m_Father: {fileID: 4017430799839697029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1802912552194049752
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439928262985822618}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &2153500282191139345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439928262985822618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d47978161745deb459b6b6057e0275fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Enemy.RagdollHead
+  drag: 0.5
+  angularDrag: 0.5
+  bloodTrail: {fileID: 0}
+  bloodSpray: {fileID: 0}
+  impactSound: {fileID: 0}
+--- !u!65 &2158194591782466292
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439928262985822618}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 520
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Center: {x: 0, y: 0.43, z: 0}
 --- !u!1 &4535438215158398707
 GameObject:
   m_ObjectHideFlags: 0

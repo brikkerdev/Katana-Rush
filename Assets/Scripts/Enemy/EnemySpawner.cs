@@ -174,11 +174,10 @@ namespace Runner.Enemy
             Vector3 worldPosition = point.Position;
             Quaternion worldRotation = point.Rotation;
 
-            enemy.ResetEnemy();
-            enemy.Setup(worldPosition, worldRotation);
-
             enemy.OnDeath -= HandleEnemyDeath;
             enemy.OnDeath += HandleEnemyDeath;
+
+            enemy.Setup(worldPosition, worldRotation);
 
             activeEnemies.Add(enemy);
 
@@ -222,7 +221,11 @@ namespace Runner.Enemy
             if (enemy == null) return;
 
             enemy.OnDeath -= HandleEnemyDeath;
+
+            enemy.ResetEnemy();
+
             enemy.gameObject.SetActive(false);
+
             activeEnemies.Remove(enemy);
 
             if (enemyPools.TryGetValue(enemy.Type, out Queue<Enemy> pool))
@@ -269,6 +272,36 @@ namespace Runner.Enemy
             }
 
             activeEnemies.Clear();
+        }
+
+        public void ResetAllEnemies()
+        {
+            for (int i = activeEnemies.Count - 1; i >= 0; i--)
+            {
+                if (activeEnemies[i] != null)
+                {
+                    activeEnemies[i].ResetEnemy();
+                    ReturnEnemyToPool(activeEnemies[i]);
+                }
+            }
+
+            activeEnemies.Clear();
+
+            foreach (var pool in enemyPools.Values)
+            {
+                foreach (var enemy in pool)
+                {
+                    if (enemy != null)
+                    {
+                        enemy.FullReset();
+                    }
+                }
+            }
+
+            if (showDebug)
+            {
+                Debug.Log("[EnemySpawner] All enemies reset");
+            }
         }
 
         private void ShuffleList<T>(List<T> list)

@@ -314,7 +314,7 @@ MonoBehaviour:
   deflectedSpeed: 160
   deflectedLifetime: 2
   deflectionAngleRange: 10
-  canDamageEnemiesWhenDeflected: 0
+  canDamageEnemiesWhenDeflected: 1
   collisionCheckRadius: 0.2
   collisionLayers:
     serializedVersion: 2
