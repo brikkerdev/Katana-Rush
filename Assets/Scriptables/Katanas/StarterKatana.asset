@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
   m_Name: StarterKatana
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
-  itemId: 
-  itemName: 
+  id: ecc25872-20b9-45a1-8363-90ec1657c65d
+  katanaName: 
   description: 
   icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  itemType: 0
   rarity: 0
-  presetOverride: {fileID: 11400000, guid: 0f2d79442bc27c4479a4ba9c774ad02f, type: 2}
-  visualPrefab: {fileID: 0}
-  attackRange: 2
-  slashAngle: 90
+  playerPreset: {fileID: 11400000, guid: 0f2d79442bc27c4479a4ba9c774ad02f, type: 2}
+  modelPrefab: {fileID: 0}
+  bladeMaterial: {fileID: 0}
+  slashEffectPrefab: {fileID: 0}
+  trailEffectPrefab: {fileID: 0}

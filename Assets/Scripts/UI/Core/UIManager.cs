@@ -16,6 +16,7 @@ namespace Runner.UI
         [SerializeField] private GameOverScreen gameOverScreen;
         [SerializeField] private SettingsScreen settingsScreen;
         [SerializeField] private LoadingScreen loadingScreen;
+        [SerializeField] private InventoryScreen inventoryScreen;
 
         [Header("Loading Settings")]
         [SerializeField] private float initialLoadDelay = 0.5f;
@@ -51,7 +52,7 @@ namespace Runner.UI
             RegisterScreen(pauseScreen);
             RegisterScreen(gameOverScreen);
             RegisterScreen(settingsScreen);
-
+            RegisterScreen(inventoryScreen);
             HideAllScreensImmediate();
         }
 

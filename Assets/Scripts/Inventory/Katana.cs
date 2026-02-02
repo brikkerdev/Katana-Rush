@@ -6,10 +6,28 @@ namespace Runner.Inventory
     public enum KatanaRarity
     {
         Common,
-        Uncommon,
         Rare,
         Epic,
-        Legendary
+        Legendary,
+        Challenge
+    }
+
+    public enum ChallengeType
+    {
+        None,
+        TotalDistance,
+        EnemiesKilled,
+        DashesUsed,
+        GamesPlayed,
+        CoinsCollected
+    }
+
+    [System.Serializable]
+    public class ChallengeRequirement
+    {
+        public ChallengeType type;
+        public float targetValue;
+        public string descriptionKey;
     }
 
     [CreateAssetMenu(fileName = "Katana", menuName = "Runner/Weapons/Katana")]
@@ -17,13 +35,14 @@ namespace Runner.Inventory
     {
         [Header("Info")]
         [SerializeField] private string id;
-        [SerializeField] private string katanaName;
-        [SerializeField] private string description;
+        [SerializeField] private string nameKey;
+        [SerializeField] private string descriptionKey;
         [SerializeField] private Sprite icon;
         [SerializeField] private KatanaRarity rarity = KatanaRarity.Common;
 
         [Header("Stats")]
         [SerializeField] private PlayerPreset playerPreset;
+        [SerializeField][Range(1, 5)] private int dashCount = 3;
 
         [Header("Visual")]
         [SerializeField] private GameObject modelPrefab;
@@ -33,16 +52,22 @@ namespace Runner.Inventory
         [SerializeField] private GameObject slashEffectPrefab;
         [SerializeField] private GameObject trailEffectPrefab;
 
+        [Header("Challenge (Only for Challenge Rarity)")]
+        [SerializeField] private ChallengeRequirement challengeRequirement;
+
         public string Id => id;
-        public string KatanaName => katanaName;
-        public string Description => description;
+        public string NameKey => nameKey;
+        public string DescriptionKey => descriptionKey;
         public Sprite Icon => icon;
         public KatanaRarity Rarity => rarity;
         public PlayerPreset PlayerPreset => playerPreset;
+        public int DashCount => dashCount;
         public GameObject ModelPrefab => modelPrefab;
         public Material BladeMaterial => bladeMaterial;
         public GameObject SlashEffectPrefab => slashEffectPrefab;
         public GameObject TrailEffectPrefab => trailEffectPrefab;
+        public ChallengeRequirement ChallengeRequirement => challengeRequirement;
+        public bool IsChallenge => rarity == KatanaRarity.Challenge;
 
         private void OnValidate()
         {

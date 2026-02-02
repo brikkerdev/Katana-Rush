@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using Runner.Player.Data;
+using Runner.Save;
 
 namespace Runner.Inventory
 {
@@ -9,28 +10,23 @@ namespace Runner.Inventory
     {
         public static InventoryManager Instance { get; private set; }
 
+        [Header("Database")]
+        [SerializeField] private KatanaDatabase katanaDatabase;
+
         [Header("Defaults")]
         [SerializeField] private PlayerPreset defaultPreset;
         [SerializeField] private Katana starterKatana;
 
-        [Header("Available Katanas")]
-        [SerializeField] private List<Katana> allKatanas = new List<Katana>();
-
         private Katana equippedKatana;
-        private List<string> ownedKatanaIds = new List<string>();
         private PlayerPreset activePreset;
 
         public Katana EquippedKatana => equippedKatana;
         public PlayerPreset ActivePreset => activePreset;
-        public IReadOnlyList<Katana> AllKatanas => allKatanas;
-        public IReadOnlyList<string> OwnedKatanaIds => ownedKatanaIds;
+        public KatanaDatabase Database => katanaDatabase;
 
         public event Action<Katana> OnKatanaEquipped;
         public event Action<PlayerPreset> OnPresetChanged;
         public event Action<Katana> OnKatanaUnlocked;
-
-        private const string EQUIPPED_KATANA_KEY = "EquippedKatanaId";
-        private const string OWNED_KATANAS_KEY = "OwnedKatanaIds";
 
         private void Awake()
         {
@@ -70,7 +66,6 @@ namespace Runner.Inventory
 
             if (!IsKatanaOwned(katana))
             {
-                Debug.LogWarning($"Cannot equip katana {katana.KatanaName} - not owned");
                 return;
             }
 
@@ -85,7 +80,7 @@ namespace Runner.Inventory
                 activePreset = defaultPreset != null ? defaultPreset : PlayerPreset.CreateDefault();
             }
 
-            SaveInventory();
+            SaveManager.SetEquippedKatana(katana.Id);
 
             OnKatanaEquipped?.Invoke(katana);
             OnPresetChanged?.Invoke(activePreset);
@@ -97,8 +92,7 @@ namespace Runner.Inventory
 
             if (IsKatanaOwned(katana)) return;
 
-            ownedKatanaIds.Add(katana.Id);
-            SaveInventory();
+            SaveManager.UnlockKatana(katana.Id);
 
             OnKatanaUnlocked?.Invoke(katana);
         }
@@ -106,26 +100,26 @@ namespace Runner.Inventory
         public bool IsKatanaOwned(Katana katana)
         {
             if (katana == null) return false;
-            return ownedKatanaIds.Contains(katana.Id);
+            return SaveManager.IsKatanaOwned(katana.Id);
         }
 
         public Katana GetKatanaById(string id)
         {
-            foreach (var katana in allKatanas)
-            {
-                if (katana.Id == id)
-                {
-                    return katana;
-                }
-            }
-            return null;
+            return katanaDatabase != null ? katanaDatabase.GetKatanaById(id) : null;
+        }
+
+        public List<Katana> GetKatanasByRarity(KatanaRarity rarity)
+        {
+            return katanaDatabase != null ? katanaDatabase.GetKatanasByRarity(rarity) : new List<Katana>();
         }
 
         public List<Katana> GetOwnedKatanas()
         {
             List<Katana> owned = new List<Katana>();
 
-            foreach (var katana in allKatanas)
+            if (katanaDatabase == null) return owned;
+
+            foreach (var katana in katanaDatabase.AllKatanas)
             {
                 if (IsKatanaOwned(katana))
                 {
@@ -136,29 +130,105 @@ namespace Runner.Inventory
             return owned;
         }
 
-        private void SaveInventory()
+        public List<Katana> GetUnownedKatanasByRarity(KatanaRarity rarity)
         {
-            if (equippedKatana != null)
+            List<Katana> unowned = new List<Katana>();
+
+            var katanas = GetKatanasByRarity(rarity);
+
+            foreach (var katana in katanas)
             {
-                PlayerPrefs.SetString(EQUIPPED_KATANA_KEY, equippedKatana.Id);
+                if (!IsKatanaOwned(katana))
+                {
+                    unowned.Add(katana);
+                }
             }
 
-            string ownedIds = string.Join(",", ownedKatanaIds);
-            PlayerPrefs.SetString(OWNED_KATANAS_KEY, ownedIds);
+            return unowned;
+        }
 
-            PlayerPrefs.Save();
+        public bool CanAfford(int price)
+        {
+            return SaveManager.GetCoins() >= price;
+        }
+
+        public bool TryPurchaseRandom(KatanaRarity rarity, out Katana result)
+        {
+            result = null;
+
+            if (rarity == KatanaRarity.Challenge) return false;
+
+            int price = katanaDatabase.GetRarityPrice(rarity);
+
+            if (!CanAfford(price)) return false;
+
+            var unowned = GetUnownedKatanasByRarity(rarity);
+
+            if (unowned.Count == 0) return false;
+
+            SaveManager.SpendCoins(price);
+
+            result = unowned[UnityEngine.Random.Range(0, unowned.Count)];
+            UnlockKatana(result);
+
+            return true;
+        }
+
+        public bool TryPurchaseDirect(Katana katana, out bool success)
+        {
+            success = false;
+
+            if (katana == null) return false;
+            if (katana.Rarity == KatanaRarity.Challenge) return false;
+            if (IsKatanaOwned(katana)) return false;
+
+            int price = katanaDatabase.GetDirectPurchasePrice(katana.Rarity);
+
+            if (!CanAfford(price)) return false;
+
+            SaveManager.SpendCoins(price);
+            UnlockKatana(katana);
+            success = true;
+
+            return true;
+        }
+
+        public bool CheckChallengeComplete(Katana katana)
+        {
+            if (katana == null || !katana.IsChallenge) return false;
+            if (katana.ChallengeRequirement == null) return false;
+
+            float current = SaveManager.GetChallengeValue(katana.ChallengeRequirement.type);
+            return current >= katana.ChallengeRequirement.targetValue;
+        }
+
+        public float GetChallengeProgress(Katana katana)
+        {
+            if (katana == null || !katana.IsChallenge) return 0f;
+            if (katana.ChallengeRequirement == null) return 0f;
+
+            float current = SaveManager.GetChallengeValue(katana.ChallengeRequirement.type);
+            float target = katana.ChallengeRequirement.targetValue;
+
+            return Mathf.Clamp01(current / target);
+        }
+
+        public void TryUnlockCompletedChallenges()
+        {
+            var challengeKatanas = GetKatanasByRarity(KatanaRarity.Challenge);
+
+            foreach (var katana in challengeKatanas)
+            {
+                if (!IsKatanaOwned(katana) && CheckChallengeComplete(katana))
+                {
+                    UnlockKatana(katana);
+                }
+            }
         }
 
         private void LoadInventory()
         {
-            string ownedIds = PlayerPrefs.GetString(OWNED_KATANAS_KEY, "");
-
-            if (!string.IsNullOrEmpty(ownedIds))
-            {
-                ownedKatanaIds = new List<string>(ownedIds.Split(','));
-            }
-
-            string equippedId = PlayerPrefs.GetString(EQUIPPED_KATANA_KEY, "");
+            string equippedId = SaveManager.GetEquippedKatanaId();
 
             if (!string.IsNullOrEmpty(equippedId))
             {
