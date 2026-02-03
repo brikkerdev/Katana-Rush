@@ -7,6 +7,7 @@ using Runner.CameraSystem;
 using Runner.Inventory;
 using Runner.Player.Data;
 using Runner.Enemy;
+using Runner.Save;
 
 namespace Runner.Core
 {
@@ -100,6 +101,12 @@ namespace Runner.Core
 
             State = GameState.Ready;
             OnGameInitialized?.Invoke();
+        }
+
+        [ContextMenu("Add 1000 coins")]
+        public void AddCoins()
+        {
+            SaveManager.AddCoins(1000);
         }
 
         private void CreateInventoryManager()

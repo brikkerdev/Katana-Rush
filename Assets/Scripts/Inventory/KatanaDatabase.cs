@@ -8,6 +8,12 @@ namespace Runner.Inventory
     {
         [SerializeField] private List<Katana> katanas = new List<Katana>();
 
+        [Header("Prices")]
+        [SerializeField] private int commonPrice = 250;
+        [SerializeField] private int rarePrice = 500;
+        [SerializeField] private int epicPrice = 1000;
+        [SerializeField] private int legendaryPrice = 2000;
+
         public IReadOnlyList<Katana> AllKatanas => katanas;
 
         public List<Katana> GetKatanasByRarity(KatanaRarity rarity)
@@ -41,10 +47,10 @@ namespace Runner.Inventory
         {
             switch (rarity)
             {
-                case KatanaRarity.Common: return 250;
-                case KatanaRarity.Rare: return 500;
-                case KatanaRarity.Epic: return 1000;
-                case KatanaRarity.Legendary: return 2000;
+                case KatanaRarity.Common: return commonPrice;
+                case KatanaRarity.Rare: return rarePrice;
+                case KatanaRarity.Epic: return epicPrice;
+                case KatanaRarity.Legendary: return legendaryPrice;
                 default: return 0;
             }
         }

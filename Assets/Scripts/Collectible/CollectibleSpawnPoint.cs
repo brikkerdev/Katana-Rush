@@ -2,16 +2,6 @@ using UnityEngine;
 
 namespace Runner.Collectibles
 {
-    public enum CollectibleType
-    {
-        Coin,
-        CoinGroup,
-        HealthPack,
-        SpeedBoost,
-        Magnet,
-        Multiplier
-    }
-
     public class CollectibleSpawnPoint : MonoBehaviour
     {
         [Header("Spawn Settings")]

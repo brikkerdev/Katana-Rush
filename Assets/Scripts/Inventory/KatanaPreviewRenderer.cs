@@ -18,7 +18,7 @@ namespace Runner.Inventory
         [Header("Locked Visual")]
         [SerializeField] private Material lockedMaterial;
 
-        private GameObject currentKatanaInstance;
+        public GameObject currentKatanaInstance;
         private bool isLocked;
         private Renderer[] katanaRenderers;
         private Material[] originalMaterials;
@@ -59,6 +59,7 @@ namespace Runner.Inventory
             isLocked = locked;
 
             currentKatanaInstance = Instantiate(katana.ModelPrefab, katanaHolder);
+            Debug.Log(currentKatanaInstance.name);
             currentKatanaInstance.transform.localPosition = katanaOffset;
             currentKatanaInstance.transform.localRotation = Quaternion.Euler(katanaRotation);
 
@@ -88,14 +89,6 @@ namespace Runner.Inventory
 
             katanaRenderers = null;
             originalMaterials = null;
-        }
-
-        public void SetRotation(float angle)
-        {
-            if (katanaHolder != null)
-            {
-                katanaHolder.localRotation = Quaternion.Euler(0f, angle, 0f);
-            }
         }
 
         private void OnDestroy()

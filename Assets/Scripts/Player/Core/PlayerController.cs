@@ -111,6 +111,7 @@ namespace Runner.Player.Core
             dashHandler.OnRegenProgressChanged += (progress) => OnDashRegenProgress?.Invoke(progress);
             dashHandler.OnDashStarted += OnDashStarted;
             dashHandler.OnDashEnded += OnDashEnded;
+            InventoryManager.Instance.OnKatanaEquipped += OnKatanaEquiped;
         }
 
         private void LoadPreset()
@@ -134,8 +135,13 @@ namespace Runner.Player.Core
 
             if (InventoryManager.Instance != null)
             {
-                SetupKatanaVisual();
+                SetupKatanaVisual(InventoryManager.Instance.EquippedKatana);
             }
+        }
+
+        private void OnKatanaEquiped(Katana katana)
+        {
+            SetupKatanaVisual(katana);
         }
 
         public void ApplyPreset(PlayerPreset preset)
@@ -149,13 +155,10 @@ namespace Runner.Player.Core
             currentSpeed = preset.BaseSpeed;
         }
 
-        private void SetupKatanaVisual()
+        private void SetupKatanaVisual(Katana katana)
         {
             if (visual == null) return;
-            if (InventoryManager.Instance == null) return;
-            if (InventoryManager.Instance.EquippedKatana == null) return;
 
-            var katana = InventoryManager.Instance.EquippedKatana;
             if (katana.ModelPrefab != null)
             {
                 visual.SetKatanaVisual(katana.ModelPrefab);

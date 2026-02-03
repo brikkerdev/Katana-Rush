@@ -443,69 +443,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Player.PlayerVisual
   modelRoot: {fileID: 1834630474355312853}
   meshTransform: {fileID: 1834630474355312853}
-  katanaMountPoint: {fileID: 0}
---- !u!1001 &4050527077646820473
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 7854012033157959594}
-    m_Modifications:
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5523870091327307348, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-      propertyPath: m_Name
-      value: basic
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
---- !u!4 &9211328892327608471 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-  m_PrefabInstance: {fileID: 4050527077646820473}
-  m_PrefabAsset: {fileID: 0}
+  katanaMountPoint: {fileID: 7854012033157959594}
 --- !u!1001 &6580928541022860648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -561,10 +499,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3082863117490664369, guid: 852375c15c5b0bd46bdf24b2c8b677f0, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4011346008064899778, guid: 852375c15c5b0bd46bdf24b2c8b677f0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9211328892327608471}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 852375c15c5b0bd46bdf24b2c8b677f0, type: 3}
       insertIndex: -1

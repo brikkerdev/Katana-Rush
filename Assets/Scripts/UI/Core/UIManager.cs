@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Runner.Core;
+using Runner.Save;
 
 namespace Runner.UI
 {
@@ -53,6 +54,7 @@ namespace Runner.UI
             RegisterScreen(gameOverScreen);
             RegisterScreen(settingsScreen);
             RegisterScreen(inventoryScreen);
+
             HideAllScreensImmediate();
         }
 
@@ -70,8 +72,6 @@ namespace Runner.UI
 
             yield return null;
 
-            float progress = 0f;
-
             if (loadingScreen != null)
             {
                 loadingScreen.SetMessage("Loading Resources...");
@@ -79,12 +79,11 @@ namespace Runner.UI
             }
 
             yield return new WaitForSecondsRealtime(initialLoadDelay * 0.3f);
-            progress = 0.3f;
 
             if (loadingScreen != null)
             {
                 loadingScreen.SetMessage("Preparing Game...");
-                loadingScreen.SetProgress(progress);
+                loadingScreen.SetProgress(0.3f);
             }
 
             while (Game.Instance == null || Game.Instance.State == GameState.Initializing)
@@ -92,20 +91,18 @@ namespace Runner.UI
                 yield return null;
             }
 
-            progress = 0.6f;
             if (loadingScreen != null)
             {
                 loadingScreen.SetMessage("Loading Level...");
-                loadingScreen.SetProgress(progress);
+                loadingScreen.SetProgress(0.6f);
             }
 
             yield return new WaitForSecondsRealtime(initialLoadDelay * 0.3f);
 
-            progress = 0.9f;
             if (loadingScreen != null)
             {
                 loadingScreen.SetMessage("Almost Ready...");
-                loadingScreen.SetProgress(progress);
+                loadingScreen.SetProgress(0.9f);
             }
 
             yield return new WaitForSecondsRealtime(initialLoadDelay * 0.2f);
@@ -237,6 +234,7 @@ namespace Runner.UI
             if (IsLoading) return;
 
             coinsCollectedThisRun = 0;
+            SaveManager.AddGamePlayed();
             ShowScreen(ScreenType.Gameplay);
             Game.Instance.StartGame();
         }
@@ -310,6 +308,7 @@ namespace Runner.UI
                 }
             }
 
+            SaveManager.AddGamePlayed();
             ShowScreen(ScreenType.Gameplay);
             Game.Instance.StartGame();
         }
@@ -370,6 +369,10 @@ namespace Runner.UI
 
             float distance = Game.Instance != null ? Game.Instance.RunDistance : 0f;
 
+            SaveManager.AddDistance(distance);
+            SaveManager.TrySetHighScore((int)distance);
+            SaveManager.SaveIfDirty();
+
             if (gameOverScreen != null)
             {
                 gameOverScreen.Setup(distance, coinsCollectedThisRun);
@@ -378,7 +381,7 @@ namespace Runner.UI
             ShowScreen(ScreenType.GameOver);
         }
 
-        public void AddCoins(int amount)
+        public void NotifyCoinsCollected(int amount)
         {
             coinsCollectedThisRun += amount;
 
@@ -386,10 +389,6 @@ namespace Runner.UI
             {
                 gameplayScreen.AddCoins(amount);
             }
-
-            int totalCoins = PlayerPrefs.GetInt("Coins", 0);
-            totalCoins += amount;
-            PlayerPrefs.SetInt("Coins", totalCoins);
         }
 
         public void ShowLoading(string message, System.Action onComplete = null)

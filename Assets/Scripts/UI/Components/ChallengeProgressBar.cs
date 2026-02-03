@@ -1,22 +1,22 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Runner.Save;
 
 namespace Runner.UI
 {
     public class ChallengeProgressBar : MonoBehaviour
     {
-        [SerializeField] private Slider progressSlider;
+        [SerializeField] private BarUIVisualElement bar;
         [SerializeField] private TextMeshProUGUI progressText;
-        [SerializeField] private Image fillImage;
 
         public void SetProgress(float current, float target)
         {
             float progress = Mathf.Clamp01(current / target);
 
-            if (progressSlider != null)
+            if (bar != null)
             {
-                progressSlider.value = progress;
+                bar.SetValue(target, current);
             }
 
             if (progressText != null)

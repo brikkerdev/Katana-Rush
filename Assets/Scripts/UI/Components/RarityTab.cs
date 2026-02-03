@@ -31,13 +31,18 @@ namespace Runner.UI
             }
         }
 
-        public void Setup(int index, string label)
+        public void Setup(int index, string label, Color rarityColor)
         {
             tabIndex = index;
 
             if (labelText != null)
             {
                 labelText.text = label;
+            }
+
+            if (background != null)
+            {
+                selectedColor = rarityColor;
             }
         }
 
@@ -58,6 +63,14 @@ namespace Runner.UI
             if (labelText != null)
             {
                 labelText.color = selected ? Color.black : Color.white;
+            }
+        }
+
+        public void SetInteractable(bool interactable)
+        {
+            if (button != null)
+            {
+                button.interactable = interactable;
             }
         }
 

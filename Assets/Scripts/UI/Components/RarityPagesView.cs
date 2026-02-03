@@ -2,39 +2,55 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
-using System.Collections.Generic;
+using DG.Tweening;
 
 namespace Runner.UI
 {
-    public class SwipeableGridView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class RarityPagesView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [Header("References")]
-        [SerializeField] private RectTransform content;
+        [SerializeField] private RectTransform pagesContainer;
         [SerializeField] private RectTransform viewport;
 
         [Header("Settings")]
         [SerializeField] private float swipeThreshold = 50f;
         [SerializeField] private float snapDuration = 0.3f;
-        [SerializeField] private float pageWidth = 400f;
 
         private int currentPage;
         private int totalPages;
+        private float pageWidth;
         private float dragStartX;
-        private float contentStartX;
+        private float containerStartX;
         private bool isDragging;
-        private float snapVelocity;
-        private float targetX;
-        private bool isSnapping;
+        private bool isAnimating;
+        private Tweener snapTween;
 
         public int CurrentPage => currentPage;
         public int TotalPages => totalPages;
+        public bool IsDragging => isDragging;
+        public bool IsAnimating => isAnimating;
 
         public event Action<int> OnPageChanged;
 
-        public void SetPageCount(int count)
+        private void Awake()
         {
-            totalPages = count;
-            currentPage = Mathf.Clamp(currentPage, 0, Mathf.Max(0, totalPages - 1));
+            if (viewport != null)
+            {
+                pageWidth = viewport.rect.width;
+            }
+        }
+
+        public void Initialize(int pageCount)
+        {
+            totalPages = pageCount;
+            currentPage = 0;
+
+            if (viewport != null)
+            {
+                pageWidth = viewport.rect.width;
+            }
+
+            UpdateContainerPosition(true);
         }
 
         public void SetPageWidth(float width)
@@ -49,46 +65,44 @@ namespace Runner.UI
             if (page == currentPage && !instant) return;
 
             currentPage = page;
-            targetX = -currentPage * pageWidth;
-
-            if (instant)
-            {
-                Vector2 pos = content.anchoredPosition;
-                pos.x = targetX;
-                content.anchoredPosition = pos;
-                isSnapping = false;
-            }
-            else
-            {
-                isSnapping = true;
-            }
-
+            UpdateContainerPosition(instant);
             OnPageChanged?.Invoke(currentPage);
         }
 
-        private void Update()
+        private void UpdateContainerPosition(bool instant)
         {
-            if (isSnapping && !isDragging)
-            {
-                Vector2 pos = content.anchoredPosition;
-                pos.x = Mathf.SmoothDamp(pos.x, targetX, ref snapVelocity, snapDuration);
-                content.anchoredPosition = pos;
+            float targetX = -currentPage * pageWidth;
 
-                if (Mathf.Abs(pos.x - targetX) < 0.5f)
-                {
-                    pos.x = targetX;
-                    content.anchoredPosition = pos;
-                    isSnapping = false;
-                }
+            snapTween?.Kill();
+
+            if (instant)
+            {
+                Vector2 pos = pagesContainer.anchoredPosition;
+                pos.x = targetX;
+                pagesContainer.anchoredPosition = pos;
+                isAnimating = false;
+            }
+            else
+            {
+                isAnimating = true;
+                snapTween = pagesContainer.DOAnchorPosX(targetX, snapDuration)
+                    .SetEase(Ease.OutCubic)
+                    .SetUpdate(true)
+                    .OnComplete(() => isAnimating = false);
             }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (isAnimating)
+            {
+                snapTween?.Kill();
+                isAnimating = false;
+            }
+
             isDragging = true;
-            isSnapping = false;
             dragStartX = eventData.position.x;
-            contentStartX = content.anchoredPosition.x;
+            containerStartX = pagesContainer.anchoredPosition.x;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -96,13 +110,16 @@ namespace Runner.UI
             if (!isDragging) return;
 
             float delta = eventData.position.x - dragStartX;
-            Vector2 pos = content.anchoredPosition;
-            pos.x = contentStartX + delta;
+            Vector2 pos = pagesContainer.anchoredPosition;
+            pos.x = containerStartX + delta;
 
             float minX = -(totalPages - 1) * pageWidth;
-            pos.x = Mathf.Clamp(pos.x, minX - pageWidth * 0.3f, pageWidth * 0.3f);
+            float maxX = 0f;
+            float elasticity = pageWidth * 0.2f;
 
-            content.anchoredPosition = pos;
+            pos.x = Mathf.Clamp(pos.x, minX - elasticity, maxX + elasticity);
+
+            pagesContainer.anchoredPosition = pos;
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -130,6 +147,11 @@ namespace Runner.UI
             {
                 GoToPage(currentPage);
             }
+        }
+
+        private void OnDestroy()
+        {
+            snapTween?.Kill();
         }
     }
 }

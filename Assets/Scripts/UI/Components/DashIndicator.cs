@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace Runner.UI
 {
@@ -9,7 +8,7 @@ namespace Runner.UI
         [SerializeField] private Transform container;
         [SerializeField] private GameObject dashDotPrefab;
         [SerializeField] private Color activeDotColor = Color.cyan;
-        [SerializeField] private Color inactiveDotColor = new Color(0.3f, 0.3f, 0.3f);
+        [SerializeField] private Color hiddenDotColor = new Color(0.3f, 0.3f, 0.3f);
 
         private Image[] dotImages;
         private int maxDots = 5;
@@ -54,7 +53,7 @@ namespace Runner.UI
             for (int i = 0; i < maxDots; i++)
             {
                 dotImages[i].gameObject.SetActive(true);
-                dotImages[i].color = inactiveDotColor;
+                dotImages[i].color = hiddenDotColor;
             }
         }
     }

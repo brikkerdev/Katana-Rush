@@ -169,15 +169,12 @@ namespace Runner.Inventory
             SaveManager.SpendCoins(price);
 
             result = unowned[UnityEngine.Random.Range(0, unowned.Count)];
-            UnlockKatana(result);
 
             return true;
         }
 
-        public bool TryPurchaseDirect(Katana katana, out bool success)
+        public bool TryPurchaseDirect(Katana katana)
         {
-            success = false;
-
             if (katana == null) return false;
             if (katana.Rarity == KatanaRarity.Challenge) return false;
             if (IsKatanaOwned(katana)) return false;
@@ -188,7 +185,6 @@ namespace Runner.Inventory
 
             SaveManager.SpendCoins(price);
             UnlockKatana(katana);
-            success = true;
 
             return true;
         }

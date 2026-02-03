@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dffd0343dd4ccf41a5b894aec887473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.InventoryManager
+  katanaDatabase: {fileID: 11400000, guid: d062bcb240a684843a1bf4747e4df7c4, type: 2}
   defaultPreset: {fileID: 11400000, guid: 0f2d79442bc27c4479a4ba9c774ad02f, type: 2}
   starterKatana: {fileID: 11400000, guid: ee3cfc74e78f21d4d96bd88eafbc31f8, type: 2}

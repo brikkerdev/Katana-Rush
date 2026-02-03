@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using Runner.Save;
 
 namespace Runner.UI
 {
@@ -38,14 +39,8 @@ namespace Runner.UI
             finalDistance = distance;
             coinsCollected = coins;
 
-            int previousHighScore = PlayerPrefs.GetInt("HighScore", 0);
+            int previousHighScore = SaveManager.GetHighScore();
             isNewHighScore = (int)distance > previousHighScore;
-
-            if (isNewHighScore)
-            {
-                PlayerPrefs.SetInt("HighScore", (int)distance);
-                PlayerPrefs.Save();
-            }
         }
 
         protected override void OnShow()
@@ -109,7 +104,7 @@ namespace Runner.UI
 
             if (highScoreText != null)
             {
-                int highScore = PlayerPrefs.GetInt("HighScore", 0);
+                int highScore = SaveManager.GetHighScore();
                 highScoreText.text = $"BEST: {highScore}m";
             }
 

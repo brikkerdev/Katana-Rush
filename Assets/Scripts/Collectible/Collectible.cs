@@ -1,17 +1,19 @@
 using UnityEngine;
-using Runner.Collectibles;
-
-namespace Runner.LevelGeneration
-{
-    public interface IResettable
-    {
-        void Reset();
-    }
-}
+using Runner.Save;
 
 namespace Runner.Collectibles
 {
-    public class Collectible : MonoBehaviour, Runner.LevelGeneration.IResettable
+    public enum CollectibleType
+    {
+        Coin,
+        CoinGroup,
+        HealthPack,
+        SpeedBoost,
+        Magnet,
+        Multiplier
+    }
+
+    public class Collectible : MonoBehaviour, IResettable
     {
         [Header("Settings")]
         [SerializeField] private CollectibleType collectibleType = CollectibleType.Coin;
@@ -23,9 +25,6 @@ namespace Runner.Collectibles
         [SerializeField] private float rotationSpeed = 90f;
         [SerializeField] private float bobSpeed = 2f;
         [SerializeField] private float bobHeight = 0.2f;
-
-        [Header("Debug")]
-        [SerializeField] private bool showDebug = false;
 
         private bool isCollected;
         private Vector3 originalPosition;
@@ -50,13 +49,11 @@ namespace Runner.Collectibles
         {
             if (isCollected) return;
 
-            // Rotation
             if (visualRoot != null && rotationSpeed > 0f)
             {
                 visualRoot.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
             }
 
-            // Bobbing
             if (bobHeight > 0f)
             {
                 bobTimer += Time.deltaTime * bobSpeed;
@@ -70,7 +67,7 @@ namespace Runner.Collectibles
             transform.position = position;
             originalPosition = transform.localPosition;
             isCollected = false;
-            bobTimer = Random.value * Mathf.PI * 2f; // Random start phase
+            bobTimer = Random.value * Mathf.PI * 2f;
 
             if (visualRoot != null)
             {
@@ -78,11 +75,6 @@ namespace Runner.Collectibles
             }
 
             gameObject.SetActive(true);
-
-            if (showDebug)
-            {
-                Debug.Log($"[Collectible] Setup {collectibleType} at {position}");
-            }
         }
 
         public void Collect()
@@ -91,15 +83,8 @@ namespace Runner.Collectibles
 
             isCollected = true;
 
-            // Apply effect based on type
             ApplyCollectEffect();
 
-            if (showDebug)
-            {
-                Debug.Log($"[Collectible] Collected {collectibleType}, value: {value}");
-            }
-
-            // Hide
             if (visualRoot != null)
             {
                 visualRoot.SetActive(false);
@@ -114,23 +99,20 @@ namespace Runner.Collectibles
             {
                 case CollectibleType.Coin:
                 case CollectibleType.CoinGroup:
-                    UI.UIManager.Instance?.AddCoins(value);
+                    SaveManager.AddCoins(value);
+                    UI.UIManager.Instance?.NotifyCoinsCollected(value);
                     break;
 
                 case CollectibleType.HealthPack:
-                    // Add health if you have health system
                     break;
 
                 case CollectibleType.SpeedBoost:
-                    // Apply speed boost
                     break;
 
                 case CollectibleType.Magnet:
-                    // Activate magnet effect
                     break;
 
                 case CollectibleType.Multiplier:
-                    // Activate score multiplier
                     break;
             }
         }
@@ -158,30 +140,5 @@ namespace Runner.Collectibles
                 Collect();
             }
         }
-
-#if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
-        {
-            Color color = collectibleType switch
-            {
-                CollectibleType.Coin => Color.yellow,
-                CollectibleType.CoinGroup => new Color(1f, 0.8f, 0f),
-                CollectibleType.HealthPack => Color.green,
-                CollectibleType.SpeedBoost => Color.cyan,
-                CollectibleType.Magnet => Color.magenta,
-                CollectibleType.Multiplier => Color.blue,
-                _ => Color.white
-            };
-
-            Gizmos.color = color;
-            Gizmos.DrawWireSphere(transform.position, 0.5f);
-
-            if (magnetRadius > 0f)
-            {
-                Gizmos.color = Color.magenta * 0.3f;
-                Gizmos.DrawWireSphere(transform.position, magnetRadius);
-            }
-        }
-#endif
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-using Runner.Core;
+using Runner.Save;
 
 namespace Runner.UI
 {
@@ -82,13 +82,13 @@ namespace Runner.UI
         {
             if (highScoreText != null)
             {
-                int highScore = PlayerPrefs.GetInt("HighScore", 0);
+                int highScore = SaveManager.GetHighScore();
                 highScoreText.text = $"BEST: {highScore}m";
             }
 
             if (coinsText != null)
             {
-                int coins = PlayerPrefs.GetInt("Coins", 0);
+                int coins = SaveManager.GetCoins();
                 coinsText.text = coins.ToString();
             }
         }

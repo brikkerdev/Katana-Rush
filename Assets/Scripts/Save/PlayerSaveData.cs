@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Runner.Inventory;
 
 namespace Runner.Save
 {
@@ -17,14 +16,6 @@ namespace Runner.Save
         public int totalCoinsCollected;
         public string equippedKatanaId;
         public List<string> ownedKatanaIds = new List<string>();
-        public List<ChallengeProgressData> challengeProgress = new List<ChallengeProgressData>();
-    }
-
-    [Serializable]
-    public class ChallengeProgressData
-    {
-        public string katanaId;
-        public float currentValue;
     }
 
     public static class SaveManager
@@ -57,7 +48,6 @@ namespace Runner.Save
                 cachedData.coins = 0;
                 cachedData.highScore = 0;
                 cachedData.ownedKatanaIds = new List<string>();
-                cachedData.challengeProgress = new List<ChallengeProgressData>();
             }
             else
             {
@@ -67,9 +57,6 @@ namespace Runner.Save
 
                     if (cachedData.ownedKatanaIds == null)
                         cachedData.ownedKatanaIds = new List<string>();
-
-                    if (cachedData.challengeProgress == null)
-                        cachedData.challengeProgress = new List<ChallengeProgressData>();
                 }
                 catch
                 {
@@ -137,14 +124,16 @@ namespace Runner.Save
             return Data.highScore;
         }
 
-        public static void SetHighScore(int score)
+        public static bool TrySetHighScore(int score)
         {
             if (score > Data.highScore)
             {
                 Data.highScore = score;
                 MarkDirty();
                 Save();
+                return true;
             }
+            return false;
         }
 
         public static void AddDistance(float distance)
@@ -169,6 +158,7 @@ namespace Runner.Save
         {
             Data.totalGamesPlayed++;
             MarkDirty();
+            Save();
         }
 
         public static float GetChallengeValue(ChallengeType type)
@@ -223,5 +213,15 @@ namespace Runner.Save
             Save();
             OnDataChanged?.Invoke();
         }
+    }
+
+    public enum ChallengeType
+    {
+        None,
+        TotalDistance,
+        EnemiesKilled,
+        DashesUsed,
+        GamesPlayed,
+        CoinsCollected
     }
 }

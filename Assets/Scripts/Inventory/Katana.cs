@@ -1,5 +1,6 @@
 using UnityEngine;
 using Runner.Player.Data;
+using Runner.Save;
 
 namespace Runner.Inventory
 {
@@ -10,16 +11,6 @@ namespace Runner.Inventory
         Epic,
         Legendary,
         Challenge
-    }
-
-    public enum ChallengeType
-    {
-        None,
-        TotalDistance,
-        EnemiesKilled,
-        DashesUsed,
-        GamesPlayed,
-        CoinsCollected
     }
 
     [System.Serializable]
@@ -42,7 +33,6 @@ namespace Runner.Inventory
 
         [Header("Stats")]
         [SerializeField] private PlayerPreset playerPreset;
-        [SerializeField][Range(1, 5)] private int dashCount = 3;
 
         [Header("Visual")]
         [SerializeField] private GameObject modelPrefab;
@@ -61,7 +51,7 @@ namespace Runner.Inventory
         public Sprite Icon => icon;
         public KatanaRarity Rarity => rarity;
         public PlayerPreset PlayerPreset => playerPreset;
-        public int DashCount => dashCount;
+        public int MaxDashes => playerPreset != null ? playerPreset.MaxDashes : 3;
         public GameObject ModelPrefab => modelPrefab;
         public Material BladeMaterial => bladeMaterial;
         public GameObject SlashEffectPrefab => slashEffectPrefab;
