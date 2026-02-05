@@ -23,14 +23,19 @@ namespace Runner.UI
         [SerializeField] private float initialLoadDelay = 0.5f;
         [SerializeField] private float restartLoadDelay = 0.3f;
 
+        [Header("Resume Settings")]
+        [SerializeField] private int resumeCountdownSeconds = 3;
+
         private Dictionary<ScreenType, UIScreen> screens;
         private ScreenType currentScreen;
         private ScreenType previousScreen;
         private int coinsCollectedThisRun;
         private bool isInitialized;
+        private bool isResuming;
 
         public ScreenType CurrentScreen => currentScreen;
         public bool IsLoading => loadingScreen != null && loadingScreen.IsLoading;
+        public bool IsResuming => isResuming;
 
         private void Awake()
         {
@@ -162,6 +167,7 @@ namespace Runner.UI
         {
             if (Game.Instance == null) return;
             if (IsLoading) return;
+            if (isResuming) return;
 
             if (Game.Instance.State == GameState.Playing)
             {
@@ -175,6 +181,13 @@ namespace Runner.UI
 
         private void HandlePlayerDeath()
         {
+            // Cancel any active countdown if player dies during resume
+            if (isResuming && gameplayScreen != null)
+            {
+                gameplayScreen.CancelCountdown();
+                isResuming = false;
+            }
+
             ShowGameOver();
         }
 
@@ -193,6 +206,12 @@ namespace Runner.UI
         public void ShowScreen(ScreenType type, bool instant = false)
         {
             if (!screens.ContainsKey(type)) return;
+
+            // Set return screen for settings before hiding current screen
+            if (type == ScreenType.Settings && settingsScreen != null)
+            {
+                settingsScreen.SetReturnScreen(currentScreen);
+            }
 
             if (currentScreen != ScreenType.None &&
                 currentScreen != type &&
@@ -244,6 +263,7 @@ namespace Runner.UI
             if (Game.Instance == null) return;
             if (Game.Instance.State != GameState.Playing) return;
             if (IsLoading) return;
+            if (isResuming) return;
 
             Game.Instance.PauseGame();
             ShowScreen(ScreenType.Pause);
@@ -254,15 +274,47 @@ namespace Runner.UI
             if (Game.Instance == null) return;
             if (Game.Instance.State != GameState.Paused) return;
             if (IsLoading) return;
+            if (isResuming) return;
 
+            StartCoroutine(ResumeGameRoutine());
+        }
+
+        private IEnumerator ResumeGameRoutine()
+        {
+            isResuming = true;
+
+            // Show gameplay screen first (coins will be preserved due to paused state check)
             ShowScreen(ScreenType.Gameplay);
-            Game.Instance.ResumeGame();
+
+            // Show countdown
+            if (gameplayScreen != null && resumeCountdownSeconds > 0)
+            {
+                gameplayScreen.ShowCountdown(resumeCountdownSeconds);
+
+                // Wait for countdown to complete
+                yield return new WaitForSecondsRealtime(resumeCountdownSeconds + 0.3f);
+            }
+
+            // Actually resume the game
+            if (Game.Instance != null && Game.Instance.State == GameState.Paused)
+            {
+                Game.Instance.ResumeGame();
+            }
+
+            isResuming = false;
         }
 
         public void RestartGame()
         {
             if (Game.Instance == null) return;
             if (IsLoading) return;
+
+            // Cancel any active resume countdown
+            if (isResuming && gameplayScreen != null)
+            {
+                gameplayScreen.CancelCountdown();
+                isResuming = false;
+            }
 
             StartCoroutine(RestartGameRoutine());
         }
@@ -317,6 +369,13 @@ namespace Runner.UI
         {
             if (Game.Instance == null) return;
             if (IsLoading) return;
+
+            // Cancel any active resume countdown
+            if (isResuming && gameplayScreen != null)
+            {
+                gameplayScreen.CancelCountdown();
+                isResuming = false;
+            }
 
             StartCoroutine(GoToMainMenuRoutine());
         }

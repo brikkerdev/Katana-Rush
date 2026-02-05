@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433a101e3db177c448725f70a500d36f, type: 3}
+  m_Name: Desert
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
+  biomeName: Desert
+  debugColor: {r: 1, g: 1, b: 1, a: 1}
+  segments:
+  - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
+  - {fileID: 6844235478968440788, guid: 9732ae13032b00348852cb29546d94e1, type: 3}
+  transitions:
+  - targetBiome: {fileID: 11400000, guid: 3bfb43a40c035694f89a37a997a852e4, type: 2}
+    exitSegments:
+    - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
+  environmentPrefab: {fileID: 5436482676337235900, guid: 0cfa2e84906db0a4296a0437107ad952, type: 3}
+  environmentOffset: {x: 0, y: 0, z: 0}
+  minLength: 800
+  maxLength: 800
+  minDifficulty: 0
+  maxDifficulty: 1
+  enemySpawnMultiplier: 1
+  overrideFog: 1
+  fogColor: {r: 1, g: 0.92983276, b: 0.6462264, a: 1}
+  fogDensity: 0.004
+  ambientColor: {r: 1, g: 0.9363716, b: 0.5801887, a: 1}
+  ambientIntensity: 0.1
+  skyboxMaterial: {fileID: 2100000, guid: 2ee500164b464974083306d3c26def4d, type: 2}

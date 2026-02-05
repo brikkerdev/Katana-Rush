@@ -19,9 +19,18 @@ namespace Runner.UI
         [SerializeField] private GameObject multiplierContainer;
         [SerializeField] private TextMeshProUGUI multiplierText;
 
+        [Header("Countdown")]
+        [SerializeField] private GameObject countdownContainer;
+        [SerializeField] private TextMeshProUGUI countdownText;
+
+        [SerializeField] private string go_key = "ui_go";
+
         private int currentCoins;
         private float displayedDistance;
         private float distanceAnimationSpeed = 50f;
+        private bool isCountingDown;
+
+        public bool IsCountingDown => isCountingDown;
 
         protected override void Awake()
         {
@@ -37,7 +46,19 @@ namespace Runner.UI
         protected override void OnShow()
         {
             base.OnShow();
-            ResetDisplay();
+
+            bool isResumingFromPause = Game.Instance != null &&
+                                       Game.Instance.State == GameState.Paused;
+
+            if (!isResumingFromPause)
+            {
+                ResetDisplay();
+            }
+
+            if (countdownContainer != null && !isCountingDown)
+            {
+                countdownContainer.SetActive(false);
+            }
         }
 
         private void ResetDisplay()
@@ -58,6 +79,7 @@ namespace Runner.UI
             if (!isVisible) return;
             if (Game.Instance == null) return;
             if (Game.Instance.State != GameState.Playing) return;
+            if (isCountingDown) return;
 
             UpdateDistance();
         }
@@ -111,8 +133,74 @@ namespace Runner.UI
             }
         }
 
+        public void ShowCountdown(int seconds)
+        {
+            StartCoroutine(CountdownRoutine(seconds));
+        }
+
+        private System.Collections.IEnumerator CountdownRoutine(int seconds)
+        {
+            isCountingDown = true;
+
+            if (pauseButton != null)
+            {
+                pauseButton.SetInteractable(false);
+            }
+
+            if (countdownContainer != null)
+            {
+                countdownContainer.SetActive(true);
+            }
+
+            for (int i = seconds; i > 0; i--)
+            {
+                if (countdownText != null)
+                {
+                    countdownText.text = i.ToString();
+                }
+
+                yield return new WaitForSecondsRealtime(1f);
+            }
+
+            if (countdownText != null)
+            {
+                countdownText.text = LocalizationController.Singleton.GetText(go_key);
+            }
+
+            yield return new WaitForSecondsRealtime(0.3f);
+
+            if (countdownContainer != null)
+            {
+                countdownContainer.SetActive(false);
+            }
+
+            if (pauseButton != null)
+            {
+                pauseButton.SetInteractable(true);
+            }
+
+            isCountingDown = false;
+        }
+
+        public void CancelCountdown()
+        {
+            StopAllCoroutines();
+            isCountingDown = false;
+
+            if (countdownContainer != null)
+            {
+                countdownContainer.SetActive(false);
+            }
+
+            if (pauseButton != null)
+            {
+                pauseButton.SetInteractable(true);
+            }
+        }
+
         private void OnPauseClicked()
         {
+            if (isCountingDown) return;
             UIManager.Instance?.PauseGame();
         }
 

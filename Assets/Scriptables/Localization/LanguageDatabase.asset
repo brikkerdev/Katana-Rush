@@ -1,0 +1,237 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17a43168ae1b113489a320f4466a05d8, type: 3}
+  m_Name: LanguageDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizationDatabase
+  languages:
+  - {fileID: 11400000, guid: fb62616145ecf4c4fbfd674081237649, type: 2}
+  - {fileID: 11400000, guid: c3ec938de9dbd8f47b650be06af52a0e, type: 2}
+  entries:
+  - key: challenge_100k_total_distance
+    translations:
+    - languageCode: en
+      text: Run 100km in total
+    - languageCode: ru
+      text: "\u041F\u0440\u043E\u0431\u0435\u0433\u0438\u0442\u0435 \u0432 \u043E\u0431\u0449\u0435\u0439
+        \u0441\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u0438 100\u043A\u043C"
+  - key: katana_description_gold
+    translations:
+    - languageCode: en
+      text: Golden tools faster than you know!
+    - languageCode: ru
+      text: "\u0417\u043E\u043B\u043E\u0442\u044B\u0435 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u044B
+        \u0431\u044B\u0441\u0442\u0440\u0435\u0435 \u0447\u0435\u043C \u0442\u044B
+        \u0434\u0443\u043C\u0430\u0435\u0448\u044C!"
+  - key: katana_description_gray_fox
+    translations:
+    - languageCode: en
+      text: '"Now we can fight as warriors, hand to hand. It is the basis of all
+        combat. Only a fool trusts his life to a weapon."'
+    - languageCode: ru
+      text: "\"\u0422\u0435\u043F\u0435\u0440\u044C \u043C\u044B \u043C\u043E\u0436\u0435\u043C
+        \u0431\u043E\u0440\u043E\u0442\u044C\u0441\u044F \u043A\u0430\u043A \u0432\u043E\u0438\u043D\u044B,
+        \u0433\u043E\u043B\u044B\u043C\u0438 \u0440\u0443\u043A\u0430\u043C\u0438.
+        \u042D\u0442\u043E \u043E\u0441\u043D\u043E\u0432\u0430 \u0432\u0441\u0435\u0445
+        \u0441\u0440\u0430\u0436\u0435\u043D\u0438\u0439. \u0422\u043E\u043B\u044C\u043A\u043E
+        \u0433\u043B\u0443\u043F\u0435\u0446 \u0434\u043E\u0432\u0435\u0440\u0438\u0442
+        \u0441\u0432\u043E\u044E \u0436\u0438\u0437\u043D\u044C \u043E\u0440\u0443\u0436\u0438\u044E.\""
+  - key: katana_description_murasama
+    translations:
+    - languageCode: en
+      text: '"Let''s dance!"'
+    - languageCode: ru
+      text: "\"\u0414\u0430\u0432\u0430\u0439 \u043F\u043E\u0442\u0430\u043D\u0446\u0443\u0435\u043C!\""
+  - key: katana_description_pixel
+    translations:
+    - languageCode: en
+      text: It reminds me something...
+    - languageCode: ru
+      text: "\u0427\u0442\u043E-\u0442\u043E \u043C\u043D\u0435 \u044D\u0442\u043E
+        \u043D\u0430\u043F\u043E\u043C\u0438\u043D\u0430\u0435\u0442..."
+  - key: katana_description_starter
+    translations:
+    - languageCode: en
+      text: Well, you have to start somewhere
+    - languageCode: ru
+      text: "\u041D\u0443, \u0441 \u0447\u0435\u0433\u043E-\u0442\u043E \u0436\u0435
+        \u043D\u0443\u0436\u043D\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C."
+  - key: katana_description_wooden
+    translations:
+    - languageCode: en
+      text: Literally wooden katana.
+    - languageCode: ru
+      text: "\u0411\u0443\u043A\u0432\u0430\u043B\u044C\u043D\u043E \u0434\u0435\u0440\u0435\u0432\u044F\u043D\u043D\u0430\u044F
+        \u043A\u0430\u0442\u0430\u043D\u0430"
+  - key: katana_name_gold
+    translations:
+    - languageCode: en
+      text: The Golden
+    - languageCode: ru
+      text: "\u0417\u043E\u043B\u043E\u0442\u043E"
+  - key: katana_name_gray_fox
+    translations:
+    - languageCode: en
+      text: Gray fox
+    - languageCode: ru
+      text: "\u0413\u0440\u0435\u0439 \u0424\u043E\u043A\u0441"
+  - key: katana_name_murasama
+    translations:
+    - languageCode: en
+      text: Murasama
+    - languageCode: ru
+      text: "\u041C\u0443\u0440\u0430\u0441\u0430\u043C\u0430"
+  - key: katana_name_pixel
+    translations:
+    - languageCode: en
+      text: Pixel
+    - languageCode: ru
+      text: "\u041F\u0438\u043A\u0441\u0435\u043B\u044C"
+  - key: katana_name_starter
+    translations:
+    - languageCode: en
+      text: Starter
+    - languageCode: ru
+      text: "\u0421\u0442\u0430\u0440\u0442\u043E\u0432\u0430\u044F"
+  - key: katana_name_wooden
+    translations:
+    - languageCode: en
+      text: Wooden
+    - languageCode: ru
+      text: "\u0414\u0435\u0440\u0435\u0432\u044F\u043D\u043D\u0430\u044F"
+  - key: rarity_challenge
+    translations:
+    - languageCode: en
+      text: Challenge
+    - languageCode: ru
+      text: "\u0418\u0441\u043F\u044B\u0442\u0430\u043D\u0438\u044F"
+  - key: rarity_common
+    translations:
+    - languageCode: en
+      text: Common
+    - languageCode: ru
+      text: "\u041E\u0431\u044B\u0447\u043D\u044B\u0439"
+  - key: rarity_epic
+    translations:
+    - languageCode: en
+      text: Epic
+    - languageCode: ru
+      text: "\u042D\u043F\u0438\u0447\u0435\u0441\u043A\u0438\u0439"
+  - key: rarity_legendary
+    translations:
+    - languageCode: en
+      text: Legendary
+    - languageCode: ru
+      text: "\u041B\u0435\u0433\u0435\u043D\u0434\u0430\u0440\u043D\u044B\u0439"
+  - key: rarity_rare
+    translations:
+    - languageCode: en
+      text: Rare
+    - languageCode: ru
+      text: "\u0420\u0435\u0434\u043A\u0438\u0439"
+  - key: tip_1
+    translations:
+    - languageCode: en
+      text: Dash through enemies to defeat them!
+    - languageCode: ru
+      text: "\u0414\u0435\u043B\u0430\u0439\u0442\u0435 \u0440\u044B\u0432\u043E\u043A
+        \u0432 \u043F\u0440\u043E\u0442\u0438\u0432\u043D\u0438\u043A\u0430 \u0447\u0442\u043E\u0431\u044B
+        \u043F\u043E\u0431\u0435\u0434\u0438\u0442\u044C \u0435\u0433\u043E!"
+  - key: tip_2
+    translations:
+    - languageCode: en
+      text: Samurai block enemy bullets automatically!
+    - languageCode: ru
+      text: "\u0421\u0430\u043C\u0443\u0440\u0430\u0439 \u0431\u043B\u043E\u043A\u0438\u0440\u0443\u0435\u0442
+        \u043F\u0443\u043B\u0438 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438!"
+  - key: tip_3
+    translations:
+    - languageCode: en
+      text: Change lanes to avoid obstacles!
+    - languageCode: ru
+      text: "\u041C\u0435\u043D\u044F\u0439 \u043B\u0438\u043D\u0438\u0438 \u0447\u0442\u043E\u0431\u044B
+        \u0438\u0437\u0431\u0435\u0436\u0430\u0442\u044C \u0441\u0442\u043E\u043B\u043A\u043D\u043E\u0432\u0435\u043D\u0438\u0439!"
+  - key: tip_4
+    translations:
+    - languageCode: en
+      text: You can find double jump on some katanas!
+    - languageCode: ru
+      text: "\u041D\u0430 \u043D\u0435\u043A\u043E\u0442\u043E\u0440\u044B\u0445
+        \u043A\u0430\u0442\u0430\u043D\u0430\u0445 \u0435\u0441\u0442\u044C \u0434\u0432\u043E\u0439\u043D\u043E\u0439
+        \u043F\u0440\u044B\u0436\u043E\u043A!"
+  - key: tip_5
+    translations:
+    - languageCode: en
+      text: Collect coins to unlock new katanas!
+    - languageCode: ru
+      text: "\u0421\u043E\u0431\u0438\u0440\u0430\u0439 \u043C\u043E\u043D\u0435\u0442\u044B
+        \u0447\u0442\u043E\u0431\u044B \u043E\u0442\u043A\u0440\u044B\u0442\u044C
+        \u043D\u043E\u0432\u044B\u0435 \u043A\u0430\u0442\u0430\u043D\u044B!"
+  - key: ui_enabled
+    translations:
+    - languageCode: en
+      text: Enabled
+    - languageCode: ru
+      text: "\u0412\u043A\u043B\u044E\u0447\u0435\u043D\u043E"
+  - key: ui_go
+    translations:
+    - languageCode: en
+      text: GO!
+    - languageCode: ru
+      text: "\u041F\u041E\u0413\u041D\u0410\u041B\u0418!"
+  - key: ui_language
+    translations:
+    - languageCode: en
+      text: Language
+    - languageCode: ru
+      text: "\u042F\u0437\u044B\u043A"
+  - key: ui_main_menu
+    translations:
+    - languageCode: en
+      text: End run
+    - languageCode: ru
+      text: "\u0417\u0430\u043A\u043E\u043D\u0447\u0438\u0442\u044C \u0437\u0430\u0431\u0435\u0433"
+  - key: ui_music
+    translations:
+    - languageCode: en
+      text: Music
+    - languageCode: ru
+      text: "\u041C\u0443\u0437\u044B\u043A\u0430"
+  - key: ui_quality
+    translations:
+    - languageCode: en
+      text: Quality
+    - languageCode: ru
+      text: "\u041A\u0430\u0447\u0435\u0441\u0442\u0432\u043E"
+  - key: ui_resume
+    translations:
+    - languageCode: en
+      text: Resume
+    - languageCode: ru
+      text: "\u041F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C"
+  - key: ui_settings
+    translations:
+    - languageCode: en
+      text: Settings
+    - languageCode: ru
+      text: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
+  - key: ui_sfx
+    translations:
+    - languageCode: en
+      text: SFX
+    - languageCode: ru
+      text: SFX
+  - key: ui_vibration
+    translations:
+    - languageCode: en
+      text: Vibration
+    - languageCode: ru
+      text: "\u0412\u0438\u0431\u0440\u0430\u0446\u0438\u044F"

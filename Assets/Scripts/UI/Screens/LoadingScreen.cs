@@ -9,7 +9,7 @@ namespace Runner.UI
     public class LoadingScreen : UIScreen
     {
         [Header("UI Elements")]
-        [SerializeField] private Image progressBar;
+        [SerializeField] private BarUIVisualElement progressBar;
         [SerializeField] private TextMeshProUGUI progressText;
         [SerializeField] private TextMeshProUGUI loadingText;
         [SerializeField] private TextMeshProUGUI tipText;
@@ -78,7 +78,7 @@ namespace Runner.UI
         {
             if (progressBar != null)
             {
-                progressBar.fillAmount = currentProgress;
+                progressBar.SetValue(1f, currentProgress);
             }
 
             if (progressText != null)
@@ -102,7 +102,7 @@ namespace Runner.UI
 
             if (showTips && tipText != null && tips.Length > 0)
             {
-                tipText.text = tips[UnityEngine.Random.Range(0, tips.Length)];
+                tipText.text = LocalizationController.Singleton.GetText(tips[UnityEngine.Random.Range(0, tips.Length)]);
                 tipText.gameObject.SetActive(true);
             }
             else if (tipText != null)

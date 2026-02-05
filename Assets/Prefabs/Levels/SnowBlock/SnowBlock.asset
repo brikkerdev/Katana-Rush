@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433a101e3db177c448725f70a500d36f, type: 3}
+  m_Name: SnowBlock
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
+  biomeName: SnowBlocks
+  debugColor: {r: 1, g: 1, b: 1, a: 1}
+  segments:
+  - {fileID: 6844235478968440788, guid: 4c6bf053e9b11d7428e1ee56fe1813b9, type: 3}
+  - {fileID: 6844235478968440788, guid: 9c9b439d072acd84c981b106ce9bc4a1, type: 3}
+  - {fileID: 6844235478968440788, guid: 7cff71f595e8e5d4381002a6b650072a, type: 3}
+  transitions:
+  - targetBiome: {fileID: 11400000, guid: 83fa665adb91367448cd12bf219cdbf2, type: 2}
+    exitSegments:
+    - {fileID: 6844235478968440788, guid: b1e016f72f26380488b851eff80a3cf7, type: 3}
+  environmentPrefab: {fileID: 7800426110740515453, guid: d611006a76996444c8f486607c461c0c, type: 3}
+  environmentOffset: {x: 0, y: 0, z: 0}
+  minLength: 800
+  maxLength: 800
+  minDifficulty: 0
+  maxDifficulty: 1
+  enemySpawnMultiplier: 1
+  overrideFog: 1
+  fogColor: {r: 0.6273585, g: 0.9564828, b: 1, a: 1}
+  fogDensity: 0.003
+  ambientColor: {r: 0.7122642, g: 0.95172757, b: 1, a: 1}
+  ambientIntensity: 1
+  sunIntensityMultiplier: 1
+  moonIntensityMultiplier: 0.2
+  skyboxMaterial: {fileID: 2100000, guid: 2ee500164b464974083306d3c26def4d, type: 2}

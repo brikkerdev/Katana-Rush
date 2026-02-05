@@ -5,7 +5,6 @@ namespace Runner.CameraSystem
         Menu,
         Gameplay,
         Death,
-        Revive,
-        Transition
+        Cinematic
     }
 }

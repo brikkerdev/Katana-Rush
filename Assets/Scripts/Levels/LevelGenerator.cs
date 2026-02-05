@@ -7,18 +7,14 @@ namespace Runner.LevelGeneration
 {
     public class LevelGenerator : MonoBehaviour
     {
-        [Header("Level Prefabs")]
-        [SerializeField] private LevelSegment[] levelPrefabs;
-
-        [Header("Generation Settings")]
+        [Header("Generation")]
         [SerializeField] private float viewDistance = 100f;
         [SerializeField] private float despawnDistance = 30f;
         [SerializeField] private int initialSegmentCount = 5;
-        [SerializeField] private float maxDifficultyDistance = 1000f;
 
         [Header("Pooling")]
-        [SerializeField] private bool useObjectPooling = true;
-        [SerializeField] private int poolSizePerPrefab = 5;
+        [SerializeField] private bool usePooling = true;
+        [SerializeField] private int poolSizePerSegment = 3;
 
         [Header("Spawners")]
         [SerializeField] private EnemySpawner enemySpawner;
@@ -28,8 +24,9 @@ namespace Runner.LevelGeneration
         [SerializeField] private bool showDebug = false;
 
         private Transform player;
+        private BiomeManager biomeManager;
         private float nextSpawnZ;
-        private LevelSegment lastSpawnedPrefab;
+        private LevelSegment lastSpawnedSegment;
         private bool isInitialized;
 
         private List<ActiveSegment> activeSegments = new List<ActiveSegment>();
@@ -43,54 +40,16 @@ namespace Runner.LevelGeneration
             public float EndZ;
         }
 
-        public float CurrentDifficulty => player != null
-            ? Mathf.Clamp01(player.position.z / maxDifficultyDistance)
-            : 0f;
+        public bool IsInitialized => isInitialized;
 
-        public void SetPlayer(Transform playerTransform)
+        public void Initialize(Transform playerTransform, BiomeManager manager)
         {
             player = playerTransform;
+            biomeManager = manager;
 
-            if (showDebug)
-            {
-                Debug.Log($"[LevelGenerator] Player set: {player.name}");
-            }
-        }
-
-        private void Awake()
-        {
             FindSpawners();
-
-            if (useObjectPooling)
-            {
-                InitializePools();
-            }
-        }
-
-        private void FindSpawners()
-        {
-            if (enemySpawner == null)
-            {
-                enemySpawner = GetComponentInChildren<EnemySpawner>();
-            }
-            if (enemySpawner == null)
-            {
-                enemySpawner = FindFirstObjectByType<EnemySpawner>();
-            }
-
-            if (collectibleSpawner == null)
-            {
-                collectibleSpawner = GetComponentInChildren<CollectibleSpawner>();
-            }
-            if (collectibleSpawner == null)
-            {
-                collectibleSpawner = FindFirstObjectByType<CollectibleSpawner>();
-            }
-        }
-
-        private void Start()
-        {
             GenerateInitialSegments();
+
             isInitialized = true;
 
             if (showDebug)
@@ -99,36 +58,16 @@ namespace Runner.LevelGeneration
             }
         }
 
-        private void Update()
+        private void FindSpawners()
         {
-            if (!isInitialized) return;
-            if (player == null) return;
-
-            TrySpawnSegments();
-            TryDespawnSegments();
-        }
-
-        private void InitializePools()
-        {
-            if (levelPrefabs == null || levelPrefabs.Length == 0)
+            if (enemySpawner == null)
             {
-                Debug.LogError("[LevelGenerator] No level prefabs assigned!");
-                return;
+                enemySpawner = FindFirstObjectByType<EnemySpawner>();
             }
 
-            foreach (var prefab in levelPrefabs)
+            if (collectibleSpawner == null)
             {
-                if (prefab == null) continue;
-
-                segmentPools[prefab] = new Queue<LevelSegment>();
-
-                for (int i = 0; i < poolSizePerPrefab; i++)
-                {
-                    var segment = Instantiate(prefab, transform);
-                    segment.gameObject.SetActive(false);
-                    segment.name = $"{prefab.name}_Pool_{i}";
-                    segmentPools[prefab].Enqueue(segment);
-                }
+                collectibleSpawner = FindFirstObjectByType<CollectibleSpawner>();
             }
         }
 
@@ -142,120 +81,120 @@ namespace Runner.LevelGeneration
             }
         }
 
-        private void TrySpawnSegments()
+        private void Update()
         {
-            float spawnThreshold = player.position.z + viewDistance;
+            if (!isInitialized) return;
+            if (player == null) return;
 
-            int safety = 100;
-            while (nextSpawnZ < spawnThreshold && safety > 0)
+            SpawnSegmentsAhead();
+            DespawnSegmentsBehind();
+        }
+
+        private void SpawnSegmentsAhead()
+        {
+            float threshold = player.position.z + viewDistance;
+            int safety = 50;
+
+            while (nextSpawnZ < threshold && safety > 0)
             {
                 SpawnNextSegment();
                 safety--;
             }
         }
 
-        private void TryDespawnSegments()
+        private void DespawnSegmentsBehind()
         {
-            float despawnThreshold = player.position.z - despawnDistance;
+            float threshold = player.position.z - despawnDistance;
 
-            while (activeSegments.Count > 0 && activeSegments[0].EndZ < despawnThreshold)
+            while (activeSegments.Count > 0 && activeSegments[0].EndZ < threshold)
             {
                 DespawnSegment(activeSegments[0]);
                 activeSegments.RemoveAt(0);
             }
 
-            // Despawn enemies and collectibles behind player
-            enemySpawner?.DespawnEnemiesBeforeZ(despawnThreshold);
-            collectibleSpawner?.DespawnCollectiblesBeforeZ(despawnThreshold);
+            enemySpawner?.DespawnEnemiesBeforeZ(threshold);
+            collectibleSpawner?.DespawnCollectiblesBeforeZ(threshold);
         }
 
         private void SpawnNextSegment()
         {
-            LevelSegment prefab = SelectNextPrefab();
-            LevelSegment segment = GetOrCreateSegment(prefab);
-
-            Vector3 position = new Vector3(0f, 0f, nextSpawnZ);
-            segment.transform.position = position;
-            segment.transform.rotation = Quaternion.identity;
-            segment.gameObject.SetActive(true);
-
-            var activeSegment = new ActiveSegment
+            if (biomeManager == null)
             {
-                Instance = segment,
+                Debug.LogError("[LevelGenerator] No BiomeManager!");
+                return;
+            }
+
+            LevelSegment prefab = biomeManager.GetNextSegment(lastSpawnedSegment);
+
+            if (prefab == null)
+            {
+                Debug.LogError("[LevelGenerator] No segment to spawn!");
+                return;
+            }
+
+            EnsureSegmentPooled(prefab);
+
+            LevelSegment instance = GetSegmentFromPool(prefab);
+            instance.transform.position = new Vector3(0f, 0f, nextSpawnZ);
+            instance.transform.rotation = Quaternion.identity;
+            instance.gameObject.SetActive(true);
+
+            var active = new ActiveSegment
+            {
+                Instance = instance,
                 Prefab = prefab,
                 StartZ = nextSpawnZ,
-                EndZ = nextSpawnZ + segment.Length
+                EndZ = nextSpawnZ + instance.Length
             };
 
-            activeSegments.Add(activeSegment);
+            activeSegments.Add(active);
 
-            float playerDistance = player != null ? player.position.z : 0f;
-
-            // Spawn enemies
-            enemySpawner?.SpawnEnemiesForSegment(segment, playerDistance);
-
-            // Spawn collectibles
-            collectibleSpawner?.SpawnCollectiblesForSegment(segment);
+            SpawnSegmentContent(instance);
 
             if (showDebug)
             {
-                Debug.Log($"[LevelGenerator] Spawned segment at Z={nextSpawnZ}");
+                string biomeInfo = biomeManager.CurrentBiome?.BiomeName ?? "Unknown";
+                Debug.Log($"[LevelGenerator] Spawned {prefab.name} at Z={nextSpawnZ} ({biomeInfo})");
             }
 
-            nextSpawnZ += segment.Length;
-            lastSpawnedPrefab = prefab;
+            nextSpawnZ += instance.Length;
+            lastSpawnedSegment = prefab;
         }
 
-        private LevelSegment SelectNextPrefab()
+        private void EnsureSegmentPooled(LevelSegment prefab)
         {
-            if (levelPrefabs == null || levelPrefabs.Length == 0)
+            if (!usePooling) return;
+            if (segmentPools.ContainsKey(prefab)) return;
+
+            segmentPools[prefab] = new Queue<LevelSegment>();
+
+            for (int i = 0; i < poolSizePerSegment; i++)
             {
-                Debug.LogError("[LevelGenerator] No level prefabs!");
-                return null;
+                var instance = Instantiate(prefab, transform);
+                instance.gameObject.SetActive(false);
+                instance.name = $"{prefab.name}_Pooled";
+                segmentPools[prefab].Enqueue(instance);
             }
-
-            List<LevelSegment> validPrefabs = new List<LevelSegment>();
-
-            foreach (var prefab in levelPrefabs)
-            {
-                if (prefab == null) continue;
-
-                if (!prefab.AllowConsecutive && prefab == lastSpawnedPrefab)
-                    continue;
-
-                float difficultyDelta = Mathf.Abs(prefab.DifficultyWeight - CurrentDifficulty);
-                if (difficultyDelta < 0.5f)
-                {
-                    validPrefabs.Add(prefab);
-                }
-            }
-
-            if (validPrefabs.Count == 0)
-            {
-                return levelPrefabs[Random.Range(0, levelPrefabs.Length)];
-            }
-
-            return validPrefabs[Random.Range(0, validPrefabs.Count)];
         }
 
-        private LevelSegment GetOrCreateSegment(LevelSegment prefab)
+        private LevelSegment GetSegmentFromPool(LevelSegment prefab)
         {
-            if (useObjectPooling && segmentPools.TryGetValue(prefab, out var pool) && pool.Count > 0)
+            if (usePooling && segmentPools.TryGetValue(prefab, out var pool) && pool.Count > 0)
             {
                 return pool.Dequeue();
             }
 
-            var segment = Instantiate(prefab, transform);
-            segment.name = $"{prefab.name}_Instance";
-            return segment;
+            var instance = Instantiate(prefab, transform);
+            instance.name = $"{prefab.name}_Instance";
+            return instance;
         }
 
-        private void DespawnSegment(ActiveSegment segment)
+        private void ReturnSegmentToPool(ActiveSegment segment)
         {
             segment.Instance.ResetSegment();
             segment.Instance.gameObject.SetActive(false);
 
-            if (useObjectPooling && segmentPools.TryGetValue(segment.Prefab, out var pool))
+            if (usePooling && segmentPools.TryGetValue(segment.Prefab, out var pool))
             {
                 pool.Enqueue(segment.Instance);
             }
@@ -265,30 +204,32 @@ namespace Runner.LevelGeneration
             }
         }
 
-        public void ResetGenerator()
+        private void SpawnSegmentContent(LevelSegment segment)
         {
-            // Despawn all enemies and collectibles
+            float difficulty = biomeManager?.CurrentBiome?.EnemySpawnMultiplier ?? 1f;
+
+            enemySpawner?.SpawnEnemiesForSegment(segment, player.position.z * difficulty);
+            collectibleSpawner?.SpawnCollectiblesForSegment(segment);
+        }
+
+        private void DespawnSegment(ActiveSegment segment)
+        {
+            ReturnSegmentToPool(segment);
+        }
+
+        public void Reset()
+        {
             enemySpawner?.DespawnAllEnemies();
             collectibleSpawner?.DespawnAllCollectibles();
 
-            // Return all segments to pool
             foreach (var segment in activeSegments)
             {
-                if (segment.Instance != null)
-                {
-                    segment.Instance.ResetSegment();
-                    segment.Instance.gameObject.SetActive(false);
-
-                    if (useObjectPooling && segmentPools.TryGetValue(segment.Prefab, out var pool))
-                    {
-                        pool.Enqueue(segment.Instance);
-                    }
-                }
+                ReturnSegmentToPool(segment);
             }
-
             activeSegments.Clear();
+
             nextSpawnZ = 0f;
-            lastSpawnedPrefab = null;
+            lastSpawnedSegment = null;
 
             GenerateInitialSegments();
 
@@ -304,15 +245,25 @@ namespace Runner.LevelGeneration
             if (!showDebug) return;
 
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(new Vector3(0f, 0f, nextSpawnZ), 1f);
+            Gizmos.DrawWireSphere(new Vector3(0f, 1f, nextSpawnZ), 1f);
 
             if (player != null)
             {
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawLine(player.position, player.position + Vector3.forward * viewDistance);
+                Vector3 viewEnd = player.position + Vector3.forward * viewDistance;
+                Gizmos.DrawLine(player.position, viewEnd);
 
                 Gizmos.color = Color.red;
-                Gizmos.DrawLine(player.position, player.position - Vector3.forward * despawnDistance);
+                Vector3 despawnEnd = player.position - Vector3.forward * despawnDistance;
+                Gizmos.DrawLine(player.position, despawnEnd);
+            }
+
+            foreach (var segment in activeSegments)
+            {
+                Gizmos.color = Color.white;
+                Vector3 center = new Vector3(0f, 0.5f, (segment.StartZ + segment.EndZ) / 2f);
+                Vector3 size = new Vector3(10f, 0.1f, segment.EndZ - segment.StartZ);
+                Gizmos.DrawWireCube(center, size);
             }
         }
 #endif

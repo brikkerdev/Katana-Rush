@@ -23,6 +23,7 @@ namespace Runner.UI
         [SerializeField] private UIButton resetButton;
 
         private List<string> languageCodes = new List<string>();
+        private ScreenType returnToScreen = ScreenType.MainMenu;
 
         protected override void Awake()
         {
@@ -95,6 +96,14 @@ namespace Runner.UI
             }
 
             qualityDropdown.AddOptions(options);
+        }
+
+        /// <summary>
+        /// Sets which screen to return to when closing settings
+        /// </summary>
+        public void SetReturnScreen(ScreenType screen)
+        {
+            returnToScreen = screen;
         }
 
         protected override void OnShow()
@@ -175,7 +184,8 @@ namespace Runner.UI
 
         private void OnCloseClicked()
         {
-            UIManager.Instance?.ShowScreen(ScreenType.MainMenu);
+            // Return to the screen we came from (MainMenu or Pause)
+            UIManager.Instance?.ShowScreen(returnToScreen);
         }
 
         private void OnResetClicked()

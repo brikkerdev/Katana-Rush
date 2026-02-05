@@ -1,190 +1,296 @@
-using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine;
+using System;
 
 namespace Runner.CameraSystem
 {
     public class CameraManager : MonoBehaviour
     {
-        [Header("Virtual Cameras")]
-        [SerializeField] private CinemachineCamera menuCamera;
-        [SerializeField] private CinemachineCamera gameplayCamera;
-        [SerializeField] private CinemachineCamera deathCamera;
+        [Header("State Configurations")]
+        [SerializeField] private CameraStateConfig menuConfig;
+        [SerializeField] private CameraStateConfig gameplayConfig;
+        [SerializeField] private CameraStateConfig deathConfig;
 
-        [Header("References")]
-        [SerializeField] private CinemachineBrain brain;
-        [SerializeField] private CameraTarget cameraTarget;
-        [SerializeField] private CameraShake cameraShake;
+        [Header("Follow Settings")]
+        [SerializeField] private float positionSmoothSpeed = 10f;
+        [SerializeField] private float rotationSmoothSpeed = 8f;
+        [SerializeField] private float stateTransitionSpeed = 3f;
 
-        [Header("Priority Settings")]
-        [SerializeField] private int activePriority = 20;
-        [SerializeField] private int inactivePriority = 10;
+        [Header("Look Ahead")]
+        [SerializeField] private bool useLookAhead = true;
+        [SerializeField] private float lookAheadDistance = 5f;
+        [SerializeField] private float lookAheadSmoothSpeed = 3f;
 
-        [Header("Blend Settings")]
-        [SerializeField] private float menuToGameplayBlendTime = 1f;
-        [SerializeField] private float gameplayToDeathBlendTime = 0.5f;
-        [SerializeField] private float deathToGameplayBlendTime = 1f;
+        [Header("Boundaries")]
+        [SerializeField] private bool clampHorizontal = true;
+        [SerializeField] private float horizontalClampRange = 0.5f;
 
-        private CameraState _currentState;
-        private CinemachineCamera _activeCamera;
-        private Transform _player;
+        private Transform target;
+        private CameraState currentState = CameraState.Menu;
+        private CameraStateConfig currentConfig;
+        private CameraStateConfig targetConfig;
 
-        public CameraState CurrentState => _currentState;
-        public CinemachineCamera ActiveCamera => _activeCamera;
+        private Vector3 currentOffset;
+        private Vector3 currentLookAhead;
+        private Quaternion currentRotation;
+        private Vector3 velocity = Vector3.zero;
+        private Vector3 lastTargetPosition;
+        private bool isInitialized;
 
-        public void Initialize(Transform player)
+        public CameraState CurrentState => currentState;
+        public Transform Target => target;
+
+        public event Action<CameraState> OnStateChanged;
+
+        private void Awake()
         {
-            _player = player;
-
-            if (cameraTarget != null)
-            {
-                cameraTarget.Initialize(player);
-            }
-
-            SetupCameraTargets();
-            SetState(CameraState.Menu);
+            InitializeDefaultConfigs();
         }
 
-        private void SetupCameraTargets()
+        private void InitializeDefaultConfigs()
         {
-            Transform target = cameraTarget != null ? cameraTarget.transform : _player;
-
-            if (gameplayCamera != null)
+            if (menuConfig == null)
             {
-                gameplayCamera.Follow = target;
-                gameplayCamera.LookAt = target;
+                menuConfig = new CameraStateConfig
+                {
+                    offset = new Vector3(0f, 4f, -8f),
+                    rotation = new Vector3(12f, 0f, 0f),
+                    fieldOfView = 60f
+                };
             }
 
-            if (deathCamera != null)
+            if (gameplayConfig == null)
             {
-                deathCamera.Follow = _player;
-                deathCamera.LookAt = _player;
+                gameplayConfig = new CameraStateConfig
+                {
+                    offset = new Vector3(0f, 5f, -10f),
+                    rotation = new Vector3(15f, 0f, 0f),
+                    fieldOfView = 65f
+                };
             }
+
+            if (deathConfig == null)
+            {
+                deathConfig = new CameraStateConfig
+                {
+                    offset = new Vector3(0f, 8f, -12f),
+                    rotation = new Vector3(30f, 0f, 0f),
+                    fieldOfView = 55f
+                };
+            }
+        }
+
+        public void Initialize(Transform playerTransform)
+        {
+            target = playerTransform;
+            currentState = CameraState.Menu;
+            currentConfig = menuConfig;
+            targetConfig = menuConfig;
+
+            currentOffset = menuConfig.offset;
+            currentRotation = Quaternion.Euler(menuConfig.rotation);
+
+            if (target != null)
+            {
+                transform.position = target.position + currentOffset;
+                transform.rotation = currentRotation;
+                lastTargetPosition = target.position;
+            }
+
+            ApplyFieldOfView(menuConfig.fieldOfView);
+            isInitialized = true;
         }
 
         public void SetState(CameraState newState)
         {
-            if (_currentState == newState) return;
+            if (currentState == newState) return;
 
-            CameraState previousState = _currentState;
-            _currentState = newState;
-
-            UpdateBlendTime(previousState, newState);
-            ActivateCameraForState(newState);
+            currentState = newState;
+            targetConfig = GetConfigForState(newState);
+            OnStateChanged?.Invoke(newState);
         }
 
-        private void UpdateBlendTime(CameraState from, CameraState to)
+        private CameraStateConfig GetConfigForState(CameraState state)
         {
-            if (brain == null) return;
+            return state switch
+            {
+                CameraState.Menu => menuConfig,
+                CameraState.Gameplay => gameplayConfig,
+                CameraState.Death => deathConfig,
+                CameraState.Cinematic => gameplayConfig,
+                _ => gameplayConfig
+            };
+        }
 
-            float blendTime = 1f;
+        private void LateUpdate()
+        {
+            if (!isInitialized || target == null) return;
 
-            if (from == CameraState.Menu && to == CameraState.Gameplay)
-                blendTime = menuToGameplayBlendTime;
-            else if (from == CameraState.Gameplay && to == CameraState.Death)
-                blendTime = gameplayToDeathBlendTime;
-            else if (from == CameraState.Death && to == CameraState.Gameplay)
-                blendTime = deathToGameplayBlendTime;
+            UpdateConfiguration();
+            UpdatePosition();
+            UpdateRotation();
+            UpdateFieldOfView();
 
-            brain.DefaultBlend = new CinemachineBlendDefinition(
-                CinemachineBlendDefinition.Styles.EaseInOut,
-                blendTime
+            lastTargetPosition = target.position;
+        }
+
+        private void UpdateConfiguration()
+        {
+            float transitionDelta = stateTransitionSpeed * Time.deltaTime;
+
+            currentOffset = Vector3.Lerp(currentOffset, targetConfig.offset, transitionDelta);
+        }
+
+        private void UpdatePosition()
+        {
+            Vector3 basePosition = target.position;
+
+            // Apply horizontal clamping for lanes
+            if (clampHorizontal)
+            {
+                float clampedX = Mathf.Clamp(
+                    transform.position.x,
+                    basePosition.x - horizontalClampRange,
+                    basePosition.x + horizontalClampRange
+                );
+                basePosition.x = Mathf.Lerp(transform.position.x, clampedX, positionSmoothSpeed * Time.deltaTime);
+            }
+
+            // Calculate look ahead
+            Vector3 lookAheadOffset = Vector3.zero;
+            if (useLookAhead && currentState == CameraState.Gameplay)
+            {
+                Vector3 targetLookAhead = Vector3.forward * lookAheadDistance;
+                currentLookAhead = Vector3.Lerp(
+                    currentLookAhead,
+                    targetLookAhead,
+                    lookAheadSmoothSpeed * Time.deltaTime
+                );
+                lookAheadOffset = currentLookAhead;
+            }
+            else
+            {
+                currentLookAhead = Vector3.Lerp(
+                    currentLookAhead,
+                    Vector3.zero,
+                    lookAheadSmoothSpeed * Time.deltaTime
+                );
+            }
+
+            Vector3 targetPosition = basePosition + currentOffset + lookAheadOffset;
+
+            transform.position = Vector3.SmoothDamp(
+                transform.position,
+                targetPosition,
+                ref velocity,
+                1f / positionSmoothSpeed
             );
         }
 
-        private void ActivateCameraForState(CameraState state)
+        private void UpdateRotation()
         {
-            SetAllCamerasInactive();
+            Quaternion targetRotation = Quaternion.Euler(targetConfig.rotation);
+            currentRotation = Quaternion.Slerp(
+                currentRotation,
+                targetRotation,
+                rotationSmoothSpeed * Time.deltaTime
+            );
+            transform.rotation = currentRotation;
+        }
 
-            switch (state)
+        private void UpdateFieldOfView()
+        {
+            Camera cam = GetComponent<Camera>();
+            if (cam != null)
             {
-                case CameraState.Menu:
-                    ActivateCamera(menuCamera);
-                    break;
-                case CameraState.Gameplay:
-                case CameraState.Revive:
-                    ActivateCamera(gameplayCamera);
-                    break;
-                case CameraState.Death:
-                    ActivateCamera(deathCamera);
-                    break;
+                cam.fieldOfView = Mathf.Lerp(
+                    cam.fieldOfView,
+                    targetConfig.fieldOfView,
+                    stateTransitionSpeed * Time.deltaTime
+                );
             }
         }
 
-        private void SetAllCamerasInactive()
+        private void ApplyFieldOfView(float fov)
         {
-            if (menuCamera != null) menuCamera.Priority = inactivePriority;
-            if (gameplayCamera != null) gameplayCamera.Priority = inactivePriority;
-            if (deathCamera != null) deathCamera.Priority = inactivePriority;
-        }
-
-        private void ActivateCamera(CinemachineCamera cam)
-        {
-            if (cam == null) return;
-
-            cam.Priority = activePriority;
-            _activeCamera = cam;
-        }
-
-        public void ShakeCamera(float intensity, float duration)
-        {
-            if (cameraShake != null)
+            Camera cam = GetComponent<Camera>();
+            if (cam != null)
             {
-                cameraShake.Shake(intensity, duration);
+                cam.fieldOfView = fov;
             }
         }
 
-        public void ShakeCamera(CameraShakePreset preset)
+        public void SnapToTarget()
         {
-            if (cameraShake != null)
+            if (target == null) return;
+
+            currentOffset = targetConfig.offset;
+            currentRotation = Quaternion.Euler(targetConfig.rotation);
+            transform.position = target.position + currentOffset;
+            transform.rotation = currentRotation;
+            velocity = Vector3.zero;
+            ApplyFieldOfView(targetConfig.fieldOfView);
+        }
+
+        public void SetTarget(Transform newTarget)
+        {
+            target = newTarget;
+            if (target != null)
             {
-                cameraShake.Shake(preset);
+                lastTargetPosition = target.position;
             }
         }
 
-        public void SetFollowOffset(Vector3 offset, float duration = 0.5f)
+        public void AddOffset(Vector3 additionalOffset, float duration = 0f)
         {
-            if (cameraTarget != null)
+            if (duration <= 0f)
             {
-                cameraTarget.SetOffset(offset, duration);
+                currentOffset += additionalOffset;
+            }
+            else
+            {
+                StartCoroutine(TempOffsetCoroutine(additionalOffset, duration));
             }
         }
 
-        public void ResetFollowOffset(float duration = 0.5f)
+        private System.Collections.IEnumerator TempOffsetCoroutine(Vector3 offset, float duration)
         {
-            if (cameraTarget != null)
-            {
-                cameraTarget.ResetOffset(duration);
-            }
-        }
+            Vector3 originalOffset = currentOffset;
+            currentOffset += offset;
 
-        public void SetFieldOfView(float fov, float duration = 0.3f)
-        {
-            StartCoroutine(AnimateFOV(fov, duration));
-        }
+            yield return new WaitForSeconds(duration);
 
-        private IEnumerator AnimateFOV(float targetFOV, float duration)
-        {
-            if (_activeCamera == null) yield break;
-
-            float startFOV = _activeCamera.Lens.FieldOfView;
             float elapsed = 0f;
+            float returnDuration = 0.3f;
+            Vector3 startOffset = currentOffset;
 
-            while (elapsed < duration)
+            while (elapsed < returnDuration)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / duration;
-                _activeCamera.Lens.FieldOfView = Mathf.Lerp(startFOV, targetFOV, t);
+                currentOffset = Vector3.Lerp(startOffset, originalOffset, elapsed / returnDuration);
                 yield return null;
             }
 
-            _activeCamera.Lens.FieldOfView = targetFOV;
+            currentOffset = originalOffset;
         }
 
-        private void OnValidate()
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
         {
-            if (brain == null)
-                brain = FindFirstObjectByType<CinemachineBrain>();
+            if (target == null) return;
+
+            Gizmos.color = Color.cyan;
+            Vector3 targetPos = target.position + (targetConfig?.offset ?? gameplayConfig.offset);
+            Gizmos.DrawWireSphere(targetPos, 0.5f);
+            Gizmos.DrawLine(target.position, targetPos);
         }
+#endif
+    }
+
+    [System.Serializable]
+    public class CameraStateConfig
+    {
+        public Vector3 offset = new Vector3(0f, 5f, -10f);
+        public Vector3 rotation = new Vector3(15f, 0f, 0f);
+        public float fieldOfView = 60f;
     }
 }

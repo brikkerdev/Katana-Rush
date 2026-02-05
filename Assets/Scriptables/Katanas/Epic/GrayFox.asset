@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
   id: 1d312d48-e88a-4ffa-b80c-c5b642ab9c4f
   nameKey: katana_name_gray_fox
-  descriptionKey: katana_name_gray_fox
+  descriptionKey: katana_description_gray_fox
   icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   rarity: 2
   playerPreset: {fileID: 11400000, guid: 0f2d79442bc27c4479a4ba9c774ad02f, type: 2}

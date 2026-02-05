@@ -8,6 +8,7 @@ using Runner.Inventory;
 using Runner.Player.Data;
 using Runner.Enemy;
 using Runner.Save;
+using Runner.Environment;
 
 namespace Runner.Core
 {
@@ -21,13 +22,19 @@ namespace Runner.Core
         [SerializeField] private LevelGenerator levelGeneratorPrefab;
         [SerializeField] private InventoryManager inventoryManagerPrefab;
         [SerializeField] private BulletPool bulletPoolPrefab;
+        [SerializeField] private BiomeManager biomeManagerPrefab;
+        [SerializeField] private DayNightCycle dayNightCyclePrefab;
 
         [Header("Scene References")]
         [SerializeField] private Transform playerSpawnPoint;
         [SerializeField] private CameraManager cameraManager;
         [SerializeField] private CameraEffects cameraEffects;
+        [SerializeField] private SceneSetup sceneSetup;
+        [SerializeField] private Light sunLight;
+        [SerializeField] private Light moonLight;
 
-        [Header("Initialization")]
+        [Header("Settings")]
+        [SerializeField] private bool useDayNightCycle = true;
         [SerializeField] private bool initializeOnAwake = true;
 
         public InputReader InputReader { get; private set; }
@@ -35,8 +42,11 @@ namespace Runner.Core
         public LevelGenerator LevelGenerator { get; private set; }
         public InventoryManager InventoryManager { get; private set; }
         public BulletPool BulletPool { get; private set; }
+        public BiomeManager BiomeManager { get; private set; }
+        public DayNightCycle DayNightCycle { get; private set; }
         public CameraManager CameraManager => cameraManager;
         public CameraEffects CameraEffects => cameraEffects;
+
         public GameState State { get; private set; }
         public float GameSpeed { get; private set; } = 1f;
         public float RunDistance => Player != null ? Player.transform.position.z : 0f;
@@ -48,6 +58,7 @@ namespace Runner.Core
         public event Action OnGameResumed;
         public event Action OnGameOver;
         public event Action OnGameRestarted;
+        public event Action<BiomeData> OnBiomeChanged;
 
         private float initializationProgress;
         public float InitializationProgress => initializationProgress;
@@ -78,20 +89,29 @@ namespace Runner.Core
             State = GameState.Initializing;
             initializationProgress = 0f;
 
+            FindSceneReferences();
+            initializationProgress = 0.1f;
+
             CreateInventoryManager();
-            initializationProgress = 0.15f;
+            initializationProgress = 0.2f;
 
             CreateInputReader();
             initializationProgress = 0.3f;
 
             CreateBulletPool();
-            initializationProgress = 0.45f;
+            initializationProgress = 0.4f;
 
-            CreateLevelGenerator();
-            initializationProgress = 0.6f;
+            CreateDayNightCycle();
+            initializationProgress = 0.5f;
 
             CreatePlayer();
-            initializationProgress = 0.75f;
+            initializationProgress = 0.6f;
+
+            CreateBiomeManager();
+            initializationProgress = 0.7f;
+
+            CreateLevelGenerator();
+            initializationProgress = 0.8f;
 
             InitializeCamera();
             initializationProgress = 0.9f;
@@ -103,10 +123,36 @@ namespace Runner.Core
             OnGameInitialized?.Invoke();
         }
 
-        [ContextMenu("Add 1000 coins")]
-        public void AddCoins()
+        private void FindSceneReferences()
         {
-            SaveManager.AddCoins(1000);
+            if (sceneSetup == null)
+            {
+                sceneSetup = FindFirstObjectByType<SceneSetup>();
+            }
+
+            if (sceneSetup != null)
+            {
+                if (sunLight == null) sunLight = sceneSetup.SunLight;
+                if (moonLight == null) moonLight = sceneSetup.MoonLight;
+            }
+
+            if (sunLight == null || moonLight == null)
+            {
+                var lights = FindObjectsByType<Light>(FindObjectsSortMode.None);
+                foreach (var light in lights)
+                {
+                    if (light.type != LightType.Directional) continue;
+
+                    if (sunLight == null && light.name.ToLower().Contains("sun"))
+                    {
+                        sunLight = light;
+                    }
+                    else if (moonLight == null && light.name.ToLower().Contains("moon"))
+                    {
+                        moonLight = light;
+                    }
+                }
+            }
         }
 
         private void CreateInventoryManager()
@@ -151,12 +197,28 @@ namespace Runner.Core
             BulletPool.name = "BulletPool";
         }
 
-        private void CreateLevelGenerator()
+        private void CreateDayNightCycle()
         {
-            if (levelGeneratorPrefab == null) return;
+            if (!useDayNightCycle) return;
 
-            LevelGenerator = Instantiate(levelGeneratorPrefab);
-            LevelGenerator.name = "LevelGenerator";
+            if (DayNightCycle.Instance != null)
+            {
+                DayNightCycle = DayNightCycle.Instance;
+                return;
+            }
+
+            if (dayNightCyclePrefab != null)
+            {
+                DayNightCycle = Instantiate(dayNightCyclePrefab);
+            }
+            else
+            {
+                var go = new GameObject("DayNightCycle");
+                DayNightCycle = go.AddComponent<DayNightCycle>();
+            }
+
+            DayNightCycle.name = "DayNightCycle";
+            DayNightCycle.Initialize(sunLight, moonLight);
         }
 
         private void CreatePlayer()
@@ -167,11 +229,50 @@ namespace Runner.Core
             Player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
             Player.name = "Player";
             Player.Initialize();
+        }
 
-            if (LevelGenerator != null)
+        private void CreateBiomeManager()
+        {
+            if (BiomeManager.Instance != null)
             {
-                LevelGenerator.SetPlayer(Player.transform);
+                BiomeManager = BiomeManager.Instance;
             }
+            else if (biomeManagerPrefab != null)
+            {
+                BiomeManager = Instantiate(biomeManagerPrefab);
+                BiomeManager.name = "BiomeManager";
+            }
+            else
+            {
+                var go = new GameObject("BiomeManager");
+                BiomeManager = go.AddComponent<BiomeManager>();
+            }
+
+            BiomeData startingBiome = sceneSetup?.StartingBiome;
+
+            if (startingBiome == null)
+            {
+                Debug.LogError("[Game] No starting biome configured in SceneSetup!");
+                return;
+            }
+
+            BiomeManager.Initialize(Player.transform, startingBiome);
+        }
+
+        private void CreateLevelGenerator()
+        {
+            if (levelGeneratorPrefab == null)
+            {
+                var go = new GameObject("LevelGenerator");
+                LevelGenerator = go.AddComponent<LevelGenerator>();
+            }
+            else
+            {
+                LevelGenerator = Instantiate(levelGeneratorPrefab);
+                LevelGenerator.name = "LevelGenerator";
+            }
+
+            LevelGenerator.Initialize(Player.transform, BiomeManager);
         }
 
         private void InitializeCamera()
@@ -199,6 +300,11 @@ namespace Runner.Core
             {
                 InventoryManager.OnPresetChanged += HandlePresetChanged;
             }
+
+            if (BiomeManager != null)
+            {
+                BiomeManager.OnBiomeChanged += HandleBiomeChanged;
+            }
         }
 
         private void UnsubscribeFromEvents()
@@ -212,6 +318,11 @@ namespace Runner.Core
             if (InventoryManager != null)
             {
                 InventoryManager.OnPresetChanged -= HandlePresetChanged;
+            }
+
+            if (BiomeManager != null)
+            {
+                BiomeManager.OnBiomeChanged -= HandleBiomeChanged;
             }
         }
 
@@ -237,6 +348,17 @@ namespace Runner.Core
             }
         }
 
+        private void HandleBiomeChanged(BiomeData biome)
+        {
+            OnBiomeChanged?.Invoke(biome);
+        }
+
+        [ContextMenu("Add 1000 coins")]
+        public void AddCoins()
+        {
+            SaveManager.AddCoins(1000);
+        }
+
         public void StartGame()
         {
             if (State != GameState.Ready) return;
@@ -244,15 +366,8 @@ namespace Runner.Core
             State = GameState.Playing;
             Score = 0;
 
-            if (Player != null)
-            {
-                Player.StartRunning();
-            }
-
-            if (InputReader != null)
-            {
-                InputReader.EnableGameplayInput();
-            }
+            Player?.StartRunning();
+            InputReader?.EnableGameplayInput();
 
             cameraManager?.SetState(CameraState.Gameplay);
             OnGameStarted?.Invoke();
@@ -264,7 +379,9 @@ namespace Runner.Core
 
             State = GameState.Paused;
             Time.timeScale = 0f;
+
             InputReader?.DisableGameplayInput();
+
             OnGamePaused?.Invoke();
         }
 
@@ -274,7 +391,9 @@ namespace Runner.Core
 
             State = GameState.Playing;
             Time.timeScale = 1f;
+
             InputReader?.EnableGameplayInput();
+
             OnGameResumed?.Invoke();
         }
 
@@ -293,9 +412,12 @@ namespace Runner.Core
             Score = 0;
 
             BulletPool?.ReturnAllBullets();
-
             Player?.Reset();
-            LevelGenerator?.ResetGenerator();
+
+            BiomeData startingBiome = sceneSetup?.StartingBiome;
+            BiomeManager?.Reset(startingBiome);
+
+            LevelGenerator?.Reset();
 
             if (Player != null)
             {
@@ -316,6 +438,16 @@ namespace Runner.Core
         public void SetGameSpeed(float speed)
         {
             GameSpeed = Mathf.Clamp(speed, 0.5f, 3f);
+        }
+
+        public void SetTimeOfDay(float normalizedTime)
+        {
+            DayNightCycle?.SetTime(normalizedTime);
+        }
+
+        public BiomeData GetCurrentBiome()
+        {
+            return BiomeManager?.CurrentBiome;
         }
 
         private void OnDestroy()

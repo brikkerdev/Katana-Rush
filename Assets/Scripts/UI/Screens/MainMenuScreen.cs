@@ -14,8 +14,6 @@ namespace Runner.UI
         [Header("Menu Buttons")]
         [SerializeField] private UIButton settingsButton;
         [SerializeField] private UIButton inventoryButton;
-        [SerializeField] private UIButton shopButton;
-        [SerializeField] private UIButton leaderboardButton;
 
         [Header("Player Info")]
         [SerializeField] private TextMeshProUGUI highScoreText;
@@ -36,12 +34,6 @@ namespace Runner.UI
 
             if (inventoryButton != null)
                 inventoryButton.OnClick += OnInventoryClicked;
-
-            if (shopButton != null)
-                shopButton.OnClick += OnShopClicked;
-
-            if (leaderboardButton != null)
-                leaderboardButton.OnClick += OnLeaderboardClicked;
         }
 
         private void SetupTapHandler()
@@ -108,16 +100,6 @@ namespace Runner.UI
             UIManager.Instance?.ShowScreen(ScreenType.Inventory);
         }
 
-        private void OnShopClicked()
-        {
-            Debug.Log("Shop clicked");
-        }
-
-        private void OnLeaderboardClicked()
-        {
-            Debug.Log("Leaderboard clicked");
-        }
-
         private void OnDestroy()
         {
             if (tapHandler != null)
@@ -128,12 +110,6 @@ namespace Runner.UI
 
             if (inventoryButton != null)
                 inventoryButton.OnClick -= OnInventoryClicked;
-
-            if (shopButton != null)
-                shopButton.OnClick -= OnShopClicked;
-
-            if (leaderboardButton != null)
-                leaderboardButton.OnClick -= OnLeaderboardClicked;
         }
     }
 }

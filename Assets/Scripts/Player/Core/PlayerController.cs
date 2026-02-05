@@ -253,7 +253,6 @@ namespace Runner.Player.Core
             if (motor.JustLanded)
             {
                 visual?.PlayLandSquash();
-                Game.Instance?.CameraEffects?.PlayLandEffect();
             }
         }
 
@@ -284,7 +283,6 @@ namespace Runner.Player.Core
             {
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
-                Game.Instance?.CameraEffects?.PlayJumpEffect();
                 playerAnimator?.PlayJumpAnimation();
             }
         }
@@ -302,7 +300,6 @@ namespace Runner.Player.Core
             {
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
-                Game.Instance?.CameraEffects?.PlayJumpEffect();
                 playerAnimator?.PlayJumpAnimation();
             }
             else
