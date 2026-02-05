@@ -39,7 +39,9 @@ namespace Runner.LevelGeneration
         [SerializeField] private float ambientIntensity = 1f;
 
         [Header("Sky")]
-        [SerializeField] private Material skyboxMaterial;
+        [SerializeField] private Color skyDayTint = Color.white;
+        [SerializeField] private Color skyNightTint = Color.white;
+        [SerializeField, Range(0f, 1f)] private float skyTintStrength = 0f;
 
         public string BiomeName => biomeName;
         public Color DebugColor => debugColor;
@@ -57,7 +59,9 @@ namespace Runner.LevelGeneration
         public float FogDensity => fogDensity;
         public Color AmbientColor => ambientColor;
         public float AmbientIntensity => ambientIntensity;
-        public Material SkyboxMaterial => skyboxMaterial;
+        public Color SkyDayTint => skyDayTint;
+        public Color SkyNightTint => skyNightTint;
+        public float SkyTintStrength => skyTintStrength;
 
         public float GetRandomLength()
         {

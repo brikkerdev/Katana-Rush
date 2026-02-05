@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sky
+  m_Shader: {fileID: 4800000, guid: 427fa7202cd171c499ea3982c1d2bf42, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _CloudsTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoonTex:
+        m_Texture: {fileID: 2800000, guid: c9d1b361b8b617047b4881b002b48c73, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StarsCubemap:
+        m_Texture: {fileID: 8900000, guid: fe95b60e70ae2b64f9d213bff0a83a37, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SunTex:
+        m_Texture: {fileID: 2800000, guid: c9d1b361b8b617047b4881b002b48c73, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AtmosphereThickness: 1
+    - _BiomeTintStrength: 0
+    - _CloudsOpacity: 0.5
+    - _CloudsScale: 1
+    - _CloudsSpeed: 0.01
+    - _HorizonOffset: 0
+    - _HorizonSharpness: 3
+    - _MoonGlowIntensity: 0.3
+    - _MoonGlowSize: 0.15
+    - _MoonIntensity: 1
+    - _MoonSize: 0.04
+    - _StarsIntensity: 2
+    - _StarsTwinkleAmount: 0.394
+    - _StarsTwinkleSpeed: 1
+    - _SunGlowIntensity: 0.5
+    - _SunGlowSize: 0.3
+    - _SunIntensity: 1.36
+    - _SunSize: 0.2
+    - _TimeOfDay: 0.5806376
+    m_Colors:
+    - _BiomeTintDay: {r: 1, g: 1, b: 1, a: 1}
+    - _BiomeTintNight: {r: 1, g: 1, b: 1, a: 1}
+    - _CloudsColor: {r: 1, g: 1, b: 1, a: 1}
+    - _DaySkyColorHorizon: {r: 0.8, g: 0.9, b: 1, a: 1}
+    - _DaySkyColorTop: {r: 0.4, g: 0.7, b: 1, a: 1}
+    - _MoonColor: {r: 0.8, g: 0.85, b: 1, a: 1}
+    - _NightSkyColorHorizon: {r: 0.1, g: 0.1, b: 0.2, a: 1}
+    - _NightSkyColorTop: {r: 0.02, g: 0.02, b: 0.08, a: 1}
+    - _SunColor: {r: 1, g: 0.95, b: 0.8, a: 1}
+    - _SunsetColorGlow: {r: 1, g: 0.3, b: 0.1, a: 1}
+    - _SunsetColorHorizon: {r: 1, g: 0.5, b: 0.2, a: 1}
+    - _SunsetColorTop: {r: 0.5, g: 0.3, b: 0.5, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

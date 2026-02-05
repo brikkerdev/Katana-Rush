@@ -46,8 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Environment.DayNightCycle
   sunLight: {fileID: 0}
   moonLight: {fileID: 0}
-  cycleDurationSeconds: 300
-  currentTime: 0.466
+  cycleDurationSeconds: 60
+  currentTime: 0.578
   maxSunIntensity: 1.2
   sunColor:
     serializedVersion: 2
@@ -79,7 +79,7 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  maxMoonIntensity: 0.5
+  maxMoonIntensity: 0.02
   moonColor:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
@@ -110,8 +110,8 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  minAmbientIntensity: 0.15
-  maxAmbientIntensity: 1
+  minAmbientIntensity: 0.25
+  maxAmbientIntensity: 0.25
   ambientColor:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}

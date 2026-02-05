@@ -29,8 +29,8 @@ MonoBehaviour:
   maxDifficulty: 1
   enemySpawnMultiplier: 1
   overrideFog: 1
-  fogColor: {r: 1, g: 0.92983276, b: 0.6462264, a: 1}
+  fogColor: {r: 1, g: 0.7697322, b: 0.64705884, a: 1}
   fogDensity: 0.004
-  ambientColor: {r: 1, g: 0.9363716, b: 0.5801887, a: 1}
+  ambientColor: {r: 1, g: 0.6828067, b: 0.5803922, a: 1}
   ambientIntensity: 0.1
   skyboxMaterial: {fileID: 2100000, guid: 2ee500164b464974083306d3c26def4d, type: 2}

@@ -184,8 +184,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 8, y: -8}
-  m_SizeDelta: {x: -16, y: -16}
+  m_AnchoredPosition: {x: 16, y: -16}
+  m_SizeDelta: {x: -32, y: -32}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4063792344328805305
 CanvasRenderer:
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.4
 --- !u!1 &4793539751254887146
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,8 +450,8 @@ MonoBehaviour:
   legendaryColor: {r: 1, g: 0.8, b: 0.2, a: 1}
   challengeColor: {r: 1, g: 0.3, b: 0.3, a: 1}
   emptyColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.5}
-  lockedIconColor: {r: 0, g: 0, b: 0, a: 1}
-  lockedIconAlpha: 0.8
+  lockedIconColor: {r: 0.18222678, g: 0.2037001, b: 0.3301887, a: 1}
+  lockedIconAlpha: 1
   selectionPulseScale: 1.1
   selectionPulseDuration: 0.15
 --- !u!1 &8230900488558883791

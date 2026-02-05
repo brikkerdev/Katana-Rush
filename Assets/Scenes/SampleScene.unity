@@ -23,10 +23,10 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.7122642, g: 0.95172757, b: 1, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 0.25
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.4765931, g: 0.5286075, b: 0.6603774, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 2ee500164b464974083306d3c26def4d, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 8fd7b89549aff4241b1d77b6695f90a6, type: 2}
   m_HaloStrength: 1
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 410087040}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9956,6 +9956,8 @@ MonoBehaviour:
   bulletPoolPrefab: {fileID: 3036213809580891604, guid: 1c4a0f1f6087eea44a446a5c6889eabd, type: 3}
   biomeManagerPrefab: {fileID: 4251084361869264720, guid: eb7f3eeff7361e844bc3e9c7a1622908, type: 3}
   dayNightCyclePrefab: {fileID: 1841606057868160058, guid: 897803da7a9db2442b2f8a72c5178e92, type: 3}
+  skyControllerPrefab: {fileID: 461484027963580448, guid: f42ca4ade74506b4e90575d5eda71db9, type: 3}
+  fogControllerPrefab: {fileID: 5049544987401744063, guid: 80ac217f319e7f143834149a61e2135b, type: 3}
   playerSpawnPoint: {fileID: 1748236326}
   cameraManager: {fileID: 1415522946}
   cameraEffects: {fileID: 189794314}
@@ -9963,7 +9965,8 @@ MonoBehaviour:
   sunLight: {fileID: 410087040}
   moonLight: {fileID: 122156966}
   useDayNightCycle: 1
-  initializeOnAwake: 1
+  useSkyController: 1
+  useFogController: 1
 --- !u!4 &962742105
 Transform:
   m_ObjectHideFlags: 0

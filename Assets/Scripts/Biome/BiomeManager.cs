@@ -12,9 +12,6 @@ namespace Runner.LevelGeneration
         [SerializeField] private float environmentPreSpawnDistance = 50f;
         [SerializeField] private float environmentDespawnDistance = 100f;
 
-        [Header("Fog")]
-        [SerializeField] private float fogTransitionSpeed = 1f;
-
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
 
@@ -35,13 +32,6 @@ namespace Runner.LevelGeneration
         private bool visualTransitionPending;
 
         private List<BiomeEnvironment> activeEnvironments = new List<BiomeEnvironment>();
-
-        private Color currentFogColor;
-        private float currentFogDensity;
-        private Color targetFogColor;
-        private float targetFogDensity;
-        private Color currentAmbientColor;
-        private Color targetAmbientColor;
 
         public event Action<BiomeData> OnBiomeChanged;
         public event Action<BiomeData, BiomeData> OnBiomeTransitionStarted;
@@ -88,7 +78,6 @@ namespace Runner.LevelGeneration
             visualTransitionPending = false;
 
             SpawnEnvironmentForBiome(currentBiome, 0f);
-            ApplyBiomeSettings(currentBiome, true);
 
             IsInitialized = true;
 
@@ -125,7 +114,6 @@ namespace Runner.LevelGeneration
             if (!IsInitialized || player == null) return;
 
             CheckVisualTransition();
-            UpdateFogTransition();
             CheckEnvironmentPreSpawn();
             CleanupOldEnvironments();
         }
@@ -145,15 +133,6 @@ namespace Runner.LevelGeneration
         {
             visualCurrentBiome = visualNextBiome;
 
-            targetFogColor = visualCurrentBiome.FogColor;
-            targetFogDensity = visualCurrentBiome.FogDensity;
-            targetAmbientColor = visualCurrentBiome.AmbientColor * visualCurrentBiome.AmbientIntensity;
-
-            if (visualCurrentBiome.SkyboxMaterial != null)
-            {
-                RenderSettings.skybox = visualCurrentBiome.SkyboxMaterial;
-            }
-
             visualTransitionPending = false;
             visualNextBiome = null;
 
@@ -165,25 +144,10 @@ namespace Runner.LevelGeneration
             }
         }
 
-        private void UpdateFogTransition()
-        {
-            float speed = fogTransitionSpeed * Time.deltaTime;
-
-            currentFogColor = Color.Lerp(currentFogColor, targetFogColor, speed);
-            currentFogDensity = Mathf.Lerp(currentFogDensity, targetFogDensity, speed);
-            currentAmbientColor = Color.Lerp(currentAmbientColor, targetAmbientColor, speed);
-
-            RenderSettings.fogColor = currentFogColor;
-            RenderSettings.fogDensity = currentFogDensity;
-            RenderSettings.ambientLight = currentAmbientColor;
-        }
-
         private void CheckEnvironmentPreSpawn()
         {
             if (environmentSpawnedForNextBiome) return;
             if (nextBiome == null) return;
-
-            float distanceToEnd = currentBiomeEndZ - player.position.z;
 
             SpawnEnvironmentForBiome(nextBiome, currentBiomeEndZ);
             environmentSpawnedForNextBiome = true;
@@ -356,30 +320,6 @@ namespace Runner.LevelGeneration
             }
         }
 
-        private void ApplyBiomeSettings(BiomeData biome, bool immediate)
-        {
-            targetFogColor = biome.FogColor;
-            targetFogDensity = biome.FogDensity;
-            targetAmbientColor = biome.AmbientColor * biome.AmbientIntensity;
-
-            if (biome.SkyboxMaterial != null)
-            {
-                RenderSettings.skybox = biome.SkyboxMaterial;
-            }
-
-            if (immediate)
-            {
-                currentFogColor = targetFogColor;
-                currentFogDensity = targetFogDensity;
-                currentAmbientColor = targetAmbientColor;
-
-                RenderSettings.fog = biome.OverrideFog;
-                RenderSettings.fogColor = currentFogColor;
-                RenderSettings.fogDensity = currentFogDensity;
-                RenderSettings.ambientLight = currentAmbientColor;
-            }
-        }
-
         public void Reset(BiomeData startingBiome)
         {
             for (int i = activeEnvironments.Count - 1; i >= 0; i--)
@@ -406,7 +346,8 @@ namespace Runner.LevelGeneration
             visualTransitionPending = false;
 
             SpawnEnvironmentForBiome(currentBiome, 0f);
-            ApplyBiomeSettings(currentBiome, true);
+
+            OnBiomeChanged?.Invoke(visualCurrentBiome);
 
             if (showDebug)
             {
@@ -439,10 +380,6 @@ namespace Runner.LevelGeneration
             {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawWireSphere(new Vector3(-10f, 2f, visualTransitionZ), 1.5f);
-                UnityEditor.Handles.Label(
-                    new Vector3(-8f, 3f, visualTransitionZ),
-                    $"Visual transition to {visualNextBiome?.BiomeName}"
-                );
             }
 
             Gizmos.color = Color.magenta;
