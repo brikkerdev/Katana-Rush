@@ -7,10 +7,6 @@ namespace Runner.Core
         [Header("Target Frame Rate")]
         [SerializeField] private int targetFPS = 60;
 
-        [Header("Quality")]
-        [SerializeField] private bool reduceShadows = true;
-        [SerializeField] private bool reduceLOD = true;
-
         [Header("Physics")]
         [SerializeField] private float physicsUpdateRate = 0.02f;
 
@@ -24,18 +20,6 @@ namespace Runner.Core
         {
             Application.targetFrameRate = targetFPS;
             QualitySettings.vSyncCount = 0;
-
-            if (reduceShadows)
-            {
-                QualitySettings.shadows = ShadowQuality.Disable;
-                QualitySettings.shadowResolution = ShadowResolution.Low;
-            }
-
-            if (reduceLOD)
-            {
-                QualitySettings.lodBias = 0.5f;
-                QualitySettings.maximumLODLevel = 1;
-            }
 
             Time.fixedDeltaTime = physicsUpdateRate;
 

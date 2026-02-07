@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2817380950867971672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6849626160100674808}
+  - component: {fileID: 5240765469439108588}
+  m_Layer: 0
+  m_Name: ParticleController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6849626160100674808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2817380950867971672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5240765469439108588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2817380950867971672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcff8908452263a4f9f1bc846b0e4148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Effects.ParticleController
+  defaultPoolSize: 10
+  expandPoolIfNeeded: 1
+  typedEffects:
+  - type: 0
+    prefab: {fileID: 6820590955023660389, guid: f7e129406ccd8bc4fbc3e31e6a03a362, type: 3}
+    prewarm: 0
+  - type: 1
+    prefab: {fileID: 6820590955023660389, guid: f7e129406ccd8bc4fbc3e31e6a03a362, type: 3}
+    prewarm: 0
+  - type: 4
+    prefab: {fileID: 2706983347986447521, guid: 69d0e8f9b4b4f29428af031b79a5ba67, type: 3}
+    prewarm: 0
+  prefabPoolsToPrewarm:
+  - prefab: {fileID: -5850168064015035106, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
+    prewarm: 0
+  - prefab: {fileID: 1088495247577383052, guid: e78b0cc09559b224ebf89cd41cf4c74f, type: 3}
+    prewarm: 0
+  - prefab: {fileID: 6891611059711840942, guid: a7c5179f5d6f652459bc5b20deeacd69, type: 3}
+    prewarm: 0
+  - prefab: {fileID: 8877573846263019777, guid: c99f0ddf6875b704e87d6562d5eddbc5, type: 3}
+    prewarm: 0

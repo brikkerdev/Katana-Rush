@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd5e26f7046ec53448cf963229bc6fee, type: 3}
+  m_Name: Overian_Preset
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.PlayerPreset
+  baseSpeed: 20
+  maxSpeed: 42
+  speedAcceleration: 0.1
+  laneSwitchSpeed: 10
+  jumpForce: 24
+  maxJumps: 0
+  gravity: -50
+  maxDashes: 4
+  dashDuration: 0.3
+  dashSpeedMultiplier: 3
+  dashRegenTime: 1
+  dashRegenDelay: 1
+  dashInvincible: 1
+  dashDamage: 1

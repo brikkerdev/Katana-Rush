@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Zweihander_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: 9ccf910a-28a8-4a97-8ec0-8e168f72e428
+  nameKey: katana_name_zweihander
+  descriptionKey: katana_description_zweihander
+  icon: {fileID: -127412252, guid: ba95e17be3279fc42a6f7cca71131d08, type: 3}
+  rarity: 4
+  playerPreset: {fileID: 11400000, guid: 9a0e07b7337ce8e40b64d994ebd21bb7, type: 2}
+  modelPrefab: {fileID: 5699206883338195788, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: e80498b83c4ac394e95b647789132133, type: 2}
+  slashEffectPrefab: {fileID: 5942177893964023165, guid: 438c0b7b02dcafa4996592b62d22671f, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  challengeRequirement:
+    type: 3
+    targetValue: 10000
+    descriptionKey: challenge_10k_total_dashes

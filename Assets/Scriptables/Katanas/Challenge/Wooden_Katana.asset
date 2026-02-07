@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Wooden_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: 25a80c55-d65f-4ad5-9de8-e179449bfad6
+  nameKey: katana_name_wooden
+  descriptionKey: katana_description_wooden
+  icon: {fileID: 1186181954, guid: 69018f08b78c3b94e8021e94042fd7be, type: 3}
+  rarity: 4
+  playerPreset: {fileID: 11400000, guid: dd0a0c044aedaa8498960cde3c84238e, type: 2}
+  modelPrefab: {fileID: 5523870091327307348, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 871439ea2efacd8469c26fda9e40008a, type: 2}
+  slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  challengeRequirement:
+    type: 1
+    targetValue: 100000
+    descriptionKey: challenge_100k_total_distance

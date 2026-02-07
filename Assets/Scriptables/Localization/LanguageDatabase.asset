@@ -23,54 +23,109 @@ MonoBehaviour:
     - languageCode: ru
       text: "\u041F\u0440\u043E\u0431\u0435\u0433\u0438\u0442\u0435 \u0432 \u043E\u0431\u0449\u0435\u0439
         \u0441\u043B\u043E\u0436\u043D\u043E\u0441\u0442\u0438 100\u043A\u043C"
+  - key: katana_description_daishe
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
+  - key: katana_description_fulgur
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
   - key: katana_description_gold
     translations:
     - languageCode: en
-      text: Golden tools faster than you know!
+      text: Dash reload a bit faster
     - languageCode: ru
-      text: "\u0417\u043E\u043B\u043E\u0442\u044B\u0435 \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u044B
-        \u0431\u044B\u0441\u0442\u0440\u0435\u0435 \u0447\u0435\u043C \u0442\u044B
-        \u0434\u0443\u043C\u0430\u0435\u0448\u044C!"
+      text: "\u0420\u044B\u0432\u043E\u043A \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u0442\u0441\u044F
+        \u043D\u0435\u043C\u043D\u043E\u0433\u043E \u0431\u044B\u0441\u0442\u0440\u0435\u0435"
   - key: katana_description_gray_fox
     translations:
     - languageCode: en
-      text: '"Now we can fight as warriors, hand to hand. It is the basis of all
-        combat. Only a fool trusts his life to a weapon."'
+      text: '-'
     - languageCode: ru
-      text: "\"\u0422\u0435\u043F\u0435\u0440\u044C \u043C\u044B \u043C\u043E\u0436\u0435\u043C
-        \u0431\u043E\u0440\u043E\u0442\u044C\u0441\u044F \u043A\u0430\u043A \u0432\u043E\u0438\u043D\u044B,
-        \u0433\u043E\u043B\u044B\u043C\u0438 \u0440\u0443\u043A\u0430\u043C\u0438.
-        \u042D\u0442\u043E \u043E\u0441\u043D\u043E\u0432\u0430 \u0432\u0441\u0435\u0445
-        \u0441\u0440\u0430\u0436\u0435\u043D\u0438\u0439. \u0422\u043E\u043B\u044C\u043A\u043E
-        \u0433\u043B\u0443\u043F\u0435\u0446 \u0434\u043E\u0432\u0435\u0440\u0438\u0442
-        \u0441\u0432\u043E\u044E \u0436\u0438\u0437\u043D\u044C \u043E\u0440\u0443\u0436\u0438\u044E.\""
+      text: '-'
+  - key: katana_description_hf
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
+  - key: katana_description_hf_prot
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
   - key: katana_description_murasama
     translations:
     - languageCode: en
-      text: '"Let''s dance!"'
+      text: + Double jump
     - languageCode: ru
-      text: "\"\u0414\u0430\u0432\u0430\u0439 \u043F\u043E\u0442\u0430\u043D\u0446\u0443\u0435\u043C!\""
+      text: "+ \u0414\u0432\u043E\u0439\u043D\u043E\u0439 \u043F\u0440\u044B\u0436\u043E\u043A"
+  - key: katana_description_naginata
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
+  - key: katana_description_overian
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
   - key: katana_description_pixel
     translations:
     - languageCode: en
-      text: It reminds me something...
+      text: '-'
     - languageCode: ru
-      text: "\u0427\u0442\u043E-\u0442\u043E \u043C\u043D\u0435 \u044D\u0442\u043E
-        \u043D\u0430\u043F\u043E\u043C\u0438\u043D\u0430\u0435\u0442..."
+      text: '-'
   - key: katana_description_starter
     translations:
     - languageCode: en
-      text: Well, you have to start somewhere
+      text: '-'
     - languageCode: ru
-      text: "\u041D\u0443, \u0441 \u0447\u0435\u0433\u043E-\u0442\u043E \u0436\u0435
-        \u043D\u0443\u0436\u043D\u043E \u043D\u0430\u0447\u0438\u043D\u0430\u0442\u044C."
+      text: '-'
+  - key: katana_description_steel_blade
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
+  - key: katana_description_thermal
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
   - key: katana_description_wooden
     translations:
     - languageCode: en
-      text: Literally wooden katana.
+      text: '-'
     - languageCode: ru
-      text: "\u0411\u0443\u043A\u0432\u0430\u043B\u044C\u043D\u043E \u0434\u0435\u0440\u0435\u0432\u044F\u043D\u043D\u0430\u044F
-        \u043A\u0430\u0442\u0430\u043D\u0430"
+      text: '-'
+  - key: katana_description_zweihander
+    translations:
+    - languageCode: en
+      text: '-'
+    - languageCode: ru
+      text: '-'
+  - key: katana_name_daishe
+    translations:
+    - languageCode: en
+      text: Daishe
+    - languageCode: ru
+      text: "\u0414\u0430\u0439\u0441\u0451"
+  - key: katana_name_fulgur
+    translations:
+    - languageCode: en
+      text: Fulgur
+    - languageCode: ru
+      text: "\u0424\u0443\u043B\u044C\u0433\u0443\u0440"
   - key: katana_name_gold
     translations:
     - languageCode: en
@@ -83,12 +138,36 @@ MonoBehaviour:
       text: Gray fox
     - languageCode: ru
       text: "\u0413\u0440\u0435\u0439 \u0424\u043E\u043A\u0441"
+  - key: katana_name_hf
+    translations:
+    - languageCode: en
+      text: HF Blade
+    - languageCode: ru
+      text: "\u0412\u0427-\u043A\u043B\u0438\u043D\u043E\u043A"
+  - key: katana_name_hf_prot
+    translations:
+    - languageCode: en
+      text: HF Prototype
+    - languageCode: ru
+      text: "\u0412\u0427-\u043F\u0440\u043E\u0442\u043E\u0442\u0438\u043F"
   - key: katana_name_murasama
     translations:
     - languageCode: en
       text: Murasama
     - languageCode: ru
       text: "\u041C\u0443\u0440\u0430\u0441\u0430\u043C\u0430"
+  - key: katana_name_naginata
+    translations:
+    - languageCode: en
+      text: Naginata
+    - languageCode: ru
+      text: "\u041D\u0430\u0433\u0438\u043D\u0430\u0442\u0430"
+  - key: katana_name_overian
+    translations:
+    - languageCode: en
+      text: Overian
+    - languageCode: ru
+      text: "\u041E\u0432\u0435\u0440\u0438\u0430\u043D\u0435\u0446"
   - key: katana_name_pixel
     translations:
     - languageCode: en
@@ -101,12 +180,30 @@ MonoBehaviour:
       text: Starter
     - languageCode: ru
       text: "\u0421\u0442\u0430\u0440\u0442\u043E\u0432\u0430\u044F"
+  - key: katana_name_steel_blade
+    translations:
+    - languageCode: en
+      text: Steel Blade
+    - languageCode: ru
+      text: "\u0421\u0442\u0430\u043B\u044C\u043D\u043E\u0439 \u043A\u043B\u0438\u043D\u043E\u043A"
+  - key: katana_name_thermal
+    translations:
+    - languageCode: en
+      text: Thermal Katana
+    - languageCode: ru
+      text: "\u0422\u0435\u0440\u043C\u0430\u043B\u044C\u043D\u0430\u044F \u043A\u0430\u0442\u0430\u043D\u0430"
   - key: katana_name_wooden
     translations:
     - languageCode: en
-      text: Wooden
+      text: Wooden katana
     - languageCode: ru
-      text: "\u0414\u0435\u0440\u0435\u0432\u044F\u043D\u043D\u0430\u044F"
+      text: "\u0414\u0435\u0440\u0435\u0432\u044F\u043D\u043D\u0430\u044F \u043A\u0430\u0442\u0430\u043D\u0430"
+  - key: katana_name_zweihander
+    translations:
+    - languageCode: en
+      text: Zweihander
+    - languageCode: ru
+      text: "\u0426\u0432\u0430\u0439\u0445\u0435\u043D\u0434\u0435\u0440"
   - key: rarity_challenge
     translations:
     - languageCode: en
@@ -187,6 +284,12 @@ MonoBehaviour:
       text: GO!
     - languageCode: ru
       text: "\u041F\u041E\u0413\u041D\u0410\u041B\u0418!"
+  - key: ui_inventory_buy_random
+    translations:
+    - languageCode: en
+      text: Buy random
+    - languageCode: ru
+      text: "\u0421\u043B\u0443\u0447\u0430\u0439\u043D\u044B\u0439"
   - key: ui_language
     translations:
     - languageCode: en
@@ -223,6 +326,24 @@ MonoBehaviour:
       text: Settings
     - languageCode: ru
       text: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
+  - key: ui_settings_quality_high
+    translations:
+    - languageCode: en
+      text: High
+    - languageCode: ru
+      text: "\u0412\u044B\u0441\u043E\u043A\u0438\u0435"
+  - key: ui_settings_quality_low
+    translations:
+    - languageCode: en
+      text: Low
+    - languageCode: ru
+      text: "\u041D\u0438\u0437\u043A\u0438\u0435"
+  - key: ui_settings_quality_medium
+    translations:
+    - languageCode: en
+      text: Medium
+    - languageCode: ru
+      text: "\u0421\u0440\u0435\u0434\u043D\u0438\u0435"
   - key: ui_sfx
     translations:
     - languageCode: en

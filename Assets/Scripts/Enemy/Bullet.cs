@@ -1,6 +1,7 @@
 using UnityEngine;
 using Runner.Player;
 using Runner.Player.Core;
+using Runner.Effects;
 
 namespace Runner.Enemy
 {
@@ -30,11 +31,6 @@ namespace Runner.Enemy
         [SerializeField] private Material normalMaterial;
         [SerializeField] private Material deflectedMaterial;
         [SerializeField] private Material lethalMaterial;
-
-        [Header("Effects")]
-        [SerializeField] private ParticleSystem hitEffect;
-        [SerializeField] private ParticleSystem lethalHitEffect;
-        [SerializeField] private ParticleSystem deflectEffect;
 
         private Vector3 direction;
         private float lifetimeTimer;
@@ -111,7 +107,7 @@ namespace Runner.Enemy
                     continue;
                 }
 
-                PlayHitEffect(false);
+                SpawnHitEffect(false);
                 Deactivate();
                 return;
             }
@@ -125,11 +121,7 @@ namespace Runner.Enemy
             if (targetPlayer == null) return;
 
             Player.Player player = targetPlayer.GetComponent<Player.Player>();
-            if (player == null)
-            {
-                player = targetPlayer.GetComponentInParent<Player.Player>();
-            }
-
+            if (player == null) player = targetPlayer.GetComponentInParent<Player.Player>();
             if (player == null) return;
             if (!player.IsBlocking) return;
 
@@ -143,22 +135,17 @@ namespace Runner.Enemy
             float sqrRadius = blockRadius * blockRadius;
 
             if (sqrDistance <= sqrRadius)
-            {
                 Deflect(player);
-            }
         }
 
         private void HandlePlayerCollision(Collider playerCollider)
         {
             Player.Player player = playerCollider.GetComponent<Player.Player>();
-            if (player == null)
-            {
-                player = playerCollider.GetComponentInParent<Player.Player>();
-            }
+            if (player == null) player = playerCollider.GetComponentInParent<Player.Player>();
 
             if (player == null)
             {
-                PlayHitEffect(false);
+                SpawnHitEffect(false);
                 Deactivate();
                 return;
             }
@@ -167,14 +154,14 @@ namespace Runner.Enemy
 
             if (controller == null)
             {
-                PlayHitEffect(false);
+                SpawnHitEffect(false);
                 Deactivate();
                 return;
             }
 
             if (controller.IsInvincible)
             {
-                PlayHitEffect(false);
+                SpawnHitEffect(false);
                 Deactivate();
                 return;
             }
@@ -187,7 +174,7 @@ namespace Runner.Enemy
 
             if (isLethal)
             {
-                PlayHitEffect(true);
+                SpawnHitEffect(true);
                 Core.Game.Instance?.GameOver();
                 Deactivate();
                 return;
@@ -199,17 +186,12 @@ namespace Runner.Enemy
         private void HandleEnemyCollision(Collider enemyCollider)
         {
             Enemy enemy = enemyCollider.GetComponent<Enemy>();
-            if (enemy == null)
-            {
-                enemy = enemyCollider.GetComponentInParent<Enemy>();
-            }
+            if (enemy == null) enemy = enemyCollider.GetComponentInParent<Enemy>();
 
             if (enemy != null && !enemy.IsDead)
-            {
-                enemy.TakeDamage(1f);
-            }
+                enemy.TakeDamage(1f, direction);
 
-            PlayHitEffect(false);
+            SpawnHitEffect(false);
             Deactivate();
         }
 
@@ -227,9 +209,7 @@ namespace Runner.Enemy
             targetPlayer = null;
 
             if (direction.sqrMagnitude > 0.001f)
-            {
                 cachedTransform.rotation = Quaternion.LookRotation(direction);
-            }
 
             UpdateVisual();
 
@@ -260,9 +240,7 @@ namespace Runner.Enemy
             lifetimeTimer = deflectedLifetime;
 
             if (direction.sqrMagnitude > 0.001f)
-            {
                 cachedTransform.rotation = Quaternion.LookRotation(direction);
-            }
 
             if (trail != null)
             {
@@ -285,6 +263,7 @@ namespace Runner.Enemy
             Quaternion horizontalRotation = Quaternion.AngleAxis(horizontalAngle, playerUp);
             Quaternion verticalRotation = Quaternion.AngleAxis(verticalAngle, playerRight);
 
+            Vector3 oldDirection = direction;
             direction = (verticalRotation * horizontalRotation * playerForward).normalized;
             currentSpeed = deflectedSpeed;
             lifetimeTimer = deflectedLifetime;
@@ -292,38 +271,26 @@ namespace Runner.Enemy
             isLethal = false;
 
             if (direction.sqrMagnitude > 0.001f)
-            {
                 cachedTransform.rotation = Quaternion.LookRotation(direction);
-            }
 
             cachedTransform.position += direction * 0.5f;
 
             UpdateVisual();
-            PlayDeflectEffect();
+            SpawnDeflectEffect(oldDirection);
         }
 
         private void UpdateVisual()
         {
-            if (meshRenderer == null) return;
+            if (meshRenderer != null)
+            {
+                Material targetMaterial = null;
 
-            Material targetMaterial = null;
+                if (isDeflected && deflectedMaterial != null) targetMaterial = deflectedMaterial;
+                else if (isLethal && lethalMaterial != null) targetMaterial = lethalMaterial;
+                else if (normalMaterial != null) targetMaterial = normalMaterial;
 
-            if (isDeflected && deflectedMaterial != null)
-            {
-                targetMaterial = deflectedMaterial;
-            }
-            else if (isLethal && lethalMaterial != null)
-            {
-                targetMaterial = lethalMaterial;
-            }
-            else if (normalMaterial != null)
-            {
-                targetMaterial = normalMaterial;
-            }
-
-            if (targetMaterial != null)
-            {
-                meshRenderer.sharedMaterial = targetMaterial;
+                if (targetMaterial != null)
+                    meshRenderer.sharedMaterial = targetMaterial;
             }
 
             if (trail != null)
@@ -352,24 +319,18 @@ namespace Runner.Enemy
             }
         }
 
-        private void PlayHitEffect(bool lethal)
+        private void SpawnHitEffect(bool lethal)
         {
-            ParticleSystem effect = lethal ? lethalHitEffect : hitEffect;
+            if (ParticleController.Instance == null) return;
 
-            if (effect != null)
-            {
-                effect.transform.position = cachedTransform.position;
-                effect.Play();
-            }
+            if (lethal) ParticleController.Instance.SpawnLethalHitEffect(cachedTransform.position, direction);
+            else ParticleController.Instance.SpawnHitEffect(cachedTransform.position, direction);
         }
 
-        private void PlayDeflectEffect()
+        private void SpawnDeflectEffect(Vector3 incomingDirection)
         {
-            if (deflectEffect != null)
-            {
-                deflectEffect.transform.position = cachedTransform.position;
-                deflectEffect.Play();
-            }
+            if (ParticleController.Instance == null) return;
+            ParticleController.Instance.SpawnDeflectEffect(cachedTransform.position, direction);
         }
 
         public void Deactivate()
@@ -377,9 +338,7 @@ namespace Runner.Enemy
             isActive = false;
 
             if (trail != null)
-            {
                 trail.enabled = false;
-            }
 
             gameObject.SetActive(false);
         }
@@ -397,9 +356,7 @@ namespace Runner.Enemy
             targetPlayer = null;
 
             if (trail != null)
-            {
                 trail.Clear();
-            }
         }
 
 #if UNITY_EDITOR

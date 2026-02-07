@@ -7,6 +7,7 @@ using Runner.Player.Data;
 using Runner.Player.Movement;
 using Runner.Player.Visual;
 using Runner.Enemy;
+using Runner.Effects;
 
 namespace Runner.Player.Core
 {
@@ -33,6 +34,7 @@ namespace Runner.Player.Core
         private PlayerVisual visual;
         private PlayerAnimator playerAnimator;
         private InputReader inputReader;
+        private ParticleController particleController;
         private PlayerPreset currentPreset;
 
         private LaneHandler laneHandler;
@@ -43,6 +45,8 @@ namespace Runner.Player.Core
         private float runDistance;
         private Vector3 startPosition;
         private bool inputEnabled;
+
+        private Katana equippedKatana;
 
         // Combat
         private Collider[] enemyHitBuffer = new Collider[16];
@@ -73,6 +77,7 @@ namespace Runner.Player.Core
             player = playerRef;
             startPosition = transform.position;
             inputReader = InputReader.Instance;
+            particleController = Game.Instance.ParticleController;
 
             SetupComponents();
             SetupHandlers();
@@ -158,38 +163,44 @@ namespace Runner.Player.Core
         private void SetupKatanaVisual(Katana katana)
         {
             if (visual == null) return;
-
+            equippedKatana = katana;
             if (katana.ModelPrefab != null)
             {
                 visual.SetKatanaVisual(katana.ModelPrefab);
             }
         }
 
+        private bool inputSubscribed;
+
         public void EnableInput()
         {
-            if (inputReader == null)
-            {
-                inputReader = InputReader.Instance;
-            }
-
+            if (inputReader == null) inputReader = InputReader.Instance;
             if (inputReader == null) return;
 
+            if (!inputSubscribed)
+            {
+                inputReader.OnJump += OnJumpInput;
+                inputReader.OnMoveLeft += OnMoveLeftInput;
+                inputReader.OnMoveRight += OnMoveRightInput;
+                inputReader.OnDash += OnDashInput;
+                inputSubscribed = true;
+            }
+
             inputEnabled = true;
-            inputReader.OnJump += OnJumpInput;
-            inputReader.OnMoveLeft += OnMoveLeftInput;
-            inputReader.OnMoveRight += OnMoveRightInput;
-            inputReader.OnDash += OnDashInput;
         }
 
         public void DisableInput()
         {
-            if (inputReader == null) return;
-
             inputEnabled = false;
+
+            if (inputReader == null) return;
+            if (!inputSubscribed) return;
+
             inputReader.OnJump -= OnJumpInput;
             inputReader.OnMoveLeft -= OnMoveLeftInput;
             inputReader.OnMoveRight -= OnMoveRightInput;
             inputReader.OnDash -= OnDashInput;
+            inputSubscribed = false;
         }
 
         private void Update()
@@ -260,19 +271,6 @@ namespace Runner.Player.Core
         {
             playerAnimator?.PlayBlockHitReaction();
             OnBlockPerformed?.Invoke();
-
-            // Spawn block effect
-            if (blockEffectPrefab != null)
-            {
-                Vector3 effectPos = transform.position + Vector3.up + transform.forward * 0.5f;
-                Instantiate(blockEffectPrefab, effectPos, Quaternion.identity);
-            }
-
-            // Play sound
-            if (blockSound != null)
-            {
-                AudioSource.PlayClipAtPoint(blockSound, transform.position);
-            }
         }
 
         private void CheckBufferedJump()
@@ -329,6 +327,8 @@ namespace Runner.Player.Core
                 visual?.PlayDashStretch();
                 Game.Instance?.CameraEffects?.PlayDashEffect();
                 playerAnimator?.PlayDashAnimation();
+
+                particleController.Spawn(equippedKatana.SlashEffectPrefab, transform.position, Vector3.forward, transform);
 
                 // Check for enemies in front and play slash
                 if (CheckEnemiesInFront())

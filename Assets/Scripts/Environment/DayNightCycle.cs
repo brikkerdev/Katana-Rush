@@ -13,6 +13,7 @@ namespace Runner.Environment
         [Header("Time")]
         [SerializeField] private float cycleDurationSeconds = 300f;
         [SerializeField, Range(0f, 1f)] private float currentTime = 0.25f;
+        [SerializeField] private Vector2 offsetRotation;
 
         [Header("Sun")]
         [SerializeField] private float maxSunIntensity = 1.2f;
@@ -159,7 +160,7 @@ namespace Runner.Environment
             if (pivot == null) return;
 
             float angle = currentTime * 360f - 90f;
-            pivot.localRotation = Quaternion.Euler(angle, 0f, 0f);
+            pivot.localRotation = Quaternion.Euler(angle, offsetRotation.x, offsetRotation.y);
         }
 
         private void UpdateSun()

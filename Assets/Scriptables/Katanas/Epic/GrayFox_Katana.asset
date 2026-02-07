@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: GrayFox_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: fe115fa7-b768-4c96-8972-7a9a237d97a2
+  nameKey: katana_name_gray_fox
+  descriptionKey: katana_description_gray_fox
+  icon: {fileID: 1186181954, guid: 69018f08b78c3b94e8021e94042fd7be, type: 3}
+  rarity: 2
+  playerPreset: {fileID: 11400000, guid: 3c756c8d70406c64592d72de3f634e01, type: 2}
+  modelPrefab: {fileID: 5523870091327307348, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 871439ea2efacd8469c26fda9e40008a, type: 2}
+  slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  challengeRequirement:
+    type: 0
+    targetValue: 0
+    descriptionKey: 

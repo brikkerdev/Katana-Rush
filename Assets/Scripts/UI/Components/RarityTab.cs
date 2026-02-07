@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System;
 
 namespace Runner.UI
@@ -8,16 +7,15 @@ namespace Runner.UI
     public class RarityTab : MonoBehaviour
     {
         [SerializeField] private Button button;
-        [SerializeField] private Image background;
-        [SerializeField] private TextMeshProUGUI labelText;
-        [SerializeField] private GameObject selectedIndicator;
+        [SerializeField] private Image circleImage;
+        [SerializeField] private Image selectedRingImage;
 
-        [Header("Colors")]
-        [SerializeField] private Color selectedColor = Color.white;
-        [SerializeField] private Color unselectedColor = new Color(0.5f, 0.5f, 0.5f);
+        [SerializeField] private Color unselectedColor = new Color(1f, 1f, 1f, 0.25f);
+        [SerializeField] private float selectedScale = 1.12f;
 
         private int tabIndex;
         private bool isSelected;
+        private Color rarityColor;
 
         public int TabIndex => tabIndex;
 
@@ -26,52 +24,43 @@ namespace Runner.UI
         private void Awake()
         {
             if (button != null)
-            {
                 button.onClick.AddListener(HandleClick);
-            }
         }
 
-        public void Setup(int index, string label, Color rarityColor)
+        public void Setup(int index, Color color)
         {
             tabIndex = index;
+            rarityColor = color;
 
-            if (labelText != null)
+            if (circleImage != null)
+                circleImage.color = unselectedColor;
+
+            if (selectedRingImage != null)
             {
-                labelText.text = label;
+                selectedRingImage.color = rarityColor;
+                selectedRingImage.gameObject.SetActive(false);
             }
 
-            if (background != null)
-            {
-                selectedColor = rarityColor;
-            }
+            transform.localScale = Vector3.one;
         }
 
         public void SetSelected(bool selected)
         {
             isSelected = selected;
 
-            if (selectedIndicator != null)
-            {
-                selectedIndicator.SetActive(selected);
-            }
+            if (circleImage != null)
+                circleImage.color = selected ? rarityColor : unselectedColor;
 
-            if (background != null)
-            {
-                background.color = selected ? selectedColor : unselectedColor;
-            }
+            if (selectedRingImage != null)
+                selectedRingImage.gameObject.SetActive(selected);
 
-            if (labelText != null)
-            {
-                labelText.color = selected ? Color.black : Color.white;
-            }
+            transform.localScale = selected ? Vector3.one * selectedScale : Vector3.one;
         }
 
         public void SetInteractable(bool interactable)
         {
             if (button != null)
-            {
                 button.interactable = interactable;
-            }
         }
 
         private void HandleClick()
@@ -82,9 +71,7 @@ namespace Runner.UI
         private void OnDestroy()
         {
             if (button != null)
-            {
                 button.onClick.RemoveListener(HandleClick);
-            }
         }
     }
 }

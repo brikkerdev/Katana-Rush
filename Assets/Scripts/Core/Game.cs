@@ -9,6 +9,8 @@ using Runner.Player.Data;
 using Runner.Enemy;
 using Runner.Save;
 using Runner.Environment;
+using Runner.Effects;
+using Runner.Player.Core;
 
 namespace Runner.Core
 {
@@ -26,6 +28,7 @@ namespace Runner.Core
         [SerializeField] private DayNightCycle dayNightCyclePrefab;
         [SerializeField] private SkyController skyControllerPrefab;
         [SerializeField] private FogController fogControllerPrefab;
+        [SerializeField] private ParticleController particleControllerPrefab;
 
         [Header("Scene References")]
         [SerializeField] private Transform playerSpawnPoint;
@@ -42,6 +45,7 @@ namespace Runner.Core
 
         public InputReader InputReader { get; private set; }
         public Player.Player Player { get; private set; }
+        public ParticleController ParticleController { get; private set; }
         public LevelGenerator LevelGenerator { get; private set; }
         public InventoryManager InventoryManager { get; private set; }
         public BulletPool BulletPool { get; private set; }
@@ -82,6 +86,7 @@ namespace Runner.Core
             State = GameState.Initializing;
 
             FindSceneReferences();
+            CreateParticleController();
             CreateInventoryManager();
             CreateInputReader();
             CreateBulletPool();
@@ -110,6 +115,20 @@ namespace Runner.Core
                 if (sunLight == null) sunLight = sceneSetup.SunLight;
                 if (moonLight == null) moonLight = sceneSetup.MoonLight;
             }
+        }
+
+        private void CreateParticleController()
+        {
+            if (ParticleController.Instance != null)
+            {
+                ParticleController = ParticleController.Instance;
+                return;
+            }
+
+            if (particleControllerPrefab == null) return;
+
+            ParticleController = Instantiate(particleControllerPrefab);
+            ParticleController.name = "ParticleController";
         }
 
         private void CreateInventoryManager()
@@ -436,6 +455,12 @@ namespace Runner.Core
         public void AddScore(int amount)
         {
             Score += amount;
+        }
+
+        [ContextMenu("Add 1000 money")]
+        public void AddMoney()
+        {
+            SaveManager.AddCoins(1000);
         }
 
         public void SetGameSpeed(float speed)

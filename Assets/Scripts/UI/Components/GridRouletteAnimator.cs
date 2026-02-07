@@ -45,7 +45,7 @@ namespace Runner.UI
             foreach (var slot in slots)
             {
                 slot.SetInteractable(false);
-                slot.HideSelection();
+                slot.ClearHighlight();
             }
 
             rollCoroutine = StartCoroutine(RollRoutine());
@@ -81,29 +81,33 @@ namespace Runner.UI
                 float easedProgress = EaseOutQuart(progress);
                 float currentInterval = Mathf.Lerp(initialInterval, finalInterval, easedProgress);
 
+                // Clear previous highlight
                 if (previousIndex >= 0 && previousIndex < slots.Count)
                 {
-                    slots[previousIndex].HideSelection();
+                    slots[previousIndex].SetHighlighted(false);
                 }
 
                 previousIndex = currentIndex;
                 currentIndex = currentStep % totalSlots;
                 currentStep++;
 
-                slots[currentIndex].FlashSelection();
+                // Highlight current slot
+                slots[currentIndex].SetHighlighted(true);
 
                 yield return new WaitForSecondsRealtime(currentInterval);
             }
 
+            // Clear all highlights except target
             for (int i = 0; i < slots.Count; i++)
             {
                 if (i != targetIndex)
                 {
-                    slots[i].HideSelection();
+                    slots[i].SetHighlighted(false);
                 }
             }
 
-            slots[targetIndex].SetSelected(true, true);
+            // Show win effect on target
+            slots[targetIndex].ShowWinEffect();
 
             yield return new WaitForSecondsRealtime(0.5f);
 
@@ -136,7 +140,7 @@ namespace Runner.UI
             {
                 if (slot != null)
                 {
-                    slot.HideSelection();
+                    slot.ClearHighlight();
                     slot.SetInteractable(true);
                 }
             }

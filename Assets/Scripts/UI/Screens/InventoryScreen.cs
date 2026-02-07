@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Runner.Inventory;
 using Runner.Save;
+using Runner.Input;
 
 namespace Runner.UI
 {
@@ -14,46 +15,46 @@ namespace Runner.UI
         [SerializeField] private KatanaPreviewRenderer previewRenderer;
         [SerializeField] private RawImage previewImage;
 
+        [Header("Pages")]
+        [SerializeField] private SwipePagesView pagesView;
+        [SerializeField] private List<RectTransform> rarityPages = new List<RectTransform>();
+        [SerializeField] private List<Transform> rarityGrids = new List<Transform>();
+
+        [Header("Tabs")]
+        [SerializeField] private Transform tabContainer;
+        [SerializeField] private RarityTab tabPrefab;
+
         [Header("Info Panel - Owned")]
         [SerializeField] private GameObject ownedInfoPanel;
         [SerializeField] private TextMeshProUGUI katanaNameText;
         [SerializeField] private LocalizationUIText katanaNameLocalized;
-        [SerializeField] private TextMeshProUGUI rarityText;
-        [SerializeField] private DashIndicator dashIndicator;
+        [SerializeField] private UICircularStaminaBar dashBar;
         [SerializeField] private TextMeshProUGUI descriptionText;
         [SerializeField] private LocalizationUIText descriptionLocalized;
-        [SerializeField] private Image rarityBadge;
 
         [Header("Info Panel - Locked")]
         [SerializeField] private GameObject lockedInfoPanel;
 
         [Header("Info Panel - Challenge")]
         [SerializeField] private GameObject challengeInfoPanel;
-        [SerializeField] private TextMeshProUGUI challengeKatanaNameText;
-        [SerializeField] private LocalizationUIText challengeNameLocalized;
         [SerializeField] private LocalizationUIText challengeDescriptionLocalized;
         [SerializeField] private ChallengeProgressBar challengeProgressBar;
-
-        [Header("No Selection Panel")]
-        [SerializeField] private GameObject noSelectionPanel;
 
         [Header("Currency")]
         [SerializeField] private CoinDisplay coinDisplay;
 
-        [Header("Buttons")]
+        [Header("Buttons - Random")]
         [SerializeField] private UIButton buyRandomButton;
+        [SerializeField] private TextMeshProUGUI buyRandomLabelText;
         [SerializeField] private TextMeshProUGUI buyRandomPriceText;
-        [SerializeField] private UIButton buySelectedButton;
-        [SerializeField] private TextMeshProUGUI buySelectedPriceText;
+
+        [Header("Buttons - Specific")]
+        [SerializeField] private UIButton buySpecificButton;
+        [SerializeField] private TextMeshProUGUI buySpecificLabelText;
+        [SerializeField] private TextMeshProUGUI buySpecificPriceText;
+
+        [Header("Buttons")]
         [SerializeField] private UIButton backButton;
-
-        [Header("Tabs")]
-        [SerializeField] private Transform tabContainer;
-        [SerializeField] private RarityTab tabPrefab;
-
-        [Header("Pages")]
-        [SerializeField] private Transform pagesContainer;
-        [SerializeField] private GameObject pageTemplate;
 
         [Header("Grid Settings")]
         [SerializeField] private KatanaSlot slotPrefab;
@@ -63,10 +64,6 @@ namespace Runner.UI
         [Header("Roulette")]
         [SerializeField] private GridRouletteAnimator rouletteAnimator;
 
-        [Header("Swipe Settings")]
-        [SerializeField] private float swipeThreshold = 50f;
-        [SerializeField] private float pageTransitionDuration = 0.3f;
-
         [Header("Rarity Colors")]
         [SerializeField] private Color commonColor = new Color(0.7f, 0.7f, 0.7f);
         [SerializeField] private Color rareColor = new Color(0.2f, 0.6f, 1f);
@@ -75,13 +72,10 @@ namespace Runner.UI
         [SerializeField] private Color challengeColor = new Color(1f, 0.3f, 0.3f);
 
         [Header("Localization Keys")]
-        [SerializeField] private string commonKey = "rarity_common";
-        [SerializeField] private string rareKey = "rarity_rare";
-        [SerializeField] private string epicKey = "rarity_epic";
-        [SerializeField] private string legendaryKey = "rarity_legendary";
-        [SerializeField] private string challengeKey = "rarity_challenge";
+        [SerializeField] private string buyRandomKey = "ui_inventory_buy_random";
+        [SerializeField] private string buyNowKey = "ui_inventory_buy_now";
 
-        private readonly KatanaRarity[] rarityOrder = new KatanaRarity[]
+        private readonly KatanaRarity[] rarityOrder =
         {
             KatanaRarity.Common,
             KatanaRarity.Rare,
@@ -90,13 +84,13 @@ namespace Runner.UI
             KatanaRarity.Challenge
         };
 
-        private List<RarityTab> tabs = new List<RarityTab>();
-        private List<GameObject> pages = new List<GameObject>();
-        private Dictionary<KatanaRarity, List<KatanaSlot>> slotsByRarity = new Dictionary<KatanaRarity, List<KatanaSlot>>();
-        private int currentPageIndex = 0;
+        private readonly List<RarityTab> tabs = new List<RarityTab>();
+        private readonly Dictionary<KatanaRarity, List<KatanaSlot>> slotsByRarity = new Dictionary<KatanaRarity, List<KatanaSlot>>();
+
+        private int currentPageIndex;
         private KatanaRarity currentRarity = KatanaRarity.Common;
-        private Katana selectedKatana;
         private KatanaSlot selectedSlot;
+        private Katana selectedKatana;
         private bool isProcessing;
 
         protected override void Awake()
@@ -104,14 +98,27 @@ namespace Runner.UI
             base.Awake();
             screenType = ScreenType.Inventory;
 
+            HideAllInfoPanels();
+
+            if (previewImage != null)
+                previewImage.gameObject.SetActive(false);
+
             SetupButtons();
             SetupTabs();
-            SetupPages();
+            SetupRarityMaps();
 
             if (rouletteAnimator != null)
-            {
                 rouletteAnimator.OnRouletteComplete += OnRouletteComplete;
-            }
+
+            if (pagesView != null)
+                pagesView.OnPageChanged += OnPageChanged;
+        }
+
+        private void SetupRarityMaps()
+        {
+            slotsByRarity.Clear();
+            for (int i = 0; i < rarityOrder.Length; i++)
+                slotsByRarity[rarityOrder[i]] = new List<KatanaSlot>();
         }
 
         private void SetupButtons()
@@ -119,8 +126,8 @@ namespace Runner.UI
             if (buyRandomButton != null)
                 buyRandomButton.OnClick += OnBuyRandomClicked;
 
-            if (buySelectedButton != null)
-                buySelectedButton.OnClick += OnBuySelectedClicked;
+            if (buySpecificButton != null)
+                buySpecificButton.OnClick += OnBuySpecificClicked;
 
             if (backButton != null)
                 backButton.OnClick += OnBackClicked;
@@ -132,29 +139,10 @@ namespace Runner.UI
 
             for (int i = 0; i < rarityOrder.Length; i++)
             {
-                RarityTab tab = Instantiate(tabPrefab, tabContainer);
-                string label = GetRarityName(rarityOrder[i]);
-                Color color = GetRarityColor(rarityOrder[i]);
-                tab.Setup(i, label, color);
+                var tab = Instantiate(tabPrefab, tabContainer);
+                tab.Setup(i, GetRarityColor(rarityOrder[i]));
                 tab.OnTabClicked += OnTabClicked;
                 tabs.Add(tab);
-            }
-        }
-
-        private void SetupPages()
-        {
-            if (pagesContainer == null || pageTemplate == null) return;
-
-            pageTemplate.SetActive(false);
-
-            for (int i = 0; i < rarityOrder.Length; i++)
-            {
-                GameObject page = Instantiate(pageTemplate, pagesContainer);
-                page.name = $"Page_{rarityOrder[i]}";
-                page.SetActive(false);
-                pages.Add(page);
-
-                slotsByRarity[rarityOrder[i]] = new List<KatanaSlot>();
             }
         }
 
@@ -162,19 +150,29 @@ namespace Runner.UI
         {
             base.OnShow();
 
-            if (InventoryManager.Instance != null)
+            InputReader.Instance?.DisableGameplayInput();
+            InventoryManager.Instance?.TryUnlockCompletedChallenges();
+
+            Canvas.ForceUpdateCanvases();
+
+            if (pagesView != null && rarityPages != null && rarityPages.Count > 0)
             {
-                InventoryManager.Instance.TryUnlockCompletedChallenges();
+                pagesView.SetPages(rarityPages, true);
+                pagesView.Rebuild();
             }
 
             RefreshAllGrids();
 
-            selectedKatana = null;
             selectedSlot = null;
+            selectedKatana = null;
 
-            SelectPageByIndex(0, true);
+            SelectEquippedKatana();
+
             UpdateCoinDisplay();
-            ClearSelection();
+            UpdateButtons();
+
+            if (previewImage != null)
+                previewImage.gameObject.SetActive(true);
 
             isProcessing = false;
         }
@@ -183,23 +181,146 @@ namespace Runner.UI
         {
             base.OnHide();
 
-            if (rouletteAnimator != null)
+            InputReader.Instance?.EnableGameplayInput();
+            rouletteAnimator?.Cancel();
+
+            if (selectedSlot != null)
             {
-                rouletteAnimator.Cancel();
+                selectedSlot.SetSelected(false);
+                selectedSlot = null;
             }
+
+            selectedKatana = null;
+
+            if (previewImage != null)
+                previewImage.gameObject.SetActive(false);
+        }
+
+        private void OnPageChanged(int index)
+        {
+            currentPageIndex = Mathf.Clamp(index, 0, rarityOrder.Length - 1);
+            currentRarity = rarityOrder[currentPageIndex];
+
+            for (int i = 0; i < tabs.Count; i++)
+                tabs[i].SetSelected(i == currentPageIndex);
+
+            UpdateButtons();
+        }
+
+        private void OnTabClicked(int index)
+        {
+            if (isProcessing) return;
+            SelectPageByIndex(index, false);
+        }
+
+        private void SelectPageByIndex(int index, bool instant)
+        {
+            index = Mathf.Clamp(index, 0, rarityOrder.Length - 1);
+
+            if (pagesView != null)
+                pagesView.GoToPage(index, instant);
+            else
+                OnPageChanged(index);
+        }
+
+        private void SelectEquippedKatana()
+        {
+            if (InventoryManager.Instance == null)
+            {
+                SelectPageByIndex(0, true);
+                HideAllInfoPanels();
+                return;
+            }
+
+            Katana equipped = InventoryManager.Instance.EquippedKatana;
+
+            if (equipped == null)
+            {
+                SelectPageByIndex(0, true);
+                SelectFirstOwnedKatana();
+                return;
+            }
+
+            int pageIndex = GetRarityPageIndex(equipped.Rarity);
+            SelectPageByIndex(pageIndex, true);
+
+            KatanaSlot equippedSlot = FindSlotForKatana(equipped);
+            if (equippedSlot != null) SelectSlot(equippedSlot);
+            else DisplayKatana(equipped);
+        }
+
+        private int GetRarityPageIndex(KatanaRarity rarity)
+        {
+            for (int i = 0; i < rarityOrder.Length; i++)
+                if (rarityOrder[i] == rarity) return i;
+            return 0;
+        }
+
+        private KatanaSlot FindSlotForKatana(Katana katana)
+        {
+            if (katana == null) return null;
+
+            if (slotsByRarity.TryGetValue(katana.Rarity, out var slots))
+            {
+                for (int i = 0; i < slots.Count; i++)
+                {
+                    var slot = slots[i];
+                    if (slot != null && !slot.IsEmpty && slot.Katana == katana)
+                        return slot;
+                }
+            }
+
+            return null;
+        }
+
+        private void SelectFirstOwnedKatana()
+        {
+            if (InventoryManager.Instance == null)
+            {
+                HideAllInfoPanels();
+                return;
+            }
+
+            for (int i = 0; i < rarityOrder.Length; i++)
+            {
+                var slots = slotsByRarity[rarityOrder[i]];
+                for (int j = 0; j < slots.Count; j++)
+                {
+                    var slot = slots[j];
+                    if (slot != null && !slot.IsEmpty && slot.IsOwned)
+                    {
+                        SelectPageByIndex(i, true);
+                        SelectSlot(slot);
+                        return;
+                    }
+                }
+            }
+
+            HideAllInfoPanels();
+        }
+
+        private Transform GetGridForIndex(int i)
+        {
+            if (rarityGrids != null && i >= 0 && i < rarityGrids.Count && rarityGrids[i] != null)
+                return rarityGrids[i];
+
+            if (rarityPages != null && i >= 0 && i < rarityPages.Count && rarityPages[i] != null)
+                return rarityPages[i];
+
+            return null;
         }
 
         private void RefreshAllGrids()
         {
             ClearAllGrids();
-
             if (InventoryManager.Instance == null) return;
 
             for (int i = 0; i < rarityOrder.Length; i++)
             {
                 KatanaRarity rarity = rarityOrder[i];
                 var katanas = InventoryManager.Instance.GetKatanasByRarity(rarity);
-                Transform gridContainer = pages[i].transform;
+                Transform gridContainer = GetGridForIndex(i);
+                if (gridContainer == null) continue;
 
                 int katanaIndex = 0;
 
@@ -233,18 +354,15 @@ namespace Runner.UI
                 KatanaSlot emptySlot = Instantiate(emptySlotPrefab, parent);
                 emptySlot.SetupEmpty();
                 slotsByRarity[rarity].Add(emptySlot);
+                return;
             }
-            else
-            {
-                GameObject emptyObj = new GameObject("EmptySlot");
-                emptyObj.transform.SetParent(parent);
 
-                RectTransform rt = emptyObj.AddComponent<RectTransform>();
-                rt.localScale = Vector3.one;
-
-                Image img = emptyObj.AddComponent<Image>();
-                img.color = new Color(0.2f, 0.2f, 0.2f, 0.3f);
-            }
+            var emptyObj = new GameObject("EmptySlot");
+            emptyObj.transform.SetParent(parent, false);
+            var rt = emptyObj.AddComponent<RectTransform>();
+            rt.localScale = Vector3.one;
+            var img = emptyObj.AddComponent<Image>();
+            img.color = new Color(0.2f, 0.2f, 0.2f, 0.3f);
         }
 
         private void ClearAllGrids()
@@ -262,59 +380,14 @@ namespace Runner.UI
                 kvp.Value.Clear();
             }
 
-            foreach (var page in pages)
+            for (int i = 0; i < rarityOrder.Length; i++)
             {
-                for (int i = page.transform.childCount - 1; i >= 0; i--)
-                {
-                    Destroy(page.transform.GetChild(i).gameObject);
-                }
+                Transform grid = GetGridForIndex(i);
+                if (grid == null) continue;
+
+                for (int c = grid.childCount - 1; c >= 0; c--)
+                    Destroy(grid.GetChild(c).gameObject);
             }
-        }
-
-        private void OnTabClicked(int index)
-        {
-            if (isProcessing) return;
-            SelectPageByIndex(index, false);
-        }
-
-        private void SelectPageByIndex(int index, bool instant)
-        {
-            if (index < 0 || index >= rarityOrder.Length) return;
-
-            for (int i = 0; i < pages.Count; i++)
-            {
-                pages[i].SetActive(i == index);
-            }
-
-            currentPageIndex = index;
-            currentRarity = rarityOrder[index];
-
-            for (int i = 0; i < tabs.Count; i++)
-            {
-                tabs[i].SetSelected(i == index);
-            }
-
-            UpdateButtons();
-        }
-
-        private void ClearSelection()
-        {
-            if (selectedSlot != null)
-            {
-                selectedSlot.SetSelected(false);
-            }
-
-            selectedSlot = null;
-            selectedKatana = null;
-
-            HideAllInfoPanels();
-
-            if (noSelectionPanel != null)
-            {
-                noSelectionPanel.SetActive(true);
-            }
-
-            UpdateButtons();
         }
 
         private void OnSlotClicked(KatanaSlot slot)
@@ -323,9 +396,10 @@ namespace Runner.UI
             if (slot == null) return;
             if (slot.IsEmpty) return;
 
-            if (slot.IsOwned && slot == selectedSlot && selectedKatana != null)
+            if (slot == selectedSlot && selectedKatana != null)
             {
-                EquipKatana(slot.Katana);
+                if (slot.IsOwned)
+                    EquipAndClose(slot.Katana);
                 return;
             }
 
@@ -335,87 +409,44 @@ namespace Runner.UI
         private void SelectSlot(KatanaSlot slot)
         {
             if (selectedSlot != null)
-            {
                 selectedSlot.SetSelected(false);
-            }
 
             selectedSlot = slot;
             selectedKatana = slot.Katana;
 
             slot.SetSelected(true, true);
-
-            UpdateInfoPanel();
+            DisplayKatana(slot.Katana);
             UpdateButtons();
         }
 
-        private void EquipKatana(Katana katana)
+        private void EquipAndClose(Katana katana)
         {
             if (katana == null) return;
             if (InventoryManager.Instance == null) return;
-            if (!InventoryManager.Instance.IsKatanaOwned(katana)) return;
-            if (InventoryManager.Instance.EquippedKatana == katana) return;
 
             InventoryManager.Instance.EquipKatana(katana);
-            RefreshEquippedIndicators();
+            UIManager.Instance?.ShowScreen(ScreenType.MainMenu);
         }
 
-        private void RefreshEquippedIndicators()
+        private void DisplayKatana(Katana katana)
         {
-            foreach (var kvp in slotsByRarity)
-            {
-                foreach (var slot in kvp.Value)
-                {
-                    if (slot == null || slot.IsEmpty) continue;
-
-                    bool equipped = InventoryManager.Instance != null &&
-                                    InventoryManager.Instance.EquippedKatana == slot.Katana;
-                    slot.SetEquipped(equipped);
-                }
-            }
-        }
-
-        private void UpdateInfoPanel()
-        {
-            if (selectedKatana == null)
+            if (katana == null)
             {
                 HideAllInfoPanels();
-                if (noSelectionPanel != null)
-                {
-                    noSelectionPanel.SetActive(true);
-                }
                 return;
             }
 
-            if (noSelectionPanel != null)
-            {
-                noSelectionPanel.SetActive(false);
-            }
-
-            bool owned = InventoryManager.Instance != null &&
-                         InventoryManager.Instance.IsKatanaOwned(selectedKatana);
+            bool owned = InventoryManager.Instance != null && InventoryManager.Instance.IsKatanaOwned(katana);
 
             if (previewRenderer != null)
-            {
-                previewRenderer.ShowKatana(selectedKatana, !owned);
-            }
+                previewRenderer.ShowKatana(katana, !owned);
 
             if (previewImage != null && previewRenderer != null)
-            {
                 previewImage.texture = previewRenderer.RenderTexture;
-            }
 
-            if (owned)
-            {
-                ShowOwnedInfo();
-            }
-            else if (selectedKatana.IsChallenge)
-            {
-                ShowChallengeInfo();
-            }
-            else
-            {
-                ShowLockedInfo();
-            }
+            if (owned) ShowOwnedInfo(katana);
+            else if (katana.IsChallenge) ShowChallengeInfo(katana);
+            else ShowLockedInfo(katana);
         }
 
         private void HideAllInfoPanels()
@@ -425,119 +456,79 @@ namespace Runner.UI
             if (challengeInfoPanel != null) challengeInfoPanel.SetActive(false);
         }
 
-        private void ShowOwnedInfo()
+        private void ShowOwnedInfo(Katana katana)
         {
             HideAllInfoPanels();
             if (ownedInfoPanel != null) ownedInfoPanel.SetActive(true);
 
-            if (katanaNameLocalized != null)
-            {
-                katanaNameLocalized.Key = selectedKatana.NameKey;
-            }
-            else if (katanaNameText != null)
-            {
-                katanaNameText.text = GetLocalizedText(selectedKatana.NameKey);
-            }
+            if (katanaNameLocalized != null) katanaNameLocalized.Key = katana.NameKey;
+            else if (katanaNameText != null) katanaNameText.text = GetLocalizedText(katana.NameKey);
 
-            if (rarityText != null)
-            {
-                rarityText.text = GetRarityName(selectedKatana.Rarity);
-                rarityText.color = GetRarityColor(selectedKatana.Rarity);
-            }
+            if (dashBar != null)
+                dashBar.SetMaxDashes(katana.MaxDashes);
 
-            if (rarityBadge != null)
-            {
-                rarityBadge.color = GetRarityColor(selectedKatana.Rarity);
-            }
-
-            if (dashIndicator != null)
-            {
-                dashIndicator.SetDashCount(selectedKatana.MaxDashes);
-            }
-
-            if (descriptionLocalized != null)
-            {
-                descriptionLocalized.Key = selectedKatana.DescriptionKey;
-            }
-            else if (descriptionText != null)
-            {
-                descriptionText.text = GetLocalizedText(selectedKatana.DescriptionKey);
-            }
+            if (descriptionLocalized != null) descriptionLocalized.Key = katana.DescriptionKey;
+            else if (descriptionText != null) descriptionText.text = GetLocalizedText(katana.DescriptionKey);
         }
 
-        private void ShowLockedInfo()
+        private void ShowLockedInfo(Katana katana)
         {
             HideAllInfoPanels();
             if (lockedInfoPanel != null) lockedInfoPanel.SetActive(true);
 
-            if (rarityText != null)
-            {
-                rarityText.text = GetRarityName(selectedKatana.Rarity);
-                rarityText.color = GetRarityColor(selectedKatana.Rarity);
-            }
+            if (dashBar != null)
+                dashBar.SetMaxDashes(katana.MaxDashes);
 
-            if (dashIndicator != null)
-            {
-                dashIndicator.SetHidden();
-            }
+            if (descriptionLocalized != null) descriptionLocalized.Key = katana.DescriptionKey;
+            else if (descriptionText != null) descriptionText.text = GetLocalizedText(katana.DescriptionKey);
         }
 
-        private void ShowChallengeInfo()
+        private void ShowChallengeInfo(Katana katana)
         {
             HideAllInfoPanels();
             if (challengeInfoPanel != null) challengeInfoPanel.SetActive(true);
 
-            if (challengeNameLocalized != null)
-            {
-                challengeNameLocalized.Key = selectedKatana.NameKey;
-            }
-            else if (challengeKatanaNameText != null)
-            {
-                challengeKatanaNameText.text = GetLocalizedText(selectedKatana.NameKey);
-            }
-
-            if (selectedKatana.ChallengeRequirement != null)
+            if (katana.ChallengeRequirement != null)
             {
                 if (challengeDescriptionLocalized != null)
-                {
-                    challengeDescriptionLocalized.Key = selectedKatana.ChallengeRequirement.descriptionKey;
-                }
+                    challengeDescriptionLocalized.Key = katana.ChallengeRequirement.descriptionKey;
 
                 if (challengeProgressBar != null)
                 {
-                    float current = SaveManager.GetChallengeValue(selectedKatana.ChallengeRequirement.type);
-                    float target = selectedKatana.ChallengeRequirement.targetValue;
+                    float current = SaveManager.GetChallengeValue(katana.ChallengeRequirement.type);
+                    float target = katana.ChallengeRequirement.targetValue;
                     challengeProgressBar.SetProgress(current, target);
                 }
             }
+
+            if (dashBar != null)
+                dashBar.SetMaxDashes(katana.MaxDashes);
         }
 
         private void UpdateButtons()
         {
-            bool isChallenge = currentRarity == KatanaRarity.Challenge;
+            if (buyRandomLabelText != null)
+                buyRandomLabelText.text = GetLocalizedText(buyRandomKey);
+
+            if (buySpecificLabelText != null)
+                buySpecificLabelText.text = GetLocalizedText(buyNowKey);
+
             int coins = SaveManager.GetCoins();
 
             int randomPrice = 0;
-            int directPrice = 0;
-
             if (InventoryManager.Instance?.Database != null)
-            {
                 randomPrice = InventoryManager.Instance.Database.GetRarityPrice(currentRarity);
-                directPrice = InventoryManager.Instance.Database.GetDirectPurchasePrice(currentRarity);
-            }
 
             var unowned = InventoryManager.Instance?.GetUnownedKatanasByRarity(currentRarity);
             bool hasUnowned = unowned != null && unowned.Count > 0;
 
-            bool selectedOwned = selectedKatana != null &&
-                                 InventoryManager.Instance != null &&
-                                 InventoryManager.Instance.IsKatanaOwned(selectedKatana);
+            bool isChallengePage = currentRarity == KatanaRarity.Challenge;
 
             if (buyRandomButton != null)
             {
-                bool canBuyRandom = !isChallenge && hasUnowned && coins >= randomPrice && !isProcessing;
+                bool canBuyRandom = !isChallengePage && hasUnowned && coins >= randomPrice && !isProcessing;
                 buyRandomButton.SetInteractable(canBuyRandom);
-                buyRandomButton.gameObject.SetActive(!isChallenge);
+                buyRandomButton.gameObject.SetActive(!isChallengePage);
             }
 
             if (buyRandomPriceText != null)
@@ -546,32 +537,39 @@ namespace Runner.UI
                 buyRandomPriceText.color = coins >= randomPrice ? Color.white : Color.red;
             }
 
-            if (buySelectedButton != null)
+            bool selectedOwned = selectedKatana != null && InventoryManager.Instance != null && InventoryManager.Instance.IsKatanaOwned(selectedKatana);
+            bool selectedChallenge = selectedKatana != null && selectedKatana.IsChallenge;
+            bool showSpecific = selectedKatana != null && !selectedOwned && !selectedChallenge;
+
+            int selectedRarityPrice = 0;
+            if (selectedKatana != null && InventoryManager.Instance?.Database != null)
+                selectedRarityPrice = InventoryManager.Instance.Database.GetRarityPrice(selectedKatana.Rarity);
+
+            int specificPrice = selectedRarityPrice * 2;
+
+            if (buySpecificButton != null)
             {
-                bool canBuySelected = !isChallenge && selectedKatana != null &&
-                                      !selectedOwned && coins >= directPrice && !isProcessing;
-                buySelectedButton.SetInteractable(canBuySelected);
-                buySelectedButton.gameObject.SetActive(!isChallenge && selectedKatana != null && !selectedOwned);
+                buySpecificButton.gameObject.SetActive(showSpecific);
+                if (showSpecific)
+                {
+                    bool canBuySpecific = coins >= specificPrice && !isProcessing;
+                    buySpecificButton.SetInteractable(canBuySpecific);
+                }
             }
 
-            if (buySelectedPriceText != null)
+            if (buySpecificPriceText != null)
             {
-                buySelectedPriceText.text = directPrice.ToString();
-                buySelectedPriceText.color = coins >= directPrice ? Color.white : Color.red;
+                buySpecificPriceText.text = specificPrice.ToString();
+                buySpecificPriceText.color = coins >= specificPrice ? Color.white : Color.red;
             }
 
-            foreach (var tab in tabs)
-            {
-                tab.SetInteractable(!isProcessing);
-            }
+            for (int i = 0; i < tabs.Count; i++)
+                tabs[i].SetInteractable(!isProcessing);
         }
 
         private void UpdateCoinDisplay()
         {
-            if (coinDisplay != null)
-            {
-                coinDisplay.UpdateDisplay();
-            }
+            coinDisplay?.UpdateDisplay();
         }
 
         private void OnBuyRandomClicked()
@@ -586,30 +584,54 @@ namespace Runner.UI
                 UpdateButtons();
                 UpdateCoinDisplay();
 
+                if (selectedSlot != null)
+                {
+                    selectedSlot.SetSelected(false);
+                    selectedSlot = null;
+                    selectedKatana = null;
+                }
+
                 var slots = GetKatanaSlotsOnly(currentRarity);
                 rouletteAnimator.StartRoulette(slots, result);
             }
         }
 
+        private void OnBuySpecificClicked()
+        {
+            if (isProcessing) return;
+            if (selectedKatana == null) return;
+            if (InventoryManager.Instance == null) return;
+            if (selectedKatana.IsChallenge) return;
+            if (InventoryManager.Instance.IsKatanaOwned(selectedKatana)) return;
+
+            int rarityPrice = InventoryManager.Instance.Database != null ? InventoryManager.Instance.Database.GetRarityPrice(selectedKatana.Rarity) : 0;
+            int specificPrice = rarityPrice * 2;
+
+            if (!SaveManager.SpendCoins(specificPrice)) return;
+
+            InventoryManager.Instance.UnlockKatana(selectedKatana);
+
+            UpdateCoinDisplay();
+
+            if (selectedSlot != null && !selectedSlot.IsEmpty && selectedSlot.Katana == selectedKatana)
+                selectedSlot.SetOwned(true);
+
+            UpdateButtons();
+            DisplayKatana(selectedKatana);
+        }
+
         private List<KatanaSlot> GetKatanaSlotsOnly(KatanaRarity rarity)
         {
-            List<KatanaSlot> result = new List<KatanaSlot>();
-
+            var result = new List<KatanaSlot>();
             foreach (var slot in slotsByRarity[rarity])
-            {
                 if (slot != null && !slot.IsEmpty)
-                {
                     result.Add(slot);
-                }
-            }
-
             return result;
         }
 
         private void OnRouletteComplete(Katana result)
         {
             InventoryManager.Instance?.UnlockKatana(result);
-
             StartCoroutine(FinishRouletteRoutine(result));
         }
 
@@ -623,6 +645,7 @@ namespace Runner.UI
                 if (slot != null && !slot.IsEmpty && slot.Katana == result)
                 {
                     slot.SetOwned(true);
+                    slot.ClearHighlight();
                     SelectSlot(slot);
                     break;
                 }
@@ -632,45 +655,10 @@ namespace Runner.UI
             UpdateButtons();
         }
 
-        private void OnBuySelectedClicked()
-        {
-            if (isProcessing) return;
-            if (selectedKatana == null) return;
-            if (currentRarity == KatanaRarity.Challenge) return;
-            if (InventoryManager.Instance == null) return;
-
-            if (InventoryManager.Instance.TryPurchaseDirect(selectedKatana))
-            {
-                if (selectedSlot != null)
-                {
-                    selectedSlot.SetOwned(true);
-                }
-
-                UpdateInfoPanel();
-                UpdateButtons();
-                UpdateCoinDisplay();
-            }
-        }
-
         private void OnBackClicked()
         {
             if (isProcessing) return;
             UIManager.Instance?.ShowScreen(ScreenType.MainMenu);
-        }
-
-        private string GetRarityName(KatanaRarity rarity)
-        {
-            string key = rarity switch
-            {
-                KatanaRarity.Common => commonKey,
-                KatanaRarity.Rare => rareKey,
-                KatanaRarity.Epic => epicKey,
-                KatanaRarity.Legendary => legendaryKey,
-                KatanaRarity.Challenge => challengeKey,
-                _ => commonKey
-            };
-
-            return GetLocalizedText(key);
         }
 
         private Color GetRarityColor(KatanaRarity rarity)
@@ -689,9 +677,7 @@ namespace Runner.UI
         private string GetLocalizedText(string key)
         {
             if (LocalizationController.Singleton != null)
-            {
                 return LocalizationController.Singleton.GetText(key);
-            }
             return key;
         }
 
@@ -700,8 +686,8 @@ namespace Runner.UI
             if (buyRandomButton != null)
                 buyRandomButton.OnClick -= OnBuyRandomClicked;
 
-            if (buySelectedButton != null)
-                buySelectedButton.OnClick -= OnBuySelectedClicked;
+            if (buySpecificButton != null)
+                buySpecificButton.OnClick -= OnBuySpecificClicked;
 
             if (backButton != null)
                 backButton.OnClick -= OnBackClicked;
@@ -709,13 +695,12 @@ namespace Runner.UI
             if (rouletteAnimator != null)
                 rouletteAnimator.OnRouletteComplete -= OnRouletteComplete;
 
+            if (pagesView != null)
+                pagesView.OnPageChanged -= OnPageChanged;
+
             foreach (var tab in tabs)
-            {
                 if (tab != null)
-                {
                     tab.OnTabClicked -= OnTabClicked;
-                }
-            }
 
             ClearAllGrids();
         }

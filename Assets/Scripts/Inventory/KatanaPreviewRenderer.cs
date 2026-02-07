@@ -43,7 +43,7 @@ namespace Runner.Inventory
         {
             if (autoRotate && katanaHolder != null && currentKatanaInstance != null)
             {
-                katanaHolder.Rotate(Vector3.up, rotationSpeed * Time.unscaledDeltaTime);
+                katanaHolder.Rotate(Vector3.right, rotationSpeed * Time.unscaledDeltaTime);
             }
         }
 

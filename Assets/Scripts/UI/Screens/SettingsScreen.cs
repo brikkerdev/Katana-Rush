@@ -22,14 +22,39 @@ namespace Runner.UI
         [SerializeField] private UIButton closeButton;
         [SerializeField] private UIButton resetButton;
 
-        private List<string> languageCodes = new List<string>();
+        private readonly List<string> languageCodes = new List<string>();
         private ScreenType returnToScreen = ScreenType.MainMenu;
+
+        private const string MusicKey = "MusicVolume";
+        private const string SfxKey = "SFXVolume";
+        private const string VibrationKey = "Vibration";
+        private const string GraphicsPresetKey = "GraphicsPreset";
+        private const string QualityLevelKey = "QualityLevel";
+
+        private static readonly string[] QualityPresetKeys =
+        {
+            "ui_settings_quality_low",
+            "ui_settings_quality_medium",
+            "ui_settings_quality_high"
+        };
 
         protected override void Awake()
         {
             base.Awake();
             screenType = ScreenType.Settings;
             SetupUI();
+        }
+
+        private void OnEnable()
+        {
+            if (LocalizationController.Singleton != null)
+                LocalizationController.Singleton.LocalizationChangedEvent += RefreshLocalizedUI;
+        }
+
+        private void OnDisable()
+        {
+            if (LocalizationController.Singleton != null)
+                LocalizationController.Singleton.LocalizationChangedEvent -= RefreshLocalizedUI;
         }
 
         private void SetupUI()
@@ -56,7 +81,50 @@ namespace Runner.UI
                 languageDropdown.onValueChanged.AddListener(OnLanguageChanged);
 
             SetupLanguageDropdown();
-            SetupQualityDropdown();
+            RefreshLocalizedUI();
+        }
+
+        public void SetReturnScreen(ScreenType screen)
+        {
+            returnToScreen = screen;
+        }
+
+        protected override void OnShow()
+        {
+            base.OnShow();
+            SetupLanguageDropdown();
+            RefreshLocalizedUI();
+            LoadSettings();
+        }
+
+        private string L(string key)
+        {
+            if (LocalizationController.Singleton == null) return key;
+            return LocalizationController.Singleton.GetText(key);
+        }
+
+        private void RefreshLocalizedUI()
+        {
+            SetupQualityDropdownLocalized();
+        }
+
+        private void SetupQualityDropdownLocalized()
+        {
+            if (qualityDropdown == null) return;
+
+            int currentPreset = PlayerPrefs.GetInt(GraphicsPresetKey, 1);
+            currentPreset = Mathf.Clamp(currentPreset, 0, 2);
+
+            qualityDropdown.ClearOptions();
+
+            var options = new List<TMP_Dropdown.OptionData>(3);
+            options.Add(new TMP_Dropdown.OptionData(L(QualityPresetKeys[0])));
+            options.Add(new TMP_Dropdown.OptionData(L(QualityPresetKeys[1])));
+            options.Add(new TMP_Dropdown.OptionData(L(QualityPresetKeys[2])));
+
+            qualityDropdown.AddOptions(options);
+            qualityDropdown.SetValueWithoutNotify(currentPreset);
+            qualityDropdown.RefreshShownValue();
         }
 
         private void SetupLanguageDropdown()
@@ -68,12 +136,11 @@ namespace Runner.UI
             languageDropdown.ClearOptions();
             languageCodes.Clear();
 
-            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
+            var options = new List<TMP_Dropdown.OptionData>();
 
             foreach (var language in LocalizationController.Singleton.database.languages)
             {
                 if (language == null) continue;
-
                 options.Add(new TMP_Dropdown.OptionData(language.displayName));
                 languageCodes.Add(language.code);
             }
@@ -81,52 +148,56 @@ namespace Runner.UI
             languageDropdown.AddOptions(options);
         }
 
-        private void SetupQualityDropdown()
-        {
-            if (qualityDropdown == null) return;
-
-            qualityDropdown.ClearOptions();
-
-            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
-            string[] qualityNames = QualitySettings.names;
-
-            foreach (var name in qualityNames)
-            {
-                options.Add(new TMP_Dropdown.OptionData(name));
-            }
-
-            qualityDropdown.AddOptions(options);
-        }
-
-        /// <summary>
-        /// Sets which screen to return to when closing settings
-        /// </summary>
-        public void SetReturnScreen(ScreenType screen)
-        {
-            returnToScreen = screen;
-        }
-
-        protected override void OnShow()
-        {
-            base.OnShow();
-            LoadSettings();
-        }
-
         private void LoadSettings()
         {
             if (musicSlider != null)
-                musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+                musicSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(MusicKey, 1f));
 
             if (sfxSlider != null)
-                sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
+                sfxSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(SfxKey, 1f));
 
             if (vibrationToggle != null)
-                vibrationToggle.isOn = PlayerPrefs.GetInt("Vibration", 1) == 1;
+                vibrationToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(VibrationKey, 1) == 1);
+
+            ApplySavedGraphicsPreset();
+            LoadLanguageSelection();
+        }
+
+        private void ApplySavedGraphicsPreset()
+        {
+            int preset = PlayerPrefs.GetInt(GraphicsPresetKey, 1);
+            preset = Mathf.Clamp(preset, 0, 2);
+
+            int qualityIndex = GetQualityIndexForPreset(preset);
+            QualitySettings.SetQualityLevel(qualityIndex, true);
+
+            PlayerPrefs.SetInt(QualityLevelKey, qualityIndex);
+            PlayerPrefs.Save();
 
             if (qualityDropdown != null)
-                qualityDropdown.value = QualitySettings.GetQualityLevel();
+            {
+                qualityDropdown.SetValueWithoutNotify(preset);
+                qualityDropdown.RefreshShownValue();
+            }
+        }
 
-            LoadLanguageSelection();
+        private int GetQualityIndexForPreset(int preset)
+        {
+            int count = QualitySettings.names != null ? QualitySettings.names.Length : 0;
+            if (count <= 0) return 0;
+            if (count == 1) return 0;
+
+            int low = 0;
+            int high = count - 1;
+            int medium = (count - 1) / 2;
+
+            return preset switch
+            {
+                0 => low,
+                1 => medium,
+                2 => high,
+                _ => medium
+            };
         }
 
         private void LoadLanguageSelection()
@@ -140,6 +211,7 @@ namespace Runner.UI
             if (index >= 0)
             {
                 languageDropdown.SetValueWithoutNotify(index);
+                languageDropdown.RefreshShownValue();
             }
         }
 
@@ -150,26 +222,31 @@ namespace Runner.UI
 
         private void OnMusicVolumeChanged(float value)
         {
-            PlayerPrefs.SetFloat("MusicVolume", value);
+            PlayerPrefs.SetFloat(MusicKey, value);
             SaveSettings();
         }
 
         private void OnSFXVolumeChanged(float value)
         {
-            PlayerPrefs.SetFloat("SFXVolume", value);
+            PlayerPrefs.SetFloat(SfxKey, value);
             SaveSettings();
         }
 
         private void OnVibrationChanged(bool enabled)
         {
-            PlayerPrefs.SetInt("Vibration", enabled ? 1 : 0);
+            PlayerPrefs.SetInt(VibrationKey, enabled ? 1 : 0);
             SaveSettings();
         }
 
-        private void OnQualityChanged(int index)
+        private void OnQualityChanged(int presetIndex)
         {
-            QualitySettings.SetQualityLevel(index);
-            PlayerPrefs.SetInt("QualityLevel", index);
+            presetIndex = Mathf.Clamp(presetIndex, 0, 2);
+
+            int qualityIndex = GetQualityIndexForPreset(presetIndex);
+            QualitySettings.SetQualityLevel(qualityIndex, true);
+
+            PlayerPrefs.SetInt(GraphicsPresetKey, presetIndex);
+            PlayerPrefs.SetInt(QualityLevelKey, qualityIndex);
             SaveSettings();
         }
 
@@ -180,11 +257,11 @@ namespace Runner.UI
 
             string languageCode = languageCodes[index];
             LocalizationController.Singleton.ChangeLanguage(languageCode);
+            LoadLanguageSelection();
         }
 
         private void OnCloseClicked()
         {
-            // Return to the screen we came from (MainMenu or Pause)
             UIManager.Instance?.ShowScreen(returnToScreen);
         }
 
@@ -206,11 +283,7 @@ namespace Runner.UI
 
             string defaultCode = GetSystemLanguageCode();
             int index = languageCodes.IndexOf(defaultCode);
-
-            if (index < 0)
-            {
-                index = 0;
-            }
+            if (index < 0) index = 0;
 
             languageDropdown.value = index;
         }
@@ -219,44 +292,26 @@ namespace Runner.UI
         {
             SystemLanguage systemLang = Application.systemLanguage;
 
-            switch (systemLang)
+            return systemLang switch
             {
-                case SystemLanguage.English:
-                    return "en";
-                case SystemLanguage.Russian:
-                    return "ru";
-                case SystemLanguage.German:
-                    return "de";
-                case SystemLanguage.French:
-                    return "fr";
-                case SystemLanguage.Spanish:
-                    return "es";
-                case SystemLanguage.Italian:
-                    return "it";
-                case SystemLanguage.Portuguese:
-                    return "pt";
-                case SystemLanguage.Japanese:
-                    return "ja";
-                case SystemLanguage.Korean:
-                    return "ko";
-                case SystemLanguage.Chinese:
-                case SystemLanguage.ChineseSimplified:
-                    return "zh-CN";
-                case SystemLanguage.ChineseTraditional:
-                    return "zh-TW";
-                case SystemLanguage.Arabic:
-                    return "ar";
-                case SystemLanguage.Turkish:
-                    return "tr";
-                case SystemLanguage.Polish:
-                    return "pl";
-                case SystemLanguage.Dutch:
-                    return "nl";
-                case SystemLanguage.Ukrainian:
-                    return "uk";
-                default:
-                    return "en";
-            }
+                SystemLanguage.English => "en",
+                SystemLanguage.Russian => "ru",
+                SystemLanguage.German => "de",
+                SystemLanguage.French => "fr",
+                SystemLanguage.Spanish => "es",
+                SystemLanguage.Italian => "it",
+                SystemLanguage.Portuguese => "pt",
+                SystemLanguage.Japanese => "ja",
+                SystemLanguage.Korean => "ko",
+                SystemLanguage.Chinese or SystemLanguage.ChineseSimplified => "zh-CN",
+                SystemLanguage.ChineseTraditional => "zh-TW",
+                SystemLanguage.Arabic => "ar",
+                SystemLanguage.Turkish => "tr",
+                SystemLanguage.Polish => "pl",
+                SystemLanguage.Dutch => "nl",
+                SystemLanguage.Ukrainian => "uk",
+                _ => "en"
+            };
         }
 
         private void OnDestroy()

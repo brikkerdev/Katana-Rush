@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Runner.Core;
+using Runner.Effects;
 
 namespace Runner.Enemy
 {
@@ -42,11 +43,6 @@ namespace Runner.Enemy
         [SerializeField] private EnemyRagdoll ragdoll;
         [SerializeField] private SimpleEnemyRagdoll simpleRagdoll;
 
-        [Header("Effects")]
-        [SerializeField] private ParticleSystem deathEffect;
-        [SerializeField] private ParticleSystem hitEffect;
-        [SerializeField] private ParticleSystem muzzleFlash;
-
         private bool isDead;
         private float currentHealth;
         private Vector3 spawnPosition;
@@ -79,31 +75,21 @@ namespace Runner.Enemy
             sqrFireRange = fireRange * fireRange;
 
             if (visualRoot == null && cachedTransform.childCount > 0)
-            {
                 visualRoot = cachedTransform.GetChild(0).gameObject;
-            }
 
             enemyAnimator = GetComponentInChildren<EnemyAnimator>();
 
             if (ragdoll == null)
-            {
                 ragdoll = GetComponent<EnemyRagdoll>();
-            }
 
             if (simpleRagdoll == null)
-            {
                 simpleRagdoll = GetComponent<SimpleEnemyRagdoll>();
-            }
 
             if (predictionSettings == null)
-            {
                 predictionSettings = new AimPredictionSettings();
-            }
 
             if (enemyType == EnemyType.Shooter || enemyType == EnemyType.Sniper)
-            {
                 canShoot = true;
-            }
 
             if (enemyType == EnemyType.Sniper)
             {
@@ -116,9 +102,7 @@ namespace Runner.Enemy
         private void Start()
         {
             if (enemyAnimator != null)
-            {
                 enemyAnimator.Initialize(this);
-            }
 
             SetupAimPredictor();
         }
@@ -129,20 +113,13 @@ namespace Runner.Enemy
 
             aimPredictor = GetComponent<EnemyAimPredictor>();
             if (aimPredictor == null)
-            {
                 aimPredictor = gameObject.AddComponent<EnemyAimPredictor>();
-            }
         }
 
         private void Update()
         {
             if (isDead || !canShoot || playerTarget == null) return;
-
-            if (Game.Instance == null || Game.Instance.State != GameState.Playing)
-            {
-                return;
-            }
-
+            if (Game.Instance == null || Game.Instance.State != GameState.Playing) return;
             UpdateShooting();
         }
 
@@ -151,15 +128,11 @@ namespace Runner.Enemy
             if (!canFire)
             {
                 initialDelay -= Time.deltaTime;
-                if (initialDelay <= 0f)
-                {
-                    canFire = true;
-                }
+                if (initialDelay <= 0f) canFire = true;
                 return;
             }
 
             Vector3 toPlayer = playerTarget.position - cachedTransform.position;
-
             if (toPlayer.sqrMagnitude > sqrFireRange) return;
 
             float dot = Vector3.Dot(-cachedTransform.forward, toPlayer.normalized);
@@ -205,12 +178,8 @@ namespace Runner.Enemy
             bullet.SetTarget(playerTarget);
             bullet.SetSourceEnemy(this);
 
-            if (muzzleFlash != null)
-            {
-                muzzleFlash.transform.position = cachedFirePosition;
-                muzzleFlash.transform.rotation = Quaternion.LookRotation(direction);
-                muzzleFlash.Play();
-            }
+            if (ParticleController.Instance != null && firePoint != null)
+                ParticleController.Instance.SpawnMuzzleFlash(firePoint, direction);
 
             enemyAnimator?.PlayFireAnimation();
         }
@@ -233,10 +202,7 @@ namespace Runner.Enemy
 
             FindPlayer();
 
-            if (visualRoot != null)
-            {
-                visualRoot.SetActive(true);
-            }
+            if (visualRoot != null) visualRoot.SetActive(true);
 
             if (animator != null)
             {
@@ -252,15 +218,10 @@ namespace Runner.Enemy
         private void FindPlayer()
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null)
-            {
-                playerTarget = playerObj.transform;
+            if (playerObj == null) return;
 
-                if (aimPredictor != null)
-                {
-                    aimPredictor.Initialize(playerTarget);
-                }
-            }
+            playerTarget = playerObj.transform;
+            aimPredictor?.Initialize(playerTarget);
         }
 
         public void SetPlayer(Transform player)
@@ -278,15 +239,15 @@ namespace Runner.Enemy
 
             OnHit?.Invoke(this);
 
-            if (hitEffect != null)
+            if (ParticleController.Instance != null)
             {
-                hitEffect.Play();
+                Vector3 hitPosition = cachedTransform.position + Vector3.up;
+                ParticleController.Instance.SpawnBloodEffect(hitPosition, hitDirection);
+                ParticleController.Instance.SpawnHitEffect(hitPosition, hitDirection);
             }
 
             if (currentHealth <= 0f)
-            {
                 Die(hitDirection);
-            }
         }
 
         public void TakeDamage(float damage)
@@ -305,51 +266,29 @@ namespace Runner.Enemy
             isDead = true;
             lastHitDirection = hitDirection;
 
-            if (animator != null)
-            {
-                animator.enabled = false;
-            }
+            if (animator != null) animator.enabled = false;
 
-            if (useRagdoll)
-            {
-                ActivateRagdoll(hitDirection);
-            }
-            else
-            {
-                if (visualRoot != null)
-                {
-                    visualRoot.SetActive(false);
-                }
-            }
+            if (useRagdoll) ActivateRagdoll(hitDirection);
+            else if (visualRoot != null) visualRoot.SetActive(false);
 
-            if (deathEffect != null)
+            if (ParticleController.Instance != null)
             {
-                deathEffect.Play();
+                Vector3 deathPosition = cachedTransform.position + Vector3.up * 0.5f;
+                ParticleController.Instance.SpawnDeathEffect(deathPosition, hitDirection);
             }
 
             OnDeath?.Invoke(this);
 
             if (!useRagdoll)
-            {
                 Invoke(nameof(Deactivate), 0.1f);
-            }
         }
 
-        public void Die()
-        {
-            Die(lastHitDirection);
-        }
+        public void Die() => Die(lastHitDirection);
 
         private void ActivateRagdoll(Vector3 hitDirection)
         {
-            if (ragdoll != null)
-            {
-                ragdoll.ActivateRagdoll(hitDirection, 1f);
-            }
-            else if (simpleRagdoll != null)
-            {
-                simpleRagdoll.Activate(hitDirection);
-            }
+            if (ragdoll != null) ragdoll.ActivateRagdoll(hitDirection, 1f);
+            else if (simpleRagdoll != null) simpleRagdoll.Activate(hitDirection);
         }
 
         private void Deactivate()
@@ -368,20 +307,10 @@ namespace Runner.Enemy
             canFire = false;
             lastHitDirection = Vector3.forward;
 
-            if (ragdoll != null)
-            {
-                ragdoll.ResetRagdoll();
-            }
+            ragdoll?.ResetRagdoll();
+            simpleRagdoll?.ResetRagdoll();
 
-            if (simpleRagdoll != null)
-            {
-                simpleRagdoll.ResetRagdoll();
-            }
-
-            if (visualRoot != null)
-            {
-                visualRoot.SetActive(true);
-            }
+            if (visualRoot != null) visualRoot.SetActive(true);
 
             if (animator != null)
             {
@@ -390,10 +319,7 @@ namespace Runner.Enemy
                 animator.Update(0f);
             }
 
-            if (enemyAnimator != null)
-            {
-                enemyAnimator.ResetAnimator();
-            }
+            enemyAnimator?.ResetAnimator();
 
             if (hasBeenSetup)
             {
@@ -427,9 +353,7 @@ namespace Runner.Enemy
                     Gizmos.DrawRay(firePoint.position, -transform.forward * 2f);
 
                     if (usePrediction && aimPredictor != null && playerTarget != null)
-                    {
                         aimPredictor.DrawPredictionGizmos(firePoint.position, bulletSpeed);
-                    }
                 }
             }
         }

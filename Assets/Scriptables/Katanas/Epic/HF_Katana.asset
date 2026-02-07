@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: HF_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: 82c326a5-2125-4e91-b2f2-8083844c02bc
+  nameKey: katana_name_hf
+  descriptionKey: katana_description_hf
+  icon: {fileID: 1326138094, guid: 9151ab848f315fc4984446fe75e01cb1, type: 3}
+  rarity: 2
+  playerPreset: {fileID: 11400000, guid: c990f68aa12d4554cbae929b0eb5dd25, type: 2}
+  modelPrefab: {fileID: 7073885569655949021, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: a8c10a3c8e3230f498987056755d389f, type: 2}
+  slashEffectPrefab: {fileID: 174940048960636371, guid: a7c5179f5d6f652459bc5b20deeacd69, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  challengeRequirement:
+    type: 0
+    targetValue: 0
+    descriptionKey: 

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Murasama_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: 87d17be9-aaf8-44a7-8249-0523068714f2
+  nameKey: katana_name_murasama
+  descriptionKey: katana_description_murasama
+  icon: {fileID: -1347938996, guid: 3af687e7e145b6b4d8c5ba5b956130b1, type: 3}
+  rarity: 3
+  playerPreset: {fileID: 11400000, guid: e7ac74f84f5912b4cad76e6d2615f7da, type: 2}
+  modelPrefab: {fileID: 2555748930796192416, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: afecd4e7a9febdb41986a235a040f6dd, type: 2}
+  slashEffectPrefab: {fileID: 174940048960636371, guid: ea46e7d9fef6d0b4d87d608e07ad656c, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  challengeRequirement:
+    type: 0
+    targetValue: 0
+    descriptionKey: 

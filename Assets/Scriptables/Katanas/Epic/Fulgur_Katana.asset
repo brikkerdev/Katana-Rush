@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Fulgur_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: e3a214a4-377e-45ea-a23d-7cf75ce3dd22
+  nameKey: katana_name_fulgur
+  descriptionKey: katana_description_fulgur
+  icon: {fileID: -776691562, guid: 216a8ad8215623240931375bcfcf9f65, type: 3}
+  rarity: 2
+  playerPreset: {fileID: 11400000, guid: 11a7acf42e7083f4797b781417bd83f7, type: 2}
+  modelPrefab: {fileID: 7720228727281258322, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 4b36f1c96f33eab49a173af7ca209191, type: 2}
+  slashEffectPrefab: {fileID: 174940048960636371, guid: a7c5179f5d6f652459bc5b20deeacd69, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  challengeRequirement:
+    type: 0
+    targetValue: 0
+    descriptionKey: 

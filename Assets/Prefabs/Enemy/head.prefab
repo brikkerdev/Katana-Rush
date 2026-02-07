@@ -255,10 +255,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Enemy.RagdollHead
   drag: 0.5
   angularDrag: 0.5
-  bounciness: 0.3
   bloodTrail: {fileID: 0}
-  trailDuration: 0.5
-  bloodSpray: {fileID: 0}
+  bloodSprayPrefab: {fileID: 5678536337407522548, guid: 17d9f40f34766204693f11d7d62f5be6, type: 3}
+  impactEffectPrefab: {fileID: 5678536337407522548, guid: 17d9f40f34766204693f11d7d62f5be6, type: 3}
   impactSound: {fileID: 0}
 --- !u!1 &7121095041739037417
 GameObject:

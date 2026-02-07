@@ -1,4 +1,5 @@
 using UnityEngine;
+using Runner.Effects;
 
 namespace Runner.Enemy
 {
@@ -12,8 +13,11 @@ namespace Runner.Enemy
         [Header("Trail")]
         [SerializeField] private TrailRenderer bloodTrail;
 
-        [Header("Effects")]
-        [SerializeField] private ParticleSystem bloodSpray;
+        [Header("Effect Prefabs")]
+        [SerializeField] private GameObject bloodSprayPrefab;
+        [SerializeField] private GameObject impactEffectPrefab;
+
+        [Header("Audio")]
         [SerializeField] private AudioSource impactSound;
 
         private Rigidbody rb;
@@ -27,6 +31,7 @@ namespace Runner.Enemy
         private const int MAX_BOUNCES = 3;
 
         private Vector3 originalScale;
+        private Vector3 lastVelocity;
 
         private void Awake()
         {
@@ -73,10 +78,8 @@ namespace Runner.Enemy
                 bloodTrail.emitting = true;
             }
 
-            if (bloodSpray != null)
-            {
-                bloodSpray.Play();
-            }
+            // Spawn blood spray using ParticleController
+            SpawnBloodSpray(force.normalized);
 
             if (col != null)
             {
@@ -86,11 +89,18 @@ namespace Runner.Enemy
             gameObject.SetActive(true);
         }
 
+        private void SpawnBloodSpray(Vector3 direction)
+        {
+            if (ParticleController.Instance == null) return;
+
+        }
+
         private void Update()
         {
             if (!isActive) return;
 
             timer -= Time.deltaTime;
+            lastVelocity = rb.linearVelocity;
 
             if (timer <= 0f)
             {
@@ -121,6 +131,9 @@ namespace Runner.Enemy
                     impactSound.pitch = Random.Range(0.9f, 1.1f);
                     impactSound.Play();
                 }
+
+                // Spawn impact effect
+                SpawnImpactEffect(collision);
             }
 
             bounceCount++;
@@ -130,6 +143,14 @@ namespace Runner.Enemy
                 rb.linearVelocity *= 0.3f;
                 rb.angularVelocity *= 0.3f;
             }
+        }
+
+        private void SpawnImpactEffect(Collision collision)
+        {
+            if (ParticleController.Instance == null) return;
+            if (impactEffectPrefab == null) return;
+
+            ContactPoint contact = collision.GetContact(0);
         }
 
         private void Deactivate()
@@ -143,12 +164,6 @@ namespace Runner.Enemy
             {
                 bloodTrail.emitting = false;
                 bloodTrail.Clear();
-            }
-
-            if (bloodSpray != null)
-            {
-                bloodSpray.Stop();
-                bloodSpray.Clear();
             }
 
             if (col != null)
@@ -189,12 +204,6 @@ namespace Runner.Enemy
             {
                 bloodTrail.emitting = false;
                 bloodTrail.Clear();
-            }
-
-            if (bloodSpray != null)
-            {
-                bloodSpray.Stop();
-                bloodSpray.Clear();
             }
 
             transform.localScale = originalScale;

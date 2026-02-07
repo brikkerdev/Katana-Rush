@@ -64,9 +64,10 @@
     <Compile Include="Assets\Scripts\Camera\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerInputBuffer.cs" />
     <Compile Include="Assets\Scripts\Inventory\Katana.cs" />
-    <Compile Include="Assets\Scripts\UI\Components\RarityPagesView.cs" />
+    <Compile Include="Assets\Scripts\Environment\ParticleExtensions.cs" />
     <Compile Include="Assets\Scripts\Biome\BiomeManager.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemySpawner.cs" />
+    <Compile Include="Assets\Scripts\Environment\GameVisualEffect.cs" />
     <Compile Include="Assets\Scripts\Levels\LevelSegment.cs" />
     <Compile Include="Assets\Scripts\Player\Visual\StaminaBarController.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\JumpMovement.cs" />
@@ -80,6 +81,8 @@
     <Compile Include="Assets\Scripts\UI\Screens\InventoryScreen.cs" />
     <Compile Include="Assets\Scripts\Inventory\KatanaDatabase.cs" />
     <Compile Include="Assets\Scripts\UI\Components\ChallengeProgressBar.cs" />
+    <Compile Include="Assets\Scripts\Environment\ParticleController.cs" />
+    <Compile Include="Assets\Scripts\UI\Components\UICircularStaminaBar.cs" />
     <Compile Include="Assets\Scripts\Collectible\CollectibleSpawnPoint.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAnimator.cs" />
     <Compile Include="Assets\Scripts\Input\SwipeDirection.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="Assets\Scripts\Levels\IResettable.cs" />
     <Compile Include="Assets\Scripts\UI\Components\BarUIVisualElement.cs" />
     <Compile Include="Assets\Scripts\Core\Game.cs" />
+    <Compile Include="Assets\Scripts\Environment\FogController.cs" />
     <Compile Include="Assets\Scripts\Core\MobileOptimizer.cs" />
     <Compile Include="Assets\Scripts\Input\InputReader.cs" />
     <Compile Include="Assets\Scripts\Inventory\KatanaPreviewRenderer.cs" />
@@ -97,11 +101,13 @@
     <Compile Include="Assets\Scripts\Localization\Elements\Language.cs" />
     <Compile Include="Assets\Scripts\Player\Visual\CircularStaminaBar.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIManager.cs" />
+    <Compile Include="Assets\Scripts\Environment\SkyController.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\DashMovement.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\PauseScreen.cs" />
     <Compile Include="Assets\Scripts\Player\Core\Player.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\RagdollHead.cs" />
     <Compile Include="Assets\Scripts\Collectible\CollectibleSpawner.cs" />
+    <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\PivotBasedCameraRig.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\SimpleEnemyRagdoll.cs" />
     <Compile Include="Assets\Scripts\Enemy\BulletPool.cs" />
     <Compile Include="Assets\Scripts\UI\Components\RarityTab.cs" />
@@ -110,6 +116,7 @@
     <Compile Include="Assets\Scripts\UI\Screens\SettingsScreen.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraEffects.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\GameplayScreen.cs" />
+    <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\AbstractTargetFollower.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\RagdollPartPool.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerAnimator.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\GameOverScreen.cs" />
@@ -121,10 +128,12 @@
     <Compile Include="Assets\Scripts\Core\SceneSetup.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\MainMenuScreen.cs" />
+    <Compile Include="Assets\Scripts\UI\Components\SwipePagesView.cs" />
     <Compile Include="Assets\Scripts\UI\Components\StaminaDisplay.cs" />
     <Compile Include="Assets\Scripts\Player\Abilities\BulletDeflector.cs" />
     <Compile Include="Assets\Scripts\Levels\LevelGenerator.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemySpawnPoint.cs" />
+    <Compile Include="Assets\SimpleToon\Scripts\SelfRotation.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerBlockDetector.cs" />
     <Compile Include="Assets\Scripts\Player\Data\MovementSettings.cs" />
@@ -132,6 +141,7 @@
     <Compile Include="Assets\Scripts\Player\Core\PlayerMotor.cs" />
     <Compile Include="Assets\Scripts\Player\Visual\PlayerVisual.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIButton.cs" />
+    <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\FreeLookCam.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIScreen.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAimPredictor.cs" />
     <Compile Include="Assets\Scripts\Localization\Elements\LocalizationUIText.cs" />
@@ -141,12 +151,16 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
+    <None Include="Assets\SimpleToon\Shader\ToonLightBase.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\Shaders\Shaders\Sky\ProceduralSky.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\Shaders\Shaders\CircularStaminaBar\CircularStaminaBar.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Free Slash VFX\Model\Katana\Katana License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
+    <None Include="Assets\Shaders\Shaders\CircularStaminaBar\CircularStaminaBarUI.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -157,6 +171,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\Free Slash VFX\Model\Rock\Stylized Rock Credits.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />

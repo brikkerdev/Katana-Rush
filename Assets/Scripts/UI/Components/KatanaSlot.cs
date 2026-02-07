@@ -12,10 +12,11 @@ namespace Runner.UI
         [Header("References")]
         [SerializeField] private Image iconImage;
         [SerializeField] private Image backgroundImage;
-        [SerializeField] private Image selectionBorder;
         [SerializeField] private GameObject lockOverlay;
         [SerializeField] private Image equippedIndicator;
         [SerializeField] private GameObject emptyOverlay;
+        [SerializeField] private Image selectionBorder;
+        [SerializeField] private Image highlightBorder;
 
         [Header("Rarity Colors")]
         [SerializeField] private Color commonColor = new Color(0.7f, 0.7f, 0.7f);
@@ -29,22 +30,28 @@ namespace Runner.UI
         [SerializeField] private Color lockedIconColor = Color.black;
         [SerializeField] private float lockedIconAlpha = 0.8f;
 
-        [Header("Selection Animation")]
-        [SerializeField] private float selectionPulseScale = 1.1f;
+        [Header("Animation Settings")]
+        [SerializeField] private float clickScale = 0.9f;
+        [SerializeField] private float clickDuration = 0.1f;
+        [SerializeField] private Color highlightColor = Color.white;
+        [SerializeField] private float winPulseScale = 1.15f;
+        [SerializeField] private float winPulseDuration = 0.3f;
+        [SerializeField] private float selectionPulseScale = 1.05f;
         [SerializeField] private float selectionPulseDuration = 0.15f;
 
         private Katana katana;
         private bool isOwned;
-        private bool isSelected;
         private bool isEquipped;
         private bool isEmpty;
         private bool isInteractable = true;
+        private bool isSelected;
         private Tweener currentTween;
+        private Sequence winSequence;
 
         public Katana Katana => katana;
         public bool IsOwned => isOwned;
-        public bool IsSelected => isSelected;
         public bool IsEmpty => isEmpty;
+        public bool IsSelected => isSelected;
 
         public event Action<KatanaSlot> OnSlotClicked;
 
@@ -53,12 +60,22 @@ namespace Runner.UI
             katana = katanaData;
             isOwned = owned;
             isEquipped = equipped;
-            isSelected = false;
             isEmpty = false;
+            isSelected = false;
 
             if (emptyOverlay != null)
             {
                 emptyOverlay.SetActive(false);
+            }
+
+            if (highlightBorder != null)
+            {
+                highlightBorder.gameObject.SetActive(false);
+            }
+
+            if (selectionBorder != null)
+            {
+                selectionBorder.gameObject.SetActive(false);
             }
 
             UpdateVisual();
@@ -69,9 +86,9 @@ namespace Runner.UI
             katana = null;
             isOwned = false;
             isEquipped = false;
-            isSelected = false;
             isEmpty = true;
             isInteractable = false;
+            isSelected = false;
 
             if (iconImage != null)
             {
@@ -93,6 +110,11 @@ namespace Runner.UI
                 equippedIndicator.gameObject.SetActive(false);
             }
 
+            if (highlightBorder != null)
+            {
+                highlightBorder.gameObject.SetActive(false);
+            }
+
             if (selectionBorder != null)
             {
                 selectionBorder.gameObject.SetActive(false);
@@ -104,6 +126,15 @@ namespace Runner.UI
             }
         }
 
+        public void SetInteractable(bool interactable)
+        {
+            if (isEmpty) return;
+            isInteractable = interactable;
+        }
+
+        /// <summary>
+        /// Sets selection state (for preview display)
+        /// </summary>
         public void SetSelected(bool selected, bool animated = false)
         {
             if (isEmpty) return;
@@ -121,33 +152,6 @@ namespace Runner.UI
             }
         }
 
-        public void SetInteractable(bool interactable)
-        {
-            if (isEmpty) return;
-            isInteractable = interactable;
-        }
-
-        public void FlashSelection()
-        {
-            if (isEmpty) return;
-            if (selectionBorder == null) return;
-
-            selectionBorder.gameObject.SetActive(true);
-
-            currentTween?.Kill();
-            currentTween = selectionBorder.DOFade(1f, 0.1f).From(0f).SetUpdate(true);
-        }
-
-        public void HideSelection()
-        {
-            currentTween?.Kill();
-
-            if (selectionBorder != null)
-            {
-                selectionBorder.gameObject.SetActive(false);
-            }
-        }
-
         private void PlaySelectionAnimation()
         {
             if (selectionBorder == null) return;
@@ -157,6 +161,89 @@ namespace Runner.UI
             selectionBorder.transform.localScale = Vector3.one;
             currentTween = selectionBorder.transform
                 .DOPunchScale(Vector3.one * (selectionPulseScale - 1f), selectionPulseDuration, 1, 0f)
+                .SetUpdate(true);
+        }
+
+        /// <summary>
+        /// Sets highlight state for roulette animation
+        /// </summary>
+        public void SetHighlighted(bool highlighted)
+        {
+            if (isEmpty) return;
+
+            if (highlightBorder != null)
+            {
+                highlightBorder.gameObject.SetActive(highlighted);
+                highlightBorder.color = highlightColor;
+            }
+            else if (backgroundImage != null)
+            {
+                // Fallback: tint the background
+                if (highlighted)
+                {
+                    backgroundImage.color = Color.Lerp(GetRarityColor(katana.Rarity), Color.white, 0.5f);
+                }
+                else
+                {
+                    backgroundImage.color = GetRarityColor(katana.Rarity);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears any highlight or animation state (for roulette)
+        /// </summary>
+        public void ClearHighlight()
+        {
+            currentTween?.Kill();
+            winSequence?.Kill();
+
+            if (highlightBorder != null)
+            {
+                highlightBorder.gameObject.SetActive(false);
+            }
+
+            if (backgroundImage != null && katana != null)
+            {
+                backgroundImage.color = GetRarityColor(katana.Rarity);
+            }
+
+            transform.localScale = Vector3.one;
+        }
+
+        /// <summary>
+        /// Shows win effect when slot is selected in roulette
+        /// </summary>
+        public void ShowWinEffect()
+        {
+            if (isEmpty) return;
+
+            winSequence?.Kill();
+            currentTween?.Kill();
+
+            // Show highlight
+            if (highlightBorder != null)
+            {
+                highlightBorder.gameObject.SetActive(true);
+                highlightBorder.color = highlightColor;
+            }
+
+            // Pulse animation
+            transform.localScale = Vector3.one;
+            winSequence = DOTween.Sequence()
+                .Append(transform.DOScale(winPulseScale, winPulseDuration * 0.5f).SetEase(Ease.OutQuad))
+                .Append(transform.DOScale(1f, winPulseDuration * 0.5f).SetEase(Ease.InQuad))
+                .SetLoops(2)
+                .SetUpdate(true);
+        }
+
+        private void PlayClickAnimation()
+        {
+            currentTween?.Kill();
+
+            transform.localScale = Vector3.one;
+            currentTween = transform
+                .DOPunchScale(Vector3.one * (clickScale - 1f), clickDuration, 1, 0f)
                 .SetUpdate(true);
         }
 
@@ -240,12 +327,15 @@ namespace Runner.UI
         {
             if (isEmpty) return;
             if (!isInteractable) return;
+
+            PlayClickAnimation();
             OnSlotClicked?.Invoke(this);
         }
 
         private void OnDestroy()
         {
             currentTween?.Kill();
+            winSequence?.Kill();
         }
     }
 }
