@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: KatanaDatabase
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.KatanaDatabase
   katanas:
+  - {fileID: 11400000, guid: ee3cfc74e78f21d4d96bd88eafbc31f8, type: 2}
   - {fileID: 11400000, guid: b9a267b8fb94b9e4d860e6432292781f, type: 2}
   - {fileID: 11400000, guid: 5c9da5ce039935d4eb9d7790e03b0fe6, type: 2}
   - {fileID: 11400000, guid: a23255c40f32b244ba64744bf290436c, type: 2}
@@ -23,7 +24,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1f78d81cca6660a48b07a0d39a360bd5, type: 2}
   - {fileID: 11400000, guid: 531a38c3ccc4563428cb13497fdd1532, type: 2}
   - {fileID: 11400000, guid: ef1a8887022415848ae0840b0661f3e2, type: 2}
-  - {fileID: 11400000, guid: ee3cfc74e78f21d4d96bd88eafbc31f8, type: 2}
   - {fileID: 11400000, guid: 2cb92e5f7652199499bf13e6194f0440, type: 2}
   - {fileID: 11400000, guid: 734c8f0ac09f7174daae715475329925, type: 2}
   - {fileID: 11400000, guid: 5df13006efc14614193ca20589f57d8f, type: 2}

@@ -408,8 +408,8 @@ RectTransform:
   - {fileID: 6575488831146099622}
   - {fileID: 3007229200950976664}
   - {fileID: 630773035023767803}
-  - {fileID: 5257160455116371394}
   - {fileID: 3419718918073669186}
+  - {fileID: 5257160455116371394}
   - {fileID: 4484997171126710855}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -451,8 +451,8 @@ MonoBehaviour:
   legendaryColor: {r: 1, g: 0.6901961, b: 0.1254902, a: 1}
   challengeColor: {r: 1, g: 0.3019608, b: 0.42745098, a: 1}
   emptyColor: {r: 0.09411765, g: 0.14117648, b: 0.23137255, a: 0.5019608}
-  lockedIconColor: {r: 0.16470589, g: 0.22745098, b: 0.36078432, a: 1}
-  lockedIconAlpha: 1
+  lockedIconColor: {r: 0, g: 0, b: 0, a: 1}
+  lockedIconAlpha: 0.8
   clickScale: 0.9
   clickDuration: 0.1
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
@@ -518,7 +518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.043137256, g: 0.0627451, b: 0.1254902, a: 1}
+  m_Color: {r: 0.84313726, g: 0.8627451, b: 0.9019608, a: 0.101960786}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

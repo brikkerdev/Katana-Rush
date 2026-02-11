@@ -19,7 +19,7 @@ namespace Runner.Core
         private void Awake()
         {
             Application.targetFrameRate = targetFPS;
-            QualitySettings.vSyncCount = 0;
+            QualitySettings.vSyncCount = 1;
 
             Time.fixedDeltaTime = physicsUpdateRate;
 

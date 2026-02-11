@@ -153,6 +153,10 @@ MonoBehaviour:
     m_RotationOrder: 4
   dashStretchZ: 1.3
   dashSquashXY: 0.9
+  slideDuration: 0.5
+  slideColliderHeight: 1
+  slideColliderCenterY: 1
+  slideCooldown: 0.2
   groundCheckRadius: 1
   groundCheckOffset: 0.1
   groundLayer:

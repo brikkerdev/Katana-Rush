@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f11f3a04076d5498fedd05e95bd23f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.LevelGenerator
-  viewDistance: 600
+  viewDistance: 200
   despawnDistance: 30
-  initialSegmentCount: 5
+  initialSegmentCount: 3
   usePooling: 1
   poolSizePerSegment: 3
   enemySpawner: {fileID: -4214440399133520785}
@@ -69,8 +69,8 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 3996532993096452310, guid: 6530c3bb3afc5b14fbe5401d47bcfc1a, type: 3}
   poolSizePerType: 10
-  minEnemiesPerSegment: 1
-  maxEnemiesPerSegment: 5
+  minEnemiesPerSegment: 0
+  maxEnemiesPerSegment: 0
   difficultyMultiplier: 1
   maxDifficultyDistance: 10000
   showDebug: 1

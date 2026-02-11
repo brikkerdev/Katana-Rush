@@ -45,6 +45,7 @@ namespace Runner.Input
         public event Action OnMoveLeft;
         public event Action OnMoveRight;
         public event Action OnDash;
+        public event Action OnSlide;
         public event Action OnPause;
 
         private bool inputEnabled = true;
@@ -155,6 +156,11 @@ namespace Runner.Input
                         lastGesture = "SWIPE UP";
                         OnJump?.Invoke();
                     }
+                    else
+                    {
+                        lastGesture = "SWIPE DOWN";
+                        OnSlide?.Invoke();
+                    }
                 }
                 else if (horizontalRatio > directionalThreshold)
                 {
@@ -210,6 +216,12 @@ namespace Runner.Input
             {
                 lastGesture = "KEY: Dash";
                 OnDash?.Invoke();
+            }
+
+            if (keyboard.sKey.wasPressedThisFrame || keyboard.downArrowKey.wasPressedThisFrame)
+            {
+                lastGesture = "KEY: Slide";
+                OnSlide?.Invoke();
             }
         }
 

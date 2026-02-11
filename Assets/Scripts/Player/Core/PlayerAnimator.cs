@@ -81,9 +81,7 @@ namespace Runner.Player
 
             _player.OnPlayerDeath += PlayDeathAnimation;
             _player.OnPlayerRevive += PlayReviveAnimation;
-
         }
-
 
         private void Update()
         {
@@ -104,12 +102,14 @@ namespace Runner.Player
         public void PlayJumpAnimation()
         {
             if (animator == null) return;
+            ClearMovementTriggers();
             animator.SetTrigger(JumpTrigger);
         }
 
         public void PlayDashAnimation()
         {
             if (animator == null) return;
+            ClearMovementTriggers();
             animator.SetTrigger(DashTrigger);
         }
 
@@ -149,6 +149,7 @@ namespace Runner.Player
         {
             if (animator == null) return;
 
+            ClearMovementTriggers();
             targetCombatWeight = 0f;
             animator.SetBool(IsBlocking, false);
             animator.SetTrigger(DieTrigger);
@@ -157,7 +158,16 @@ namespace Runner.Player
         public void PlayReviveAnimation()
         {
             if (animator == null) return;
+            ClearMovementTriggers();
             animator.SetTrigger(ReviveTrigger);
+        }
+
+        private void ClearMovementTriggers()
+        {
+            if (animator == null) return;
+            animator.ResetTrigger(JumpTrigger);
+            animator.ResetTrigger(DashTrigger);
+            animator.ResetTrigger(SlashTrigger);
         }
 
         public void ResetAnimator()
@@ -216,7 +226,7 @@ namespace Runner.Player
             if (!showDebug) return;
             if (animator == null) return;
 
-            GUILayout.BeginArea(new Rect(Screen.width - 220, 10, 210, 200));
+            GUILayout.BeginArea(new Rect(Screen.width - 220, 10, 210, 240));
             GUILayout.BeginVertical("box");
 
             GUILayout.Label("<b>ANIMATOR STATE</b>");

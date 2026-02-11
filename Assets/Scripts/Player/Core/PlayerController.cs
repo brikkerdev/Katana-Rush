@@ -48,13 +48,14 @@ namespace Runner.Player.Core
 
         private Katana equippedKatana;
 
-        // Combat
         private Collider[] enemyHitBuffer = new Collider[16];
 
         public event Action<int, int> OnDashCountChanged;
         public event Action<float> OnDashRegenProgress;
         public event Action OnSlashPerformed;
         public event Action OnBlockPerformed;
+        public event Action OnSlideStarted;
+        public event Action OnSlideEnded;
 
         public event Action<Vector3> OnBulletDeflected;
 
@@ -62,7 +63,7 @@ namespace Runner.Player.Core
         public float RunDistance => runDistance;
         public bool IsGrounded => motor != null && motor.IsGrounded;
         public bool IsDashing => dashHandler != null && dashHandler.IsDashing;
-        public bool IsInvincible => dashHandler != null && dashHandler.IsInvincible;
+        public bool IsInvincible => (dashHandler != null && dashHandler.IsInvincible);
         public int CurrentLane => laneHandler != null ? laneHandler.CurrentLane : 0;
         public int JumpsRemaining => jumpHandler != null ? jumpHandler.JumpsRemaining : 0;
         public int MaxJumps => jumpHandler != null ? jumpHandler.MaxJumps : 0;
@@ -116,6 +117,7 @@ namespace Runner.Player.Core
             dashHandler.OnRegenProgressChanged += (progress) => OnDashRegenProgress?.Invoke(progress);
             dashHandler.OnDashStarted += OnDashStarted;
             dashHandler.OnDashEnded += OnDashEnded;
+
             InventoryManager.Instance.OnKatanaEquipped += OnKatanaEquiped;
         }
 
@@ -183,6 +185,7 @@ namespace Runner.Player.Core
                 inputReader.OnMoveLeft += OnMoveLeftInput;
                 inputReader.OnMoveRight += OnMoveRightInput;
                 inputReader.OnDash += OnDashInput;
+                inputReader.OnSlide += OnSlideInput;
                 inputSubscribed = true;
             }
 
@@ -200,7 +203,16 @@ namespace Runner.Player.Core
             inputReader.OnMoveLeft -= OnMoveLeftInput;
             inputReader.OnMoveRight -= OnMoveRightInput;
             inputReader.OnDash -= OnDashInput;
+            inputReader.OnSlide -= OnSlideInput;
             inputSubscribed = false;
+        }
+
+        private void CancelDash()
+        {
+            if (dashHandler.IsDashing)
+            {
+                dashHandler.ForceEnd();
+            }
         }
 
         private void Update()
@@ -330,13 +342,20 @@ namespace Runner.Player.Core
 
                 particleController.Spawn(equippedKatana.SlashEffectPrefab, transform.position, Vector3.forward, transform);
 
-                // Check for enemies in front and play slash
                 if (CheckEnemiesInFront())
                 {
                     playerAnimator?.PlaySlashAnimation();
                     OnSlashPerformed?.Invoke();
                 }
             }
+        }
+
+        private void OnSlideInput()
+        {
+            if (!inputEnabled) return;
+            if (!motor.IsGrounded) return;
+
+            CancelDash();
         }
 
         private bool CheckEnemiesInFront()
@@ -349,7 +368,6 @@ namespace Runner.Player.Core
                 Collider col = enemyHitBuffer[i];
                 if (col == null) continue;
 
-                // Check if enemy
                 Enemy.Enemy enemy = col.GetComponent<Enemy.Enemy>();
                 if (enemy == null)
                 {
@@ -358,7 +376,6 @@ namespace Runner.Player.Core
 
                 if (enemy == null || enemy.IsDead) continue;
 
-                // Check if in front
                 Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
                 float angle = Vector3.Angle(transform.forward, toEnemy);
 
@@ -414,7 +431,6 @@ namespace Runner.Player.Core
         {
             if (movementSettings == null) return;
 
-            // Lanes
             Gizmos.color = Color.yellow;
             for (int i = 0; i < movementSettings.laneCount; i++)
             {
@@ -424,12 +440,10 @@ namespace Runner.Player.Core
                 Gizmos.DrawWireCube(pos, new Vector3(0.5f, 0.1f, 0.5f));
             }
 
-            // Slash detection
             Gizmos.color = Color.red;
             Vector3 origin = transform.position + Vector3.up;
             Gizmos.DrawWireSphere(origin, slashDetectionRange);
 
-            // Slash cone
             Vector3 leftDir = Quaternion.Euler(0, -slashDetectionAngle * 0.5f, 0) * transform.forward;
             Vector3 rightDir = Quaternion.Euler(0, slashDetectionAngle * 0.5f, 0) * transform.forward;
             Gizmos.DrawRay(origin, leftDir * slashDetectionRange);
@@ -440,7 +454,7 @@ namespace Runner.Player.Core
         {
             if (!showDebug) return;
 
-            GUILayout.BeginArea(new Rect(10, 10, 500, 500));
+            GUILayout.BeginArea(new Rect(10, 10, 500, 550));
             GUILayout.BeginVertical("box");
 
             GUILayout.Label($"<b>PLAYER CONTROLLER</b>");

@@ -1353,7 +1353,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -4006,6 +4006,7 @@ GameObject:
   - component: {fileID: 301494895}
   - component: {fileID: 301494897}
   - component: {fileID: 301494896}
+  - component: {fileID: 301494898}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4131,6 +4132,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301494894}
   m_CullTransparentMesh: 1
+--- !u!114 &301494898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301494894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a4c50f7e8b2d74c81c13aed919f5a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizationUIText
+  key: ui_back
 --- !u!1 &304833895
 GameObject:
   m_ObjectHideFlags: 0
@@ -4891,7 +4905,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -8227,7 +8241,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832575517}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
@@ -10254,6 +10268,7 @@ GameObject:
   - component: {fileID: 1113914045}
   - component: {fileID: 1113914047}
   - component: {fileID: 1113914046}
+  - component: {fileID: 1113914048}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -10379,6 +10394,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113914044}
   m_CullTransparentMesh: 1
+--- !u!114 &1113914048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113914044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8a4c50f7e8b2d74c81c13aed919f5a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalizationUIText
+  key: ui_back
 --- !u!1 &1124321447
 GameObject:
   m_ObjectHideFlags: 0

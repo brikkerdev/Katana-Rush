@@ -29,7 +29,7 @@ namespace Runner.Player.Movement
         public bool IsInvincible => isDashing && dashInvincible;
         public float DashProgress => dashProgress;
         public float RegenProgress => isRegenerating ? regenTimer / dashRegenTime : 0f;
-        public bool CanDash => dashesRemaining > 0 && !isDashing;
+        public bool CanDash => dashesRemaining > 0;
 
         public event Action<int, int> OnDashCountChanged;
         public event Action<float> OnRegenProgressChanged;
@@ -64,17 +64,17 @@ namespace Runner.Player.Movement
         {
             if (!CanDash) return false;
 
+            if (isDashing)
+            {
+                ForceEnd();
+            }
+
             dashesRemaining--;
             isDashing = true;
             dashTimer = 0f;
             dashProgress = 0f;
 
-            delayTimer = dashRegenDelay;
-            regenTimer = 0f;
-            isRegenerating = false;
-
             OnDashCountChanged?.Invoke(dashesRemaining, maxDashes);
-            OnRegenProgressChanged?.Invoke(0f);
             OnDashStarted?.Invoke();
 
             return true;
@@ -105,9 +105,25 @@ namespace Runner.Player.Movement
 
         private void EndDash()
         {
+            if (!isDashing) return;
+
             isDashing = false;
             dashProgress = 0f;
+
+            if (dashesRemaining < maxDashes && !isRegenerating)
+            {
+                delayTimer = dashRegenDelay;
+            }
+
             OnDashEnded?.Invoke();
+        }
+
+        public void ForceEnd()
+        {
+            if (isDashing)
+            {
+                EndDash();
+            }
         }
 
         private void UpdateRegen(float deltaTime)
@@ -118,13 +134,26 @@ namespace Runner.Player.Movement
                 return;
             }
 
-            if (delayTimer > 0f)
+            if (!isRegenerating)
             {
-                delayTimer -= deltaTime;
+                if (delayTimer > 0f)
+                {
+                    delayTimer -= deltaTime;
+                    if (delayTimer <= 0f)
+                    {
+                        isRegenerating = true;
+                        regenTimer = 0f;
+                    }
+                    return;
+                }
+
+                if (!isDashing)
+                {
+                    delayTimer = dashRegenDelay;
+                }
                 return;
             }
 
-            isRegenerating = true;
             regenTimer += deltaTime;
 
             OnRegenProgressChanged?.Invoke(RegenProgress);
