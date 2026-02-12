@@ -64,17 +64,6 @@ namespace Runner.CameraSystem
             }
 
             isInitialized = true;
-            SubscribeToPlayerEvents();
-        }
-
-        private void SubscribeToPlayerEvents()
-        {
-            if (player?.Controller != null)
-            {
-                // Subscribe to relevant events from player controller
-                // player.Controller.OnDash += PlayDashEffect;
-                // player.Controller.OnLand += PlayLandingEffect;
-            }
         }
 
         public void PlayDeathEffect()
@@ -153,7 +142,6 @@ namespace Runner.CameraSystem
 
         private IEnumerator SlowMotionCoroutine(float duration, float targetTimeScale)
         {
-            // Quickly enter slow motion
             float enterDuration = 0.1f;
             float elapsed = 0f;
 
@@ -171,7 +159,6 @@ namespace Runner.CameraSystem
 
             yield return new WaitForSecondsRealtime(duration);
 
-            // Smoothly exit slow motion
             elapsed = 0f;
             float exitDuration = 0.3f;
 
@@ -196,6 +183,7 @@ namespace Runner.CameraSystem
             if (fovCoroutine != null)
             {
                 StopCoroutine(fovCoroutine);
+                mainCamera.fieldOfView = originalFOV;
             }
 
             fovCoroutine = StartCoroutine(FOVPunchCoroutine(amount, duration));
@@ -203,31 +191,28 @@ namespace Runner.CameraSystem
 
         private IEnumerator FOVPunchCoroutine(float amount, float duration)
         {
-            float startFOV = mainCamera.fieldOfView;
-            float targetFOV = startFOV + amount;
+            float targetFOV = originalFOV + amount;
             float halfDuration = duration * 0.5f;
 
-            // Punch out
             float elapsed = 0f;
             while (elapsed < halfDuration)
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / halfDuration;
-                mainCamera.fieldOfView = Mathf.Lerp(startFOV, targetFOV, t);
+                mainCamera.fieldOfView = Mathf.Lerp(originalFOV, targetFOV, t);
                 yield return null;
             }
 
-            // Return
             elapsed = 0f;
             while (elapsed < halfDuration)
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / halfDuration;
-                mainCamera.fieldOfView = Mathf.Lerp(targetFOV, startFOV, t);
+                mainCamera.fieldOfView = Mathf.Lerp(targetFOV, originalFOV, t);
                 yield return null;
             }
 
-            mainCamera.fieldOfView = startFOV;
+            mainCamera.fieldOfView = originalFOV;
             fovCoroutine = null;
         }
 

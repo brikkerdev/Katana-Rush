@@ -46,7 +46,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _EffectValue: 0.000023653462
+    - _EffectValue: 0.00006847609
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0

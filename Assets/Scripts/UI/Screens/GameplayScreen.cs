@@ -25,10 +25,14 @@ namespace Runner.UI
 
         [SerializeField] private string go_key = "ui_go";
 
+        [Header("Distance Milestones")]
+        [SerializeField] private float distanceMilestoneInterval = 100f;
+
         private int currentCoins;
         private float displayedDistance;
         private float distanceAnimationSpeed = 50f;
         private bool isCountingDown;
+        private int lastDistanceMilestone;
 
         public bool IsCountingDown => isCountingDown;
 
@@ -65,6 +69,7 @@ namespace Runner.UI
         {
             displayedDistance = 0f;
             currentCoins = 0;
+            lastDistanceMilestone = 0;
             UpdateDistanceDisplay(0f);
             UpdateCoinsDisplay(0);
 
@@ -96,6 +101,13 @@ namespace Runner.UI
                     distanceAnimationSpeed * Time.deltaTime
                 );
                 UpdateDistanceDisplay(displayedDistance);
+            }
+
+            int currentMilestone = (int)(actualDistance / distanceMilestoneInterval);
+            if (currentMilestone > lastDistanceMilestone)
+            {
+                lastDistanceMilestone = currentMilestone;
+                Game.Instance?.Sound?.PlayDistanceMilestone();
             }
         }
 
@@ -159,6 +171,8 @@ namespace Runner.UI
                     countdownText.text = i.ToString();
                 }
 
+                Game.Instance?.Sound?.PlayCountdownTick();
+
                 yield return new WaitForSecondsRealtime(1f);
             }
 
@@ -166,6 +180,8 @@ namespace Runner.UI
             {
                 countdownText.text = LocalizationController.Singleton.GetText(go_key);
             }
+
+            Game.Instance?.Sound?.PlayCountdownGo();
 
             yield return new WaitForSecondsRealtime(0.3f);
 

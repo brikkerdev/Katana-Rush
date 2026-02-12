@@ -181,6 +181,11 @@ namespace Runner.Enemy
             if (ParticleController.Instance != null && firePoint != null)
                 ParticleController.Instance.SpawnMuzzleFlash(firePoint, direction);
 
+            if (enemyType == EnemyType.Sniper)
+                Game.Instance?.Sound?.PlaySniperFire(cachedFirePosition);
+            else
+                Game.Instance?.Sound?.PlayBulletFire(cachedFirePosition, shootsLethalBullets);
+
             enemyAnimator?.PlayFireAnimation();
         }
 
@@ -239,6 +244,8 @@ namespace Runner.Enemy
 
             OnHit?.Invoke(this);
 
+            Game.Instance?.Sound?.PlayEnemyHit(cachedTransform.position);
+
             if (ParticleController.Instance != null)
             {
                 Vector3 hitPosition = cachedTransform.position + Vector3.up;
@@ -268,8 +275,17 @@ namespace Runner.Enemy
 
             if (animator != null) animator.enabled = false;
 
-            if (useRagdoll) ActivateRagdoll(hitDirection);
-            else if (visualRoot != null) visualRoot.SetActive(false);
+            Game.Instance?.Sound?.PlayEnemyDeath(cachedTransform.position);
+
+            if (useRagdoll)
+            {
+                ActivateRagdoll(hitDirection);
+                Game.Instance?.Sound?.PlayEnemyRagdoll(cachedTransform.position);
+            }
+            else if (visualRoot != null)
+            {
+                visualRoot.SetActive(false);
+            }
 
             if (ParticleController.Instance != null)
             {

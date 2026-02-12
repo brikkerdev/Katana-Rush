@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Runner.Player.Data;
 
@@ -21,6 +22,8 @@ namespace Runner.Player.Movement
         public float CurrentX => currentX;
         public bool IsSwitching => isSwitching;
         public float SwitchProgress => switchProgress;
+
+        public event Action OnLaneSwitched;
 
         public void Initialize(MovementSettings movementSettings, float presetLaneSwitchSpeed)
         {
@@ -46,6 +49,7 @@ namespace Runner.Player.Movement
             if (targetLane <= 0) return false;
 
             StartSwitch(targetLane - 1);
+            OnLaneSwitched?.Invoke();
             return true;
         }
 
@@ -54,6 +58,7 @@ namespace Runner.Player.Movement
             if (targetLane >= settings.laneCount - 1) return false;
 
             StartSwitch(targetLane + 1);
+            OnLaneSwitched?.Invoke();
             return true;
         }
 

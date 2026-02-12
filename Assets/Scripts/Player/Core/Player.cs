@@ -12,11 +12,13 @@ namespace Runner.Player
         [SerializeField] private PlayerVisual playerVisual;
         [SerializeField] private PlayerAnimator animator;
         [SerializeField] private PlayerBlockDetector blockDetector;
+        [SerializeField] private PlayerFootsteps footsteps;
 
         public PlayerController Controller => controller;
         public PlayerVisual Visual => playerVisual;
         public PlayerAnimator Animator => animator;
         public PlayerBlockDetector BlockDetector => blockDetector;
+        public PlayerFootsteps Footsteps => footsteps;
         public PlayerState State { get; private set; }
         public bool IsAlive => State != PlayerState.Dead;
         public bool IsRunning => State == PlayerState.Running;
@@ -46,6 +48,11 @@ namespace Runner.Player
             if (blockDetector != null)
             {
                 blockDetector.Initialize(this);
+            }
+
+            if (footsteps != null)
+            {
+                footsteps.Initialize(this);
             }
         }
 
@@ -81,6 +88,15 @@ namespace Runner.Player
                 if (blockDetector == null)
                 {
                     blockDetector = GetComponentInChildren<PlayerBlockDetector>();
+                }
+            }
+
+            if (footsteps == null)
+            {
+                footsteps = GetComponent<PlayerFootsteps>();
+                if (footsteps == null)
+                {
+                    footsteps = GetComponentInChildren<PlayerFootsteps>();
                 }
             }
         }
@@ -124,6 +140,11 @@ namespace Runner.Player
             {
                 animator.ResetAnimator();
                 animator.PlayReviveAnimation();
+            }
+
+            if (footsteps != null)
+            {
+                footsteps.Reset();
             }
         }
 

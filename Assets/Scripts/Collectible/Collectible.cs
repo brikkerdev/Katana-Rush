@@ -1,5 +1,6 @@
 using UnityEngine;
 using Runner.Save;
+using Runner.Core;
 
 namespace Runner.Collectibles
 {
@@ -10,7 +11,8 @@ namespace Runner.Collectibles
         HealthPack,
         SpeedBoost,
         Magnet,
-        Multiplier
+        Multiplier,
+        DashRestore
     }
 
     public class Collectible : MonoBehaviour, IResettable
@@ -19,6 +21,7 @@ namespace Runner.Collectibles
         [SerializeField] private CollectibleType collectibleType = CollectibleType.Coin;
         [SerializeField] private int value = 1;
         [SerializeField] private float magnetRadius = 0f;
+        [SerializeField] private float effectDuration = 5f;
 
         [Header("Visual")]
         [SerializeField] private GameObject visualRoot;
@@ -34,6 +37,7 @@ namespace Runner.Collectibles
         public int Value => value;
         public bool IsCollected => isCollected;
         public float MagnetRadius => magnetRadius;
+        public float EffectDuration => effectDuration;
 
         private void Awake()
         {
@@ -84,6 +88,7 @@ namespace Runner.Collectibles
             isCollected = true;
 
             ApplyCollectEffect();
+            PlayCollectSound();
 
             if (visualRoot != null)
             {
@@ -91,6 +96,28 @@ namespace Runner.Collectibles
             }
 
             gameObject.SetActive(false);
+        }
+
+        private void PlayCollectSound()
+        {
+            switch (collectibleType)
+            {
+                case CollectibleType.Coin:
+                case CollectibleType.CoinGroup:
+                    Game.Instance?.Sound?.PlayCoinCollect();
+                    break;
+
+                case CollectibleType.HealthPack:
+                    Game.Instance?.Sound?.PlayHealthCollect();
+                    break;
+
+                case CollectibleType.SpeedBoost:
+                case CollectibleType.Magnet:
+                case CollectibleType.Multiplier:
+                case CollectibleType.DashRestore:
+                    Game.Instance?.Sound?.PlayPowerupCollect();
+                    break;
+            }
         }
 
         private void ApplyCollectEffect()
@@ -103,16 +130,23 @@ namespace Runner.Collectibles
                     UI.UIManager.Instance?.NotifyCoinsCollected(value);
                     break;
 
-                case CollectibleType.HealthPack:
-                    break;
-
-                case CollectibleType.SpeedBoost:
-                    break;
-
-                case CollectibleType.Magnet:
+                case CollectibleType.DashRestore:
+                    Game.Instance?.Player?.Controller?.RestoreDashes();
                     break;
 
                 case CollectibleType.Multiplier:
+                    Game.Instance?.ActivateMultiplier(value, effectDuration);
+                    break;
+
+                case CollectibleType.Magnet:
+                    Game.Instance?.ActivateMagnet(effectDuration);
+                    break;
+
+                case CollectibleType.SpeedBoost:
+                    Game.Instance?.ActivateSpeedBoost(effectDuration);
+                    break;
+
+                case CollectibleType.HealthPack:
                     break;
             }
         }

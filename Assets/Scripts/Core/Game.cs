@@ -11,6 +11,7 @@ using Runner.Save;
 using Runner.Environment;
 using Runner.Effects;
 using Runner.Player.Core;
+using Runner.Audio;
 
 namespace Runner.Core
 {
@@ -29,6 +30,7 @@ namespace Runner.Core
         [SerializeField] private SkyController skyControllerPrefab;
         [SerializeField] private FogController fogControllerPrefab;
         [SerializeField] private ParticleController particleControllerPrefab;
+        [SerializeField] private SoundController soundControllerPrefab;
 
         [Header("Scene References")]
         [SerializeField] private Transform playerSpawnPoint;
@@ -43,9 +45,16 @@ namespace Runner.Core
         [SerializeField] private bool useSkyController = true;
         [SerializeField] private bool useFogController = true;
 
+        [Header("Score Settings")]
+        [SerializeField] private int scoreMilestoneInterval = 1000;
+
+        [Header("Powerup Settings")]
+        [SerializeField] private float speedBoostMultiplier = 1.3f;
+
         public InputReader InputReader { get; private set; }
         public Player.Player Player { get; private set; }
         public ParticleController ParticleController { get; private set; }
+        public SoundController Sound { get; private set; }
         public LevelGenerator LevelGenerator { get; private set; }
         public InventoryManager InventoryManager { get; private set; }
         public BulletPool BulletPool { get; private set; }
@@ -60,6 +69,14 @@ namespace Runner.Core
         public float GameSpeed { get; private set; } = 1f;
         public float RunDistance => Player != null ? Player.transform.position.z : 0f;
         public int Score { get; private set; }
+        public int ScoreMultiplier { get; private set; } = 1;
+        public bool IsMagnetActive { get; private set; }
+        public bool IsSpeedBoostActive { get; private set; }
+
+        private int lastMilestone;
+        private float multiplierTimer;
+        private float magnetTimer;
+        private float speedBoostTimer;
 
         public event Action OnGameInitialized;
         public event Action OnGameStarted;
@@ -68,6 +85,9 @@ namespace Runner.Core
         public event Action OnGameOver;
         public event Action OnGameRestarted;
         public event Action<BiomeData> OnBiomeChanged;
+        public event Action<int> OnMultiplierChanged;
+        public event Action<bool> OnMagnetChanged;
+        public event Action<bool> OnSpeedBoostChanged;
 
         private void Awake()
         {
@@ -86,6 +106,7 @@ namespace Runner.Core
             State = GameState.Initializing;
 
             FindSceneReferences();
+            CreateSoundController();
             CreateParticleController();
             CreateInventoryManager();
             CreateInputReader();
@@ -115,6 +136,33 @@ namespace Runner.Core
                 if (sunLight == null) sunLight = sceneSetup.SunLight;
                 if (moonLight == null) moonLight = sceneSetup.MoonLight;
             }
+        }
+
+        private void CreateSoundController()
+        {
+            if (SoundController.Instance != null)
+            {
+                Sound = SoundController.Instance;
+                return;
+            }
+
+            if (soundControllerPrefab != null)
+            {
+                Sound = Instantiate(soundControllerPrefab);
+            }
+            else
+            {
+                var go = new GameObject("SoundController");
+                Sound = go.AddComponent<SoundController>();
+            }
+
+            Sound.name = "SoundController";
+
+            float savedSfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
+            float savedMusic = PlayerPrefs.GetFloat("MusicVolume", 1f);
+            Sound.SfxVolume = savedSfx;
+            Sound.UiVolume = savedSfx;
+            Sound.MasterVolume = savedMusic;
         }
 
         private void CreateParticleController()
@@ -350,11 +398,57 @@ namespace Runner.Core
             }
         }
 
+        private void Update()
+        {
+            if (State != GameState.Playing) return;
+
+            UpdatePowerups();
+        }
+
+        private void UpdatePowerups()
+        {
+            float dt = Time.deltaTime;
+
+            if (ScoreMultiplier > 1)
+            {
+                multiplierTimer -= dt;
+                if (multiplierTimer <= 0f)
+                {
+                    ScoreMultiplier = 1;
+                    OnMultiplierChanged?.Invoke(ScoreMultiplier);
+                }
+            }
+
+            if (IsMagnetActive)
+            {
+                magnetTimer -= dt;
+                if (magnetTimer <= 0f)
+                {
+                    IsMagnetActive = false;
+                    OnMagnetChanged?.Invoke(false);
+                }
+            }
+
+            if (IsSpeedBoostActive)
+            {
+                speedBoostTimer -= dt;
+                if (speedBoostTimer <= 0f)
+                {
+                    IsSpeedBoostActive = false;
+                    GameSpeed = 1f;
+                    OnSpeedBoostChanged?.Invoke(false);
+                }
+            }
+        }
+
         private void HandlePlayerDeath()
         {
             State = GameState.GameOver;
             cameraManager?.SetState(CameraState.Death);
             cameraEffects?.PlayDeathEffect();
+            Sound?.PlayDeath();
+            Sound?.PlayGameOver();
+            ResetPowerups();
             OnGameOver?.Invoke();
         }
 
@@ -362,6 +456,7 @@ namespace Runner.Core
         {
             State = GameState.Playing;
             cameraManager?.SetState(CameraState.Gameplay);
+            Sound?.PlayRevive();
         }
 
         private void HandlePresetChanged(PlayerPreset preset)
@@ -374,6 +469,7 @@ namespace Runner.Core
 
         private void HandleBiomeChanged(BiomeData biome)
         {
+            Sound?.PlayBiomeTransition();
             OnBiomeChanged?.Invoke(biome);
         }
 
@@ -383,11 +479,14 @@ namespace Runner.Core
 
             State = GameState.Playing;
             Score = 0;
+            lastMilestone = 0;
+            ResetPowerups();
 
             Player?.StartRunning();
             InputReader?.EnableGameplayInput();
             cameraManager?.SetState(CameraState.Gameplay);
 
+            Sound?.PlayGameStart();
             OnGameStarted?.Invoke();
         }
 
@@ -399,6 +498,7 @@ namespace Runner.Core
             Time.timeScale = 0f;
             InputReader?.DisableGameplayInput();
 
+            Sound?.PlayPause();
             OnGamePaused?.Invoke();
         }
 
@@ -410,6 +510,7 @@ namespace Runner.Core
             Time.timeScale = 1f;
             InputReader?.EnableGameplayInput();
 
+            Sound?.PlayResume();
             OnGameResumed?.Invoke();
         }
 
@@ -430,6 +531,8 @@ namespace Runner.Core
         {
             Time.timeScale = 1f;
             Score = 0;
+            lastMilestone = 0;
+            ResetPowerups();
 
             BulletPool?.ReturnAllBullets();
             Player?.Reset();
@@ -454,7 +557,54 @@ namespace Runner.Core
 
         public void AddScore(int amount)
         {
-            Score += amount;
+            int multipliedAmount = amount * ScoreMultiplier;
+            int previousScore = Score;
+            Score += multipliedAmount;
+
+            Sound?.PlayScoreTick();
+
+            int currentMilestone = Score / scoreMilestoneInterval;
+            if (currentMilestone > lastMilestone)
+            {
+                lastMilestone = currentMilestone;
+                Sound?.PlayMilestone();
+            }
+        }
+
+        public void ActivateMultiplier(int multiplier, float duration)
+        {
+            ScoreMultiplier = multiplier;
+            multiplierTimer = duration;
+            Sound?.PlayPowerupCollect();
+            OnMultiplierChanged?.Invoke(ScoreMultiplier);
+        }
+
+        public void ActivateMagnet(float duration)
+        {
+            IsMagnetActive = true;
+            magnetTimer = duration;
+            Sound?.PlayPowerupCollect();
+            OnMagnetChanged?.Invoke(true);
+        }
+
+        public void ActivateSpeedBoost(float duration)
+        {
+            IsSpeedBoostActive = true;
+            speedBoostTimer = duration;
+            GameSpeed = speedBoostMultiplier;
+            Sound?.PlayPowerupCollect();
+            OnSpeedBoostChanged?.Invoke(true);
+        }
+
+        private void ResetPowerups()
+        {
+            ScoreMultiplier = 1;
+            multiplierTimer = 0f;
+            IsMagnetActive = false;
+            magnetTimer = 0f;
+            IsSpeedBoostActive = false;
+            speedBoostTimer = 0f;
+            GameSpeed = 1f;
         }
 
         [ContextMenu("Add 1000 money")]

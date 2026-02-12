@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using Runner.Core;
 using Runner.Inventory;
 using Runner.Save;
 using Runner.Input;
@@ -210,6 +211,7 @@ namespace Runner.UI
         private void OnTabClicked(int index)
         {
             if (isProcessing) return;
+            Game.Instance?.Sound?.PlayTabSwitch();
             SelectPageByIndex(index, false);
         }
 
@@ -399,7 +401,9 @@ namespace Runner.UI
             if (slot == selectedSlot && selectedKatana != null)
             {
                 if (slot.IsOwned)
+                {
                     EquipAndClose(slot.Katana);
+                }
                 return;
             }
 
@@ -425,6 +429,7 @@ namespace Runner.UI
             if (InventoryManager.Instance == null) return;
 
             InventoryManager.Instance.EquipKatana(katana);
+            Game.Instance?.Sound?.PlayEquip();
             UIManager.Instance?.ShowScreen(ScreenType.MainMenu);
         }
 
@@ -581,6 +586,7 @@ namespace Runner.UI
             if (InventoryManager.Instance.TryPurchaseRandom(currentRarity, out Katana result))
             {
                 isProcessing = true;
+                Game.Instance?.Sound?.PlayPurchaseSuccess();
                 UpdateButtons();
                 UpdateCoinDisplay();
 
@@ -593,6 +599,10 @@ namespace Runner.UI
 
                 var slots = GetKatanaSlotsOnly(currentRarity);
                 rouletteAnimator.StartRoulette(slots, result);
+            }
+            else
+            {
+                Game.Instance?.Sound?.PlayPurchaseFail();
             }
         }
 
@@ -607,9 +617,15 @@ namespace Runner.UI
             int rarityPrice = InventoryManager.Instance.Database != null ? InventoryManager.Instance.Database.GetRarityPrice(selectedKatana.Rarity) : 0;
             int specificPrice = rarityPrice * 2;
 
-            if (!SaveManager.SpendCoins(specificPrice)) return;
+            if (!SaveManager.SpendCoins(specificPrice))
+            {
+                Game.Instance?.Sound?.PlayPurchaseFail();
+                return;
+            }
 
             InventoryManager.Instance.UnlockKatana(selectedKatana);
+            Game.Instance?.Sound?.PlayPurchaseSuccess();
+            Game.Instance?.Sound?.PlayUnlock();
 
             UpdateCoinDisplay();
 
@@ -632,6 +648,7 @@ namespace Runner.UI
         private void OnRouletteComplete(Katana result)
         {
             InventoryManager.Instance?.UnlockKatana(result);
+            Game.Instance?.Sound?.PlayUnlock();
             StartCoroutine(FinishRouletteRoutine(result));
         }
 

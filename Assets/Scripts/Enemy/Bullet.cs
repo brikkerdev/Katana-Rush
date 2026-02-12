@@ -25,6 +25,10 @@ namespace Runner.Enemy
         [Header("Lethality")]
         [SerializeField] private bool isLethal = false;
 
+        [Header("Whiz Settings")]
+        [SerializeField] private float whizDistance = 3f;
+        [SerializeField] private float whizCooldown = 0.5f;
+
         [Header("Visual")]
         [SerializeField] private TrailRenderer trail;
         [SerializeField] private MeshRenderer meshRenderer;
@@ -43,6 +47,9 @@ namespace Runner.Enemy
 
         private Transform targetPlayer;
         private Enemy sourceEnemy;
+
+        private bool hasPlayedWhiz;
+        private float whizTimer;
 
         public bool IsLethal => isLethal;
         public bool IsActive => isActive;
@@ -67,11 +74,35 @@ namespace Runner.Enemy
             lifetimeTimer -= deltaTime;
             if (lifetimeTimer <= 0f)
             {
+                Core.Game.Instance?.Sound?.PlayBulletExpire(cachedTransform.position);
                 Deactivate();
                 return;
             }
 
             CheckCollisions();
+            CheckWhiz();
+        }
+
+        private void CheckWhiz()
+        {
+            if (isDeflected) return;
+            if (targetPlayer == null) return;
+
+            if (whizTimer > 0f)
+            {
+                whizTimer -= Time.deltaTime;
+                return;
+            }
+
+            float sqrDist = (cachedTransform.position - targetPlayer.position).sqrMagnitude;
+            float sqrWhiz = whizDistance * whizDistance;
+
+            if (sqrDist <= sqrWhiz && !hasPlayedWhiz)
+            {
+                hasPlayedWhiz = true;
+                whizTimer = whizCooldown;
+                Core.Game.Instance?.Sound?.PlayBulletWhiz(cachedTransform.position);
+            }
         }
 
         private void CheckCollisions()
@@ -108,6 +139,7 @@ namespace Runner.Enemy
                 }
 
                 SpawnHitEffect(false);
+                Core.Game.Instance?.Sound?.PlayBulletImpact(position, isLethal);
                 Deactivate();
                 return;
             }
@@ -146,6 +178,7 @@ namespace Runner.Enemy
             if (player == null)
             {
                 SpawnHitEffect(false);
+                Core.Game.Instance?.Sound?.PlayBulletImpact(cachedTransform.position, false);
                 Deactivate();
                 return;
             }
@@ -155,6 +188,7 @@ namespace Runner.Enemy
             if (controller == null)
             {
                 SpawnHitEffect(false);
+                Core.Game.Instance?.Sound?.PlayBulletImpact(cachedTransform.position, false);
                 Deactivate();
                 return;
             }
@@ -162,6 +196,7 @@ namespace Runner.Enemy
             if (controller.IsInvincible)
             {
                 SpawnHitEffect(false);
+                Core.Game.Instance?.Sound?.PlayBulletImpact(cachedTransform.position, false);
                 Deactivate();
                 return;
             }
@@ -175,6 +210,7 @@ namespace Runner.Enemy
             if (isLethal)
             {
                 SpawnHitEffect(true);
+                Core.Game.Instance?.Sound?.PlayBulletImpact(cachedTransform.position, true);
                 Core.Game.Instance?.GameOver();
                 Deactivate();
                 return;
@@ -192,6 +228,7 @@ namespace Runner.Enemy
                 enemy.TakeDamage(1f, direction);
 
             SpawnHitEffect(false);
+            Core.Game.Instance?.Sound?.PlayBulletImpact(cachedTransform.position, false);
             Deactivate();
         }
 
@@ -207,6 +244,8 @@ namespace Runner.Enemy
             isDeflected = false;
             sourceEnemy = null;
             targetPlayer = null;
+            hasPlayedWhiz = false;
+            whizTimer = 0f;
 
             if (direction.sqrMagnitude > 0.001f)
                 cachedTransform.rotation = Quaternion.LookRotation(direction);
@@ -252,6 +291,7 @@ namespace Runner.Enemy
         private void Deflect(Player.Player player)
         {
             player.BlockDetector?.OnBulletDeflected();
+            player.Controller?.OnBulletBlocked();
 
             Vector3 playerForward = player.transform.forward;
             Vector3 playerRight = player.transform.right;
@@ -277,6 +317,8 @@ namespace Runner.Enemy
 
             UpdateVisual();
             SpawnDeflectEffect(oldDirection);
+
+            Core.Game.Instance?.Sound?.PlayDeflect();
         }
 
         private void UpdateVisual()
@@ -354,6 +396,8 @@ namespace Runner.Enemy
             wasLethal = false;
             sourceEnemy = null;
             targetPlayer = null;
+            hasPlayedWhiz = false;
+            whizTimer = 0f;
 
             if (trail != null)
                 trail.Clear();
@@ -364,6 +408,9 @@ namespace Runner.Enemy
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, collisionCheckRadius);
+
+            Gizmos.color = new Color(1f, 0.5f, 0f, 0.2f);
+            Gizmos.DrawWireSphere(transform.position, whizDistance);
         }
 #endif
     }

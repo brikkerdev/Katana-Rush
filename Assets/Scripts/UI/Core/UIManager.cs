@@ -181,7 +181,6 @@ namespace Runner.UI
 
         private void HandlePlayerDeath()
         {
-            // Cancel any active countdown if player dies during resume
             if (isResuming && gameplayScreen != null)
             {
                 gameplayScreen.CancelCountdown();
@@ -207,17 +206,27 @@ namespace Runner.UI
         {
             if (!screens.ContainsKey(type)) return;
 
-            // Set return screen for settings before hiding current screen
             if (type == ScreenType.Settings && settingsScreen != null)
             {
                 settingsScreen.SetReturnScreen(currentScreen);
             }
+
+            bool isOpeningPanel = type == ScreenType.Settings ||
+                                  type == ScreenType.Inventory ||
+                                  type == ScreenType.Pause;
+
+            bool isClosingPanel = currentScreen == ScreenType.Settings ||
+                                  currentScreen == ScreenType.Inventory ||
+                                  currentScreen == ScreenType.Pause;
 
             if (currentScreen != ScreenType.None &&
                 currentScreen != type &&
                 screens.ContainsKey(currentScreen) &&
                 screens[currentScreen] != null)
             {
+                if (isClosingPanel && !isOpeningPanel)
+                    Game.Instance?.Sound?.PlayPanelClose();
+
                 screens[currentScreen].Hide(instant);
             }
 
@@ -226,6 +235,9 @@ namespace Runner.UI
 
             if (screens[type] != null)
             {
+                if (isOpeningPanel)
+                    Game.Instance?.Sound?.PlayPanelOpen();
+
                 screens[type].Show(instant);
             }
         }
@@ -235,6 +247,7 @@ namespace Runner.UI
             if (!screens.ContainsKey(type)) return;
             if (screens[type] == null) return;
 
+            Game.Instance?.Sound?.PlayPanelClose();
             screens[type].Hide();
 
             if (previousScreen != ScreenType.None &&
@@ -283,19 +296,15 @@ namespace Runner.UI
         {
             isResuming = true;
 
-            // Show gameplay screen first (coins will be preserved due to paused state check)
             ShowScreen(ScreenType.Gameplay);
 
-            // Show countdown
             if (gameplayScreen != null && resumeCountdownSeconds > 0)
             {
                 gameplayScreen.ShowCountdown(resumeCountdownSeconds);
 
-                // Wait for countdown to complete
                 yield return new WaitForSecondsRealtime(resumeCountdownSeconds + 0.3f);
             }
 
-            // Actually resume the game
             if (Game.Instance != null && Game.Instance.State == GameState.Paused)
             {
                 Game.Instance.ResumeGame();
@@ -309,7 +318,6 @@ namespace Runner.UI
             if (Game.Instance == null) return;
             if (IsLoading) return;
 
-            // Cancel any active resume countdown
             if (isResuming && gameplayScreen != null)
             {
                 gameplayScreen.CancelCountdown();
@@ -370,7 +378,6 @@ namespace Runner.UI
             if (Game.Instance == null) return;
             if (IsLoading) return;
 
-            // Cancel any active resume countdown
             if (isResuming && gameplayScreen != null)
             {
                 gameplayScreen.CancelCountdown();
@@ -428,9 +435,14 @@ namespace Runner.UI
 
             float distance = Game.Instance != null ? Game.Instance.RunDistance : 0f;
 
+            bool isNewHighScore = SaveManager.TrySetHighScore((int)distance);
             SaveManager.AddDistance(distance);
-            SaveManager.TrySetHighScore((int)distance);
             SaveManager.SaveIfDirty();
+
+            if (isNewHighScore)
+            {
+                Game.Instance?.Sound?.PlayNewHighScore();
+            }
 
             if (gameOverScreen != null)
             {

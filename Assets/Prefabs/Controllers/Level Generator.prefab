@@ -70,7 +70,7 @@ MonoBehaviour:
   - {fileID: 3996532993096452310, guid: 6530c3bb3afc5b14fbe5401d47bcfc1a, type: 3}
   poolSizePerType: 10
   minEnemiesPerSegment: 0
-  maxEnemiesPerSegment: 0
+  maxEnemiesPerSegment: 2
   difficultyMultiplier: 1
   maxDifficultyDistance: 10000
   showDebug: 1

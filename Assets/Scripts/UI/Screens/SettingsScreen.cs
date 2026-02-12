@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using Runner.Core;
 
 namespace Runner.UI
 {
@@ -223,12 +224,23 @@ namespace Runner.UI
         private void OnMusicVolumeChanged(float value)
         {
             PlayerPrefs.SetFloat(MusicKey, value);
+
+            if (Game.Instance?.Sound != null)
+                Game.Instance.Sound.MasterVolume = value;
+
             SaveSettings();
         }
 
         private void OnSFXVolumeChanged(float value)
         {
             PlayerPrefs.SetFloat(SfxKey, value);
+
+            if (Game.Instance?.Sound != null)
+            {
+                Game.Instance.Sound.SfxVolume = value;
+                Game.Instance.Sound.UiVolume = value;
+            }
+
             SaveSettings();
         }
 

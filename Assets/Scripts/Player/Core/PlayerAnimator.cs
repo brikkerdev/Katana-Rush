@@ -40,7 +40,6 @@ namespace Runner.Player
 
         private static readonly int JumpTrigger = Animator.StringToHash("Jump");
         private static readonly int DashTrigger = Animator.StringToHash("Dash");
-        private static readonly int SlashTrigger = Animator.StringToHash("Slash");
         private static readonly int BlockHitTrigger = Animator.StringToHash("BlockHit");
         private static readonly int DieTrigger = Animator.StringToHash("Die");
         private static readonly int ReviveTrigger = Animator.StringToHash("Revive");
@@ -113,12 +112,6 @@ namespace Runner.Player
             animator.SetTrigger(DashTrigger);
         }
 
-        public void PlaySlashAnimation()
-        {
-            if (animator == null) return;
-            animator.SetTrigger(SlashTrigger);
-        }
-
         public void SetBlocking(bool blocking)
         {
             if (animator == null) return;
@@ -167,7 +160,6 @@ namespace Runner.Player
             if (animator == null) return;
             animator.ResetTrigger(JumpTrigger);
             animator.ResetTrigger(DashTrigger);
-            animator.ResetTrigger(SlashTrigger);
         }
 
         public void ResetAnimator()
@@ -176,7 +168,6 @@ namespace Runner.Player
 
             animator.ResetTrigger(JumpTrigger);
             animator.ResetTrigger(DashTrigger);
-            animator.ResetTrigger(SlashTrigger);
             animator.ResetTrigger(BlockHitTrigger);
             animator.ResetTrigger(DieTrigger);
             animator.ResetTrigger(ReviveTrigger);
@@ -226,7 +217,7 @@ namespace Runner.Player
             if (!showDebug) return;
             if (animator == null) return;
 
-            GUILayout.BeginArea(new Rect(Screen.width - 220, 10, 210, 240));
+            GUILayout.BeginArea(new Rect(Screen.width - 220, 10, 210, 200));
             GUILayout.BeginVertical("box");
 
             GUILayout.Label("<b>ANIMATOR STATE</b>");

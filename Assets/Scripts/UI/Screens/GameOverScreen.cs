@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using Runner.Core;
 using Runner.Save;
 
 namespace Runner.UI
@@ -89,6 +90,8 @@ namespace Runner.UI
                     coinsCollectedText.text = displayCoins.ToString();
                 }
 
+                Game.Instance?.Sound?.PlayScoreTick();
+
                 yield return null;
             }
 
@@ -111,6 +114,7 @@ namespace Runner.UI
             if (isNewHighScore && newHighScoreIndicator != null)
             {
                 newHighScoreIndicator.SetActive(true);
+                Game.Instance?.Sound?.PlayNewHighScore();
             }
 
             yield return new WaitForSecondsRealtime(delayBeforeButtons);

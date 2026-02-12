@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5109783600969922937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6326591262587997566}
+  - component: {fileID: 6014441948232181048}
+  m_Layer: 0
+  m_Name: SoundController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6326591262587997566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109783600969922937}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.79043, y: -1.31469, z: 95.31702}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6014441948232181048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5109783600969922937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48c7382fd6e2c5b43af58d0b843e7923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Audio.SoundController
+  initialPoolSize: 16
+  maxPoolSize: 32
+  masterVolume: 1
+  sfxVolume: 1
+  uiVolume: 1
+  jumpSound: {fileID: 8300000, guid: 89cfdead096313e4b881f67204c46d42, type: 3}
+  doubleJumpSound: {fileID: 8300000, guid: 89cfdead096313e4b881f67204c46d42, type: 3}
+  landSound: {fileID: 8300000, guid: 25bd5558b6e9efa408b15cbbc4bdcba0, type: 3}
+  dashSound: {fileID: 8300000, guid: 23521bf6cf1e34f51ba1a86ec9553326, type: 3}
+  deflectSound: {fileID: 8300000, guid: d64365af613fe4743b9dc3f14736c506, type: 3}
+  deathSound: {fileID: 8300000, guid: 94e8b360c652ebe42801e5e135b3f3e7, type: 3}
+  reviveSound: {fileID: 8300000, guid: 30af4556e49796045b2e71efbc2e5c1a, type: 3}
+  bulletFireSound: {fileID: 8300000, guid: e5f0a762c652f4065a1238d2febd38c6, type: 3}
+  bulletLethalFireSound: {fileID: 8300000, guid: af7c7a46541c343b495812ae2b3c5d28, type: 3}
+  bulletImpactSound: {fileID: 8300000, guid: 673e0c563e49943e983f44f0fb941436, type: 3}
+  bulletLethalImpactSound: {fileID: 8300000, guid: f65b2671e8e2e47b1939dd5831760196, type: 3}
+  bulletWhizSound: {fileID: 0}
+  bulletExpireSound: {fileID: 0}
+  enemyHitSound: {fileID: 8300000, guid: c193a5e721421604da41b18978c7e6cb, type: 3}
+  enemyDeathSound: {fileID: 8300000, guid: 626aeda33e0134a66a6257c865d0c5c0, type: 3}
+  enemySpawnSound: {fileID: 0}
+  enemyAlertSound: {fileID: 0}
+  enemyRagdollSound: {fileID: 0}
+  sniperChargeSound: {fileID: 0}
+  sniperFireSound: {fileID: 0}
+  buttonClickSound: {fileID: 8300000, guid: 6bc5d54cf7be3c94589e7fcbcb7c505a, type: 3}
+  buttonHoverSound: {fileID: 0}
+  buttonBackSound: {fileID: 8300000, guid: 6bc5d54cf7be3c94589e7fcbcb7c505a, type: 3}
+  buttonDisabledSound: {fileID: 0}
+  tabSwitchSound: {fileID: 0}
+  panelOpenSound: {fileID: 0}
+  panelCloseSound: {fileID: 0}
+  popupShowSound: {fileID: 0}
+  popupHideSound: {fileID: 0}
+  coinCollectSound: {fileID: 8300000, guid: 4ddbd19703867ad479cbb1cecc6db498, type: 3}
+  gemCollectSound: {fileID: 0}
+  powerupCollectSound: {fileID: 0}
+  healthCollectSound: {fileID: 0}
+  purchaseSuccessSound: {fileID: 8300000, guid: 0155e7fb6ef844abc976d5f934ce1b1e, type: 3}
+  purchaseFailSound: {fileID: 8300000, guid: 16458abe8d5a64f7a8082f0de46d643f, type: 3}
+  equipSound: {fileID: 8300000, guid: 0ae4a20a1902842349712242a032c8ab, type: 3}
+  unequipSound: {fileID: 0}
+  unlockSound: {fileID: 0}
+  upgradeSound: {fileID: 0}
+  rouletteTickSound: {fileID: 8300000, guid: 1488cb0356b2ccf4eb93b2ca25f55c1f, type: 3}
+  rouletteSlowSound: {fileID: 0}
+  rouletteWinCommonSound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  rouletteWinRareSound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  rouletteWinEpicSound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  rouletteWinLegendarySound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  rouletteDuplicateSound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  gameStartSound: {fileID: 0}
+  gameOverSound: {fileID: 0}
+  countdownTickSound: {fileID: 8300000, guid: 1488cb0356b2ccf4eb93b2ca25f55c1f, type: 3}
+  countdownGoSound: {fileID: 8300000, guid: 997b70dd6d437c4449f05c18b2802d77, type: 3}
+  pauseSound: {fileID: 0}
+  resumeSound: {fileID: 0}
+  newHighScoreSound: {fileID: 0}
+  milestoneSound: {fileID: 0}
+  scoreTickSound: {fileID: 8300000, guid: 1488cb0356b2ccf4eb93b2ca25f55c1f, type: 3}
+  comboSound: {fileID: 0}
+  comboBreakSound: {fileID: 0}
+  distanceMilestoneSound: {fileID: 0}
+  biomeTransitionSound: {fileID: 0}
+  obstacleDestroySound: {fileID: 0}
+  defaultPitchVariation: 0.1

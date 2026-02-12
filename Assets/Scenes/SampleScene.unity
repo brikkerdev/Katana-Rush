@@ -296,6 +296,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 43016090}
   m_CullTransparentMesh: 1
+--- !u!1001 &54261758
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151139752296688863, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5699206883338195788, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Zweihander
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5a871a8b4dfeb444bbe05304122b7ff6, type: 3}
 --- !u!1 &57528963
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,6 +849,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!114 &71480397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1220,6 +1283,67 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!1001 &93219109
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1379624642083172027, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3869898748984125490, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Naginata
+      objectReference: {fileID: 0}
+    - target: {fileID: 7584031940635176153, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d027cd5d493a4e44f8c4c22e4c3b1ac7, type: 3}
 --- !u!1 &96652697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,6 +1665,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!1 &139620266
 GameObject:
   m_ObjectHideFlags: 0
@@ -2857,6 +2987,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!1 &214392967
 GameObject:
   m_ObjectHideFlags: 0
@@ -3439,6 +3575,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!1 &260057745
 GameObject:
   m_ObjectHideFlags: 0
@@ -3805,6 +3947,7 @@ MonoBehaviour:
   initialInterval: 0.05
   finalInterval: 0.3
   minCycles: 3
+  slowdownThreshold: 0.7
 --- !u!114 &284974254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4145,6 +4288,75 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalizationUIText
   key: ui_back
+--- !u!1001 &302859751
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6019516671290845876, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6019516671290845876, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6019516671290845876, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752612463872362249, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7720228727281258322, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Fulgur
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fdff62af441bb074c97541e5a34c9aed, type: 3}
 --- !u!1 &304833895
 GameObject:
   m_ObjectHideFlags: 0
@@ -5016,6 +5228,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!114 &416237236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5716,7 +5934,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 538666991}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -6234,7 +6452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.2509804}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7343,6 +7561,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!114 &787663379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7614,6 +7838,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!114 &794093993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8125,6 +8355,63 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1001 &830967847
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649037049961710652, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3022157639326323331, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Daishe
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b8616ac7876cfc7438d87450b7d29c8e, type: 3}
 --- !u!1 &831373623
 GameObject:
   m_ObjectHideFlags: 0
@@ -8334,7 +8621,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838119218}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -9008,6 +9295,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!114 &952343924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9306,6 +9599,7 @@ MonoBehaviour:
   skyControllerPrefab: {fileID: 461484027963580448, guid: f42ca4ade74506b4e90575d5eda71db9, type: 3}
   fogControllerPrefab: {fileID: 5049544987401744063, guid: 80ac217f319e7f143834149a61e2135b, type: 3}
   particleControllerPrefab: {fileID: 5240765469439108588, guid: 95a6e414f03a7214e933c9786ce964e8, type: 3}
+  soundControllerPrefab: {fileID: 6014441948232181048, guid: f3c709ec80a54244cb7d9ae120de57c7, type: 3}
   playerSpawnPoint: {fileID: 1748236326}
   cameraManager: {fileID: 1415522946}
   cameraEffects: {fileID: 189794314}
@@ -9315,6 +9609,8 @@ MonoBehaviour:
   useDayNightCycle: 1
   useSkyController: 1
   useFogController: 1
+  scoreMilestoneInterval: 1000
+  speedBoostMultiplier: 1.3
 --- !u!4 &962742105
 Transform:
   m_ObjectHideFlags: 0
@@ -9524,6 +9820,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!1 &1027651171
 GameObject:
   m_ObjectHideFlags: 0
@@ -9714,6 +10016,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!114 &1030909334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9796,6 +10104,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1030909331}
   m_CullTransparentMesh: 1
+--- !u!1001 &1034523707
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170391746819784989, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7073885569655949021, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_HF
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 92d85c30245ce85429b7b4f9f1886853, type: 3}
 --- !u!1 &1044081069
 GameObject:
   m_ObjectHideFlags: 0
@@ -9896,6 +10261,7 @@ MonoBehaviour:
   countdownContainer: {fileID: 304833895}
   countdownText: {fileID: 1788678261}
   go_key: ui_go
+  distanceMilestoneInterval: 800
 --- !u!225 &1069549562
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -9908,6 +10274,63 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1001 &1082049120
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523870091327307348, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Starter
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
 --- !u!1 &1086317592
 GameObject:
   m_ObjectHideFlags: 0
@@ -11346,6 +11769,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!1 &1227577484
 GameObject:
   m_ObjectHideFlags: 0
@@ -11518,6 +11947,63 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &1268254186
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5180100786369570030, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523870091327307348, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Gold
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
 --- !u!1 &1279974713
 GameObject:
   m_ObjectHideFlags: 0
@@ -12576,6 +13062,79 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalizationUIText
   key: ui_sfx
+--- !u!1001 &1356630586
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 546616785096148520, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 546616785096148520, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 546616785096148520, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 546616785096148520, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2259323416954021100, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5763846699888138154, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Thermal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7f6b9d047570e804dbe321b869236c59, type: 3}
 --- !u!1 &1362327208
 GameObject:
   m_ObjectHideFlags: 0
@@ -12763,6 +13322,63 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1001 &1394480879
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3918180382599582309, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697122922779084332, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_HFprot
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4e326c3ec956c6f4d9d08aa3c1d5546f, type: 3}
 --- !u!1 &1415522944
 GameObject:
   m_ObjectHideFlags: 0
@@ -12945,6 +13561,75 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1498870262
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3133394987768610610, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625682973518750266, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625682973518750266, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5625682973518750266, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5873118006866473708, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Overian
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0e8f198f41e778a46814fa13cda3696a, type: 3}
 --- !u!1 &1500470016
 GameObject:
   m_ObjectHideFlags: 0
@@ -15158,6 +15843,67 @@ MonoBehaviour:
   flickVelocity: 1200
   elasticityNormalized: 0.2
   snapDuration: 0.3
+--- !u!1001 &1739054459
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2555748930796192416, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_Murasama
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899201812286494746, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8794055133572067892, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.544
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1dc595c87bfa312429e23826874ba8ad, type: 3}
 --- !u!1 &1748236325
 GameObject:
   m_ObjectHideFlags: 0
@@ -16502,6 +17248,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.UIButton
   scaleOnPress: 0.95
+  playClickSound: 1
+  playHoverSound: 0
+  playDisabledSound: 1
+  soundType: 0
+  overrideClickSound: {fileID: 0}
+  overrideHoverSound: {fileID: 0}
 --- !u!1 &2004021847
 GameObject:
   m_ObjectHideFlags: 0
@@ -17317,6 +18069,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2100555520
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2086009641753365395, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_Name
+      value: KatanaView_SteelBlade
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157334777258077445, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 020d94c93c46d3643944614ce3b4828a, type: 3}
 --- !u!1 &2130782388
 GameObject:
   m_ObjectHideFlags: 0
@@ -17535,3 +18344,15 @@ SceneRoots:
   - {fileID: 277228857}
   - {fileID: 1491589626}
   - {fileID: 2093762285}
+  - {fileID: 1082049120}
+  - {fileID: 830967847}
+  - {fileID: 302859751}
+  - {fileID: 1268254186}
+  - {fileID: 1034523707}
+  - {fileID: 1394480879}
+  - {fileID: 1739054459}
+  - {fileID: 93219109}
+  - {fileID: 1498870262}
+  - {fileID: 1356630586}
+  - {fileID: 2100555520}
+  - {fileID: 54261758}

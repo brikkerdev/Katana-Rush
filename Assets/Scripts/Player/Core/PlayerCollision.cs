@@ -53,7 +53,11 @@ namespace Runner.Player
 
                 if (col.CompareTag(collectibleTag))
                 {
-                    col.GetComponent<Collectible>().Collect();
+                    Collectible collectible = col.GetComponent<Collectible>();
+                    if (collectible != null)
+                    {
+                        collectible.Collect();
+                    }
                     col.gameObject.SetActive(false);
                 }
             }

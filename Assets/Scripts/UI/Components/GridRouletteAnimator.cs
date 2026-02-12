@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Runner.Core;
 using Runner.Inventory;
 
 namespace Runner.UI
@@ -13,11 +14,13 @@ namespace Runner.UI
         [SerializeField] private float initialInterval = 0.05f;
         [SerializeField] private float finalInterval = 0.3f;
         [SerializeField] private int minCycles = 3;
+        [SerializeField] private float slowdownThreshold = 0.7f;
 
         private List<KatanaSlot> slots = new List<KatanaSlot>();
         private Katana targetKatana;
         private bool isRolling;
         private Coroutine rollCoroutine;
+        private bool hasPlayedSlow;
 
         public bool IsRolling => isRolling;
 
@@ -41,6 +44,7 @@ namespace Runner.UI
 
             targetKatana = result;
             isRolling = true;
+            hasPlayedSlow = false;
 
             foreach (var slot in slots)
             {
@@ -81,7 +85,6 @@ namespace Runner.UI
                 float easedProgress = EaseOutQuart(progress);
                 float currentInterval = Mathf.Lerp(initialInterval, finalInterval, easedProgress);
 
-                // Clear previous highlight
                 if (previousIndex >= 0 && previousIndex < slots.Count)
                 {
                     slots[previousIndex].SetHighlighted(false);
@@ -91,13 +94,20 @@ namespace Runner.UI
                 currentIndex = currentStep % totalSlots;
                 currentStep++;
 
-                // Highlight current slot
                 slots[currentIndex].SetHighlighted(true);
+
+                float tickPitch = Mathf.Lerp(1.2f, 0.8f, easedProgress);
+                Game.Instance?.Sound?.PlayRouletteTickAtPitch(tickPitch);
+
+                if (progress > slowdownThreshold && !hasPlayedSlow)
+                {
+                    hasPlayedSlow = true;
+                    Game.Instance?.Sound?.PlayRouletteSlow();
+                }
 
                 yield return new WaitForSecondsRealtime(currentInterval);
             }
 
-            // Clear all highlights except target
             for (int i = 0; i < slots.Count; i++)
             {
                 if (i != targetIndex)
@@ -106,8 +116,12 @@ namespace Runner.UI
                 }
             }
 
-            // Show win effect on target
             slots[targetIndex].ShowWinEffect();
+
+            if (targetKatana != null)
+            {
+                Game.Instance?.Sound?.PlayRouletteWinByRarity(targetKatana.Rarity);
+            }
 
             yield return new WaitForSecondsRealtime(0.5f);
 

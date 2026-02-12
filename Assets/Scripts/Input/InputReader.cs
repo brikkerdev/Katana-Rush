@@ -212,16 +212,10 @@ namespace Runner.Input
                 OnMoveRight?.Invoke();
             }
 
-            if (keyboard.leftShiftKey.wasPressedThisFrame)
+            if (keyboard.eKey.wasPressedThisFrame)
             {
                 lastGesture = "KEY: Dash";
                 OnDash?.Invoke();
-            }
-
-            if (keyboard.sKey.wasPressedThisFrame || keyboard.downArrowKey.wasPressedThisFrame)
-            {
-                lastGesture = "KEY: Slide";
-                OnSlide?.Invoke();
             }
         }
 

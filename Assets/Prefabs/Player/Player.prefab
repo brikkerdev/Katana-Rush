@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 8075143233085510226}
   - component: {fileID: 6507126174264226217}
   - component: {fileID: -1687174122129337456}
+  - component: {fileID: 2346846710081443994}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -116,6 +117,7 @@ MonoBehaviour:
   playerVisual: {fileID: 6870236852055899347}
   animator: {fileID: 8075143233085510226}
   blockDetector: {fileID: 6507126174264226217}
+  footsteps: {fileID: 2346846710081443994}
 --- !u!114 &345000286880959821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,6 +250,43 @@ MonoBehaviour:
   redirectEffect: {fileID: 0}
   audioSource: {fileID: 0}
   redirectSound: {fileID: 0}
+--- !u!114 &2346846710081443994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3791620074096128303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5c167bb21b59d4cbe98af37a6667ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Player.PlayerFootsteps
+  baseStepInterval: 0.75
+  minStepInterval: 0.25
+  speedReference: 20
+  baseVolume: 0.3
+  maxVolume: 0.5
+  slideVolume: 0.15
+  basePitch: 0.9
+  maxPitch: 1.2
+  pitchVariation: 0.08
+  footstepClips:
+  - {fileID: 8300000, guid: 47f0909add88cef40889bf90098cc7ca, type: 3}
+  - {fileID: 8300000, guid: 101672ecb12cf874dba6bf11a3c8dcc4, type: 3}
+  - {fileID: 8300000, guid: f6effbe72d996ef44bfdbc20d74175eb, type: 3}
+  - {fileID: 8300000, guid: 7d0fb29cbbf7f574fbc89748e6f682f3, type: 3}
+  - {fileID: 8300000, guid: d3e2203005313144ca4b3938fb8408af, type: 3}
+  - {fileID: 8300000, guid: 64d98c233867eb54784a9f53f1701837, type: 3}
+  - {fileID: 8300000, guid: e5559c16a36665742b007d12152cae4c, type: 3}
+  - {fileID: 8300000, guid: a81bb4e62a4382a4a8f79e2c0e81a021, type: 3}
+  - {fileID: 8300000, guid: ea693bb2aa96dd3419bf2be7e81014b7, type: 3}
+  - {fileID: 8300000, guid: 9753cbe93448ab44f801cfa79cb9c349, type: 3}
+  - {fileID: 8300000, guid: afcc0822745dda140be161db03ac9e79, type: 3}
+  - {fileID: 8300000, guid: f0d8ffd3735eae34097af2318bd14e55, type: 3}
+  - {fileID: 8300000, guid: 6b7f26d6a816b2c4b9f74fdde6c3d6d8, type: 3}
+  - {fileID: 8300000, guid: b52af211d55a65b4296983eb7003f9b1, type: 3}
+  - {fileID: 8300000, guid: 84c947f247db5664bbec3642019c850d, type: 3}
 --- !u!1 &3903948339950895801
 GameObject:
   m_ObjectHideFlags: 0

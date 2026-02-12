@@ -17,17 +17,8 @@ namespace Runner.Player.Core
         [SerializeField] private MovementSettings movementSettings;
         [SerializeField] private PlayerPreset defaultPreset;
 
-        [Header("Combat")]
-        [SerializeField] private float slashDetectionRange = 5f;
-        [SerializeField] private float slashDetectionAngle = 60f;
-        [SerializeField] private LayerMask enemyDetectionLayer = -1;
-
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
-
-        [Header("Block Effects")]
-        [SerializeField] private GameObject blockEffectPrefab;
-        [SerializeField] private AudioClip blockSound;
 
         private Player player;
         private PlayerMotor motor;
@@ -48,14 +39,9 @@ namespace Runner.Player.Core
 
         private Katana equippedKatana;
 
-        private Collider[] enemyHitBuffer = new Collider[16];
-
         public event Action<int, int> OnDashCountChanged;
         public event Action<float> OnDashRegenProgress;
-        public event Action OnSlashPerformed;
         public event Action OnBlockPerformed;
-        public event Action OnSlideStarted;
-        public event Action OnSlideEnded;
 
         public event Action<Vector3> OnBulletDeflected;
 
@@ -63,7 +49,7 @@ namespace Runner.Player.Core
         public float RunDistance => runDistance;
         public bool IsGrounded => motor != null && motor.IsGrounded;
         public bool IsDashing => dashHandler != null && dashHandler.IsDashing;
-        public bool IsInvincible => (dashHandler != null && dashHandler.IsInvincible);
+        public bool IsInvincible => dashHandler != null && dashHandler.IsInvincible;
         public int CurrentLane => laneHandler != null ? laneHandler.CurrentLane : 0;
         public int JumpsRemaining => jumpHandler != null ? jumpHandler.JumpsRemaining : 0;
         public int MaxJumps => jumpHandler != null ? jumpHandler.MaxJumps : 0;
@@ -185,7 +171,6 @@ namespace Runner.Player.Core
                 inputReader.OnMoveLeft += OnMoveLeftInput;
                 inputReader.OnMoveRight += OnMoveRightInput;
                 inputReader.OnDash += OnDashInput;
-                inputReader.OnSlide += OnSlideInput;
                 inputSubscribed = true;
             }
 
@@ -203,16 +188,7 @@ namespace Runner.Player.Core
             inputReader.OnMoveLeft -= OnMoveLeftInput;
             inputReader.OnMoveRight -= OnMoveRightInput;
             inputReader.OnDash -= OnDashInput;
-            inputReader.OnSlide -= OnSlideInput;
             inputSubscribed = false;
-        }
-
-        private void CancelDash()
-        {
-            if (dashHandler.IsDashing)
-            {
-                dashHandler.ForceEnd();
-            }
         }
 
         private void Update()
@@ -276,6 +252,7 @@ namespace Runner.Player.Core
             if (motor.JustLanded)
             {
                 visual?.PlayLandSquash();
+                Game.Instance?.Sound?.PlayLand();
             }
         }
 
@@ -294,6 +271,7 @@ namespace Runner.Player.Core
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
                 playerAnimator?.PlayJumpAnimation();
+                Game.Instance?.Sound?.PlayJump();
             }
         }
 
@@ -306,11 +284,18 @@ namespace Runner.Player.Core
         {
             if (!inputEnabled) return;
 
+            bool isDoubleJump = !motor.IsGrounded && jumpHandler.JumpsRemaining > 0;
+
             if (jumpHandler.TryJump(out float velocity))
             {
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
                 playerAnimator?.PlayJumpAnimation();
+
+                if (isDoubleJump)
+                    Game.Instance?.Sound?.PlayDoubleJump();
+                else
+                    Game.Instance?.Sound?.PlayJump();
             }
             else
             {
@@ -339,53 +324,13 @@ namespace Runner.Player.Core
                 visual?.PlayDashStretch();
                 Game.Instance?.CameraEffects?.PlayDashEffect();
                 playerAnimator?.PlayDashAnimation();
+                Game.Instance?.Sound?.PlayDash();
 
-                particleController.Spawn(equippedKatana.SlashEffectPrefab, transform.position, Vector3.forward, transform);
-
-                if (CheckEnemiesInFront())
+                if (equippedKatana != null && equippedKatana.SlashEffectPrefab != null)
                 {
-                    playerAnimator?.PlaySlashAnimation();
-                    OnSlashPerformed?.Invoke();
+                    particleController.Spawn(equippedKatana.SlashEffectPrefab, transform.position, Vector3.forward, transform);
                 }
             }
-        }
-
-        private void OnSlideInput()
-        {
-            if (!inputEnabled) return;
-            if (!motor.IsGrounded) return;
-
-            CancelDash();
-        }
-
-        private bool CheckEnemiesInFront()
-        {
-            Vector3 origin = transform.position + Vector3.up;
-            int hitCount = Physics.OverlapSphereNonAlloc(origin, slashDetectionRange, enemyHitBuffer, enemyDetectionLayer);
-
-            for (int i = 0; i < hitCount; i++)
-            {
-                Collider col = enemyHitBuffer[i];
-                if (col == null) continue;
-
-                Enemy.Enemy enemy = col.GetComponent<Enemy.Enemy>();
-                if (enemy == null)
-                {
-                    enemy = col.GetComponentInParent<Enemy.Enemy>();
-                }
-
-                if (enemy == null || enemy.IsDead) continue;
-
-                Vector3 toEnemy = (enemy.transform.position - transform.position).normalized;
-                float angle = Vector3.Angle(transform.forward, toEnemy);
-
-                if (angle <= slashDetectionAngle * 0.5f)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private void OnDashStarted()
@@ -439,22 +384,13 @@ namespace Runner.Player.Core
                 Vector3 pos = new Vector3(x, transform.position.y, transform.position.z);
                 Gizmos.DrawWireCube(pos, new Vector3(0.5f, 0.1f, 0.5f));
             }
-
-            Gizmos.color = Color.red;
-            Vector3 origin = transform.position + Vector3.up;
-            Gizmos.DrawWireSphere(origin, slashDetectionRange);
-
-            Vector3 leftDir = Quaternion.Euler(0, -slashDetectionAngle * 0.5f, 0) * transform.forward;
-            Vector3 rightDir = Quaternion.Euler(0, slashDetectionAngle * 0.5f, 0) * transform.forward;
-            Gizmos.DrawRay(origin, leftDir * slashDetectionRange);
-            Gizmos.DrawRay(origin, rightDir * slashDetectionRange);
         }
 
         private void OnGUI()
         {
             if (!showDebug) return;
 
-            GUILayout.BeginArea(new Rect(10, 10, 500, 550));
+            GUILayout.BeginArea(new Rect(10, 10, 500, 400));
             GUILayout.BeginVertical("box");
 
             GUILayout.Label($"<b>PLAYER CONTROLLER</b>");
