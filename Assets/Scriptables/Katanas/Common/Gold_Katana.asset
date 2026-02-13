@@ -16,12 +16,13 @@ MonoBehaviour:
   nameKey: katana_name_gold
   descriptionKey: katana_description_gold
   icon: {fileID: -875353822, guid: eb61cee9f949b9b47867f2392990110b, type: 3}
-  rarity: 0
+  rarity: 3
   playerPreset: {fileID: 11400000, guid: a397b58b50caf8240acb74feb4297db9, type: 2}
   modelPrefab: {fileID: 5523870091327307348, guid: 93515f84e5270ee48bffc20ce02c8042, type: 3}
   bladeMaterial: {fileID: 2100000, guid: 97c037143d01a2e4b8c46285d0d04952, type: 2}
   slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
   trailEffectPrefab: {fileID: 0}
+  ability: {fileID: 11400000, guid: 7474458cc12406541a3294b14b96b157, type: 2}
   challengeRequirement:
     type: 0
     targetValue: 0

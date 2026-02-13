@@ -1,6 +1,6 @@
-using UnityEngine;
 using Runner.Player.Data;
 using Runner.Save;
+using UnityEngine;
 
 namespace Runner.Inventory
 {
@@ -42,6 +42,9 @@ namespace Runner.Inventory
         [SerializeField] private GameObject slashEffectPrefab;
         [SerializeField] private GameObject trailEffectPrefab;
 
+        [Header("Ability")]
+        [SerializeField] private KatanaAbility ability;
+
         [Header("Challenge (Only for Challenge Rarity)")]
         [SerializeField] private ChallengeRequirement challengeRequirement;
 
@@ -56,8 +59,10 @@ namespace Runner.Inventory
         public Material BladeMaterial => bladeMaterial;
         public GameObject SlashEffectPrefab => slashEffectPrefab;
         public GameObject TrailEffectPrefab => trailEffectPrefab;
+        public KatanaAbility Ability => ability;
         public ChallengeRequirement ChallengeRequirement => challengeRequirement;
         public bool IsChallenge => rarity == KatanaRarity.Challenge;
+        public bool HasAbility => ability != null;
 
         private void OnValidate()
         {

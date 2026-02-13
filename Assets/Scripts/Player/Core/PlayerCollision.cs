@@ -2,6 +2,8 @@ using UnityEngine;
 using Runner.Core;
 using Runner.Player.Core;
 using Runner.Collectibles;
+using Runner.Inventory;
+using Runner.Save;
 
 namespace Runner.Player
 {
@@ -84,7 +86,28 @@ namespace Runner.Player
                 }
 
                 enemy.TakeDamage(damage);
+                Game.Instance?.Sound?.PlayDash();
                 Game.Instance?.AddScore(100);
+
+                if (AbilityManager.Instance != null && AbilityManager.Instance.HasKillReward)
+                {
+                    var reward = AbilityManager.Instance.KillReward;
+                    if (reward.CoinsPerKill > 0)
+                    {
+                        int coins = reward.CoinsPerKill;
+                        if (AbilityManager.Instance.HasDoubleCoin)
+                        {
+                            coins *= AbilityManager.Instance.GetCoinMultiplier();
+                        }
+                        SaveManager.AddCoins(coins);
+                        UI.UIManager.Instance?.NotifyCoinsCollected(coins);
+                    }
+                    if (reward.ScorePerKill > 0)
+                    {
+                        Game.Instance?.AddScore(reward.ScorePerKill);
+                    }
+                }
+
                 return;
             }
 

@@ -23,8 +23,8 @@ MonoBehaviour:
     - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
   environmentPrefab: {fileID: 5436482676337235900, guid: 0cfa2e84906db0a4296a0437107ad952, type: 3}
   environmentOffset: {x: 0, y: 0, z: 0}
-  minLength: 800
-  maxLength: 800
+  minLength: 1600
+  maxLength: 1600
   minDifficulty: 0
   maxDifficulty: 1
   enemySpawnMultiplier: 1
@@ -33,4 +33,6 @@ MonoBehaviour:
   fogDensity: 0.004
   ambientColor: {r: 1, g: 0.6828067, b: 0.5803922, a: 1}
   ambientIntensity: 0.1
-  skyboxMaterial: {fileID: 2100000, guid: 2ee500164b464974083306d3c26def4d, type: 2}
+  skyDayTint: {r: 1, g: 1, b: 1, a: 1}
+  skyNightTint: {r: 1, g: 1, b: 1, a: 1}
+  skyTintStrength: 0

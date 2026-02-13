@@ -1,6 +1,7 @@
 using UnityEngine;
 using Runner.Save;
 using Runner.Core;
+using Runner.Inventory;
 
 namespace Runner.Collectibles
 {
@@ -126,8 +127,13 @@ namespace Runner.Collectibles
             {
                 case CollectibleType.Coin:
                 case CollectibleType.CoinGroup:
-                    SaveManager.AddCoins(value);
-                    UI.UIManager.Instance?.NotifyCoinsCollected(value);
+                    int coinAmount = value;
+                    if (AbilityManager.Instance != null)
+                    {
+                        coinAmount *= AbilityManager.Instance.GetCoinMultiplier();
+                    }
+                    SaveManager.AddCoins(coinAmount);
+                    UI.UIManager.Instance?.NotifyCoinsCollected(coinAmount);
                     break;
 
                 case CollectibleType.DashRestore:

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b9ce19f926339439f5b34fe3d5d8c4, type: 3}
+  m_Name: TargetedDeflectAbility
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Abilities.TargetedDeflectAbility
+  abilityId: 412dbfc9-7967-489f-8fc9-53d8cc87eeea
+  targetChance: 1
+  deflectSpeed: 80
+  searchRadius: 30
+  canDamageEnemies: 1

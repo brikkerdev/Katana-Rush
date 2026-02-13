@@ -15,11 +15,11 @@ MonoBehaviour:
   id: 25a80c55-d65f-4ad5-9de8-e179449bfad6
   nameKey: katana_name_wooden
   descriptionKey: katana_description_wooden
-  icon: {fileID: 1186181954, guid: 69018f08b78c3b94e8021e94042fd7be, type: 3}
+  icon: {fileID: -2129182286, guid: d130855f62270e440ad334b1e122c44b, type: 3}
   rarity: 4
   playerPreset: {fileID: 11400000, guid: dd0a0c044aedaa8498960cde3c84238e, type: 2}
-  modelPrefab: {fileID: 5523870091327307348, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-  bladeMaterial: {fileID: 2100000, guid: 871439ea2efacd8469c26fda9e40008a, type: 2}
+  modelPrefab: {fileID: 3022157639326323331, guid: b2c43fa8e55a24341adf8fde8bb00b29, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 7a08c39e6e7f45a48b442d36ca17212c, type: 2}
   slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
   trailEffectPrefab: {fileID: 0}
   challengeRequirement:

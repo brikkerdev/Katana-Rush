@@ -2,6 +2,8 @@ using UnityEngine;
 using Runner.Player;
 using Runner.Player.Core;
 using Runner.Effects;
+using Runner.Inventory;
+using Runner.Inventory.Abilities;
 
 namespace Runner.Enemy
 {
@@ -21,6 +23,7 @@ namespace Runner.Enemy
         [SerializeField] private float collisionCheckRadius = 0.2f;
         [SerializeField] private LayerMask collisionLayers = -1;
         [SerializeField] private LayerMask playerLayer;
+        [SerializeField] private LayerMask enemyLayer;
 
         [Header("Lethality")]
         [SerializeField] private bool isLethal = false;
@@ -44,6 +47,7 @@ namespace Runner.Enemy
         private bool wasLethal;
         private Transform cachedTransform;
         private Collider[] hitBuffer = new Collider[8];
+        private Collider[] enemySearchBuffer = new Collider[16];
 
         private Transform targetPlayer;
         private Enemy sourceEnemy;
@@ -293,19 +297,43 @@ namespace Runner.Enemy
             player.BlockDetector?.OnBulletDeflected();
             player.Controller?.OnBulletBlocked();
 
-            Vector3 playerForward = player.transform.forward;
-            Vector3 playerRight = player.transform.right;
-            Vector3 playerUp = Vector3.up;
+            bool targeted = false;
 
-            float horizontalAngle = Random.Range(-deflectionAngleRange, deflectionAngleRange);
-            float verticalAngle = Random.Range(-deflectionAngleRange * 0.5f, deflectionAngleRange * 0.5f);
+            if (AbilityManager.Instance != null && AbilityManager.Instance.HasTargetedDeflect)
+            {
+                var deflectAbility = AbilityManager.Instance.TargetedDeflect;
 
-            Quaternion horizontalRotation = Quaternion.AngleAxis(horizontalAngle, playerUp);
-            Quaternion verticalRotation = Quaternion.AngleAxis(verticalAngle, playerRight);
+                if (Random.value <= deflectAbility.TargetChance)
+                {
+                    Enemy nearestEnemy = FindNearestEnemy(deflectAbility.SearchRadius);
 
-            Vector3 oldDirection = direction;
-            direction = (verticalRotation * horizontalRotation * playerForward).normalized;
-            currentSpeed = deflectedSpeed;
+                    if (nearestEnemy != null)
+                    {
+                        Vector3 toEnemy = (nearestEnemy.transform.position + Vector3.up - cachedTransform.position).normalized;
+                        direction = toEnemy;
+                        currentSpeed = deflectAbility.DeflectSpeed;
+                        canDamageEnemiesWhenDeflected = deflectAbility.CanDamageEnemies;
+                        targeted = true;
+                    }
+                }
+            }
+
+            if (!targeted)
+            {
+                Vector3 playerForward = player.transform.forward;
+                Vector3 playerRight = player.transform.right;
+                Vector3 playerUp = Vector3.up;
+
+                float horizontalAngle = Random.Range(-deflectionAngleRange, deflectionAngleRange);
+                float verticalAngle = Random.Range(-deflectionAngleRange * 0.5f, deflectionAngleRange * 0.5f);
+
+                Quaternion horizontalRotation = Quaternion.AngleAxis(horizontalAngle, playerUp);
+                Quaternion verticalRotation = Quaternion.AngleAxis(verticalAngle, playerRight);
+
+                direction = (verticalRotation * horizontalRotation * playerForward).normalized;
+                currentSpeed = deflectedSpeed;
+            }
+
             lifetimeTimer = deflectedLifetime;
             isDeflected = true;
             isLethal = false;
@@ -316,9 +344,43 @@ namespace Runner.Enemy
             cachedTransform.position += direction * 0.5f;
 
             UpdateVisual();
-            SpawnDeflectEffect(oldDirection);
+            SpawnDeflectEffect();
 
             Core.Game.Instance?.Sound?.PlayDeflect();
+        }
+
+        private Enemy FindNearestEnemy(float searchRadius)
+        {
+            int hitCount = Physics.OverlapSphereNonAlloc(
+                cachedTransform.position,
+                searchRadius,
+                enemySearchBuffer,
+                enemyLayer,
+                QueryTriggerInteraction.Ignore
+            );
+
+            Enemy nearest = null;
+            float nearestSqrDist = float.MaxValue;
+
+            for (int i = 0; i < hitCount; i++)
+            {
+                Collider col = enemySearchBuffer[i];
+                if (col == null) continue;
+
+                Enemy enemy = col.GetComponent<Enemy>();
+                if (enemy == null) enemy = col.GetComponentInParent<Enemy>();
+                if (enemy == null || enemy.IsDead) continue;
+                if (enemy == sourceEnemy) continue;
+
+                float sqrDist = (enemy.transform.position - cachedTransform.position).sqrMagnitude;
+                if (sqrDist < nearestSqrDist)
+                {
+                    nearestSqrDist = sqrDist;
+                    nearest = enemy;
+                }
+            }
+
+            return nearest;
         }
 
         private void UpdateVisual()
@@ -369,7 +431,7 @@ namespace Runner.Enemy
             else ParticleController.Instance.SpawnHitEffect(cachedTransform.position, direction);
         }
 
-        private void SpawnDeflectEffect(Vector3 incomingDirection)
+        private void SpawnDeflectEffect()
         {
             if (ParticleController.Instance == null) return;
             ParticleController.Instance.SpawnDeflectEffect(cachedTransform.position, direction);

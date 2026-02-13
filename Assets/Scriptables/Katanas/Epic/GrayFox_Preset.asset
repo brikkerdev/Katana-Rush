@@ -23,6 +23,6 @@ MonoBehaviour:
   dashDuration: 0.3
   dashSpeedMultiplier: 3
   dashRegenTime: 2
-  dashRegenDelay: 0
+  dashRegenDelay: 0.1
   dashInvincible: 1
   dashDamage: 1

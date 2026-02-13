@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f98e95db8ba46458e95b8549a7500d, type: 3}
+  m_Name: MagnetAuraAbility
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Abilities.MagnetAuraAbility
+  abilityId: f3308e61-89b2-41ac-91d4-04708a748709
+  magnetRadius: 5

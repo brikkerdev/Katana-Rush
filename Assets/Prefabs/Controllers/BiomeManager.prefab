@@ -45,6 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeManager
   environmentPreSpawnDistance: 400
-  environmentDespawnDistance: 1000
-  fogTransitionSpeed: 0.5
+  environmentDespawnDistance: 1600
   showDebug: 1

@@ -19,6 +19,7 @@ namespace Runner.Inventory
 
         private Katana equippedKatana;
         private PlayerPreset activePreset;
+        private AbilityManager abilityManager;
 
         public Katana EquippedKatana => equippedKatana;
         public PlayerPreset ActivePreset => activePreset;
@@ -39,7 +40,20 @@ namespace Runner.Inventory
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
+            EnsureAbilityManager();
             Initialize();
+        }
+
+        private void EnsureAbilityManager()
+        {
+            if (AbilityManager.Instance != null)
+            {
+                abilityManager = AbilityManager.Instance;
+                return;
+            }
+
+            var go = new GameObject("AbilityManager");
+            abilityManager = go.AddComponent<AbilityManager>();
         }
 
         private void Initialize()
@@ -63,10 +77,11 @@ namespace Runner.Inventory
         public void EquipKatana(Katana katana)
         {
             if (katana == null) return;
+            if (!IsKatanaOwned(katana)) return;
 
-            if (!IsKatanaOwned(katana))
+            if (equippedKatana != null && equippedKatana.Ability != null)
             {
-                return;
+                equippedKatana.Ability.Deactivate();
             }
 
             equippedKatana = katana;
@@ -80,6 +95,11 @@ namespace Runner.Inventory
                 activePreset = defaultPreset != null ? defaultPreset : PlayerPreset.CreateDefault();
             }
 
+            if (katana.Ability != null)
+            {
+                katana.Ability.Activate();
+            }
+
             SaveManager.SetEquippedKatana(katana.Id);
 
             OnKatanaEquipped?.Invoke(katana);
@@ -89,7 +109,6 @@ namespace Runner.Inventory
         public void UnlockKatana(Katana katana)
         {
             if (katana == null) return;
-
             if (IsKatanaOwned(katana)) return;
 
             SaveManager.UnlockKatana(katana.Id);
@@ -234,12 +253,22 @@ namespace Runner.Inventory
                 {
                     equippedKatana = katana;
                     activePreset = katana.PlayerPreset != null ? katana.PlayerPreset : defaultPreset;
+
+                    if (katana.Ability != null)
+                    {
+                        katana.Ability.Activate();
+                    }
                 }
             }
         }
 
         private void OnDestroy()
         {
+            if (equippedKatana != null && equippedKatana.Ability != null)
+            {
+                equippedKatana.Ability.Deactivate();
+            }
+
             if (Instance == this)
             {
                 Instance = null;
