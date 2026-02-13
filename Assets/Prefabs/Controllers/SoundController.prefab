@@ -49,6 +49,21 @@ MonoBehaviour:
   masterVolume: 1
   sfxVolume: 1
   uiVolume: 1
+  musicVolume: 1
+  musicTracks:
+  - {fileID: 8300000, guid: 575af022ec8694b4bb45d76920527ef0, type: 3}
+  - {fileID: 8300000, guid: 3924a3c6122d3514dbae22288862762c, type: 3}
+  - {fileID: 8300000, guid: a7fb5f30871100b4b9d04571776705e8, type: 3}
+  - {fileID: 8300000, guid: 693f462d9d222374e8359d31ede82f47, type: 3}
+  - {fileID: 8300000, guid: 35917a76abf6ee64185a52319068cf11, type: 3}
+  - {fileID: 8300000, guid: f8df80cd9a5e2e84fa10e24ae5e56168, type: 3}
+  - {fileID: 8300000, guid: d4645958691102e4889c2541b556f5aa, type: 3}
+  - {fileID: 8300000, guid: e1ad4e864b3fc9b41a65b0c260845066, type: 3}
+  - {fileID: 8300000, guid: 8090bda9ccaa15a49a0ed88ac0b2c18f, type: 3}
+  menuMusicVolume: 0.3
+  gameplayMusicVolume: 0.7
+  musicFadeDuration: 1.5
+  trackTransitionDelay: 0.5
   jumpSound: {fileID: 8300000, guid: 89cfdead096313e4b881f67204c46d42, type: 3}
   doubleJumpSound: {fileID: 8300000, guid: 89cfdead096313e4b881f67204c46d42, type: 3}
   landSound: {fileID: 8300000, guid: 25bd5558b6e9efa408b15cbbc4bdcba0, type: 3}

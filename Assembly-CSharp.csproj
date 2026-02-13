@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Player\Movement\JumpMovement.cs" />
     <Compile Include="Assets\Scripts\Localization\Controllers\LocalizationController.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerCollision.cs" />
+    <Compile Include="Assets\Scripts\UI\Components\DayNightUIElement.cs" />
     <Compile Include="Assets\Scripts\Enemy\Bullet.cs" />
     <Compile Include="Assets\Input\GameInput.cs" />
     <Compile Include="Assets\Scripts\UI\Components\TapToStartHandler.cs" />
@@ -107,7 +108,6 @@
     <Compile Include="Assets\Scripts\Player\Core\Player.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\RagdollHead.cs" />
     <Compile Include="Assets\Scripts\Collectible\CollectibleSpawner.cs" />
-    <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\PivotBasedCameraRig.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\SimpleEnemyRagdoll.cs" />
     <Compile Include="Assets\Scripts\Enemy\BulletPool.cs" />
     <Compile Include="Assets\Scripts\UI\Components\RarityTab.cs" />
@@ -117,12 +117,12 @@
     <Compile Include="Assets\Scripts\UI\Screens\SettingsScreen.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraEffects.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\GameplayScreen.cs" />
-    <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\AbstractTargetFollower.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\RagdollPartPool.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerAnimator.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\GameOverScreen.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\TargetedDeflectAbility.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Environment\CustomFogRenderFeature.cs" />
     <Compile Include="Assets\Scripts\Environment\DayNightCycle.cs" />
     <Compile Include="Assets\Scripts\Biome\BiomeData.cs" />
     <Compile Include="Assets\Scripts\Sound\PlayerFootsteps.cs" />
@@ -130,6 +130,7 @@
     <Compile Include="Assets\Scripts\Sound\SoundController.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\LaneMovement.cs" />
     <Compile Include="Assets\Scripts\UI\Components\KatanaSlot.cs" />
+    <Compile Include="Assets\Scripts\UI\Components\DayNightUiController.cs" />
     <Compile Include="Assets\Scripts\Core\SceneSetup.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\MainMenuScreen.cs" />
@@ -139,7 +140,6 @@
     <Compile Include="Assets\Scripts\Levels\LevelGenerator.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\DoubleCoinAbility.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemySpawnPoint.cs" />
-    <Compile Include="Assets\SimpleToon\Scripts\SelfRotation.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerBlockDetector.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\EnemyKillRewardAbility.cs" />
@@ -150,7 +150,6 @@
     <Compile Include="Assets\Scripts\Player\Core\PlayerMotor.cs" />
     <Compile Include="Assets\Scripts\Player\Visual\PlayerVisual.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIButton.cs" />
-    <Compile Include="Assets\SimpleToon\Model\Kawaii Slimes\Cameras\Scripts\FreeLookCam.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIScreen.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyAimPredictor.cs" />
     <Compile Include="Assets\Scripts\Localization\Elements\LocalizationUIText.cs" />
@@ -159,8 +158,9 @@
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\Shaders\Shaders\Fog\CustomFog.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
-    <None Include="Assets\SimpleToon\Shader\ToonLightBase.shader" />
+    <None Include="Assets\Shaders\Shaders\Toon\ToonLightBase.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Shaders\Shaders\Sky\ProceduralSky.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />

@@ -20,7 +20,7 @@ MonoBehaviour:
   maxJumps: 1
   gravity: -50
   maxDashes: 5
-  dashDuration: 0.2
+  dashDuration: 0.4
   dashSpeedMultiplier: 4
   dashRegenTime: 1
   dashRegenDelay: 0.5

@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using System.Collections;
+using DG.Tweening;
 
 namespace Runner.UI
 {
@@ -22,10 +22,12 @@ namespace Runner.UI
         [SerializeField] protected ScreenType screenType;
         [SerializeField] protected float fadeDuration = 0.3f;
         [SerializeField] protected bool disableOnHide = true;
+        [SerializeField] protected float showScaleFrom = 0.95f;
 
         protected CanvasGroup canvasGroup;
         protected bool isVisible;
-        protected Coroutine fadeCoroutine;
+        private Tween fadeTween;
+        private Tween scaleTween;
 
         public ScreenType Type => screenType;
         public bool IsVisible => isVisible;
@@ -46,7 +48,7 @@ namespace Runner.UI
 
         public virtual void Show(bool instant = false)
         {
-            StopFadeCoroutine();
+            KillTweens();
 
             gameObject.SetActive(true);
             OnShowStarted?.Invoke();
@@ -59,18 +61,35 @@ namespace Runner.UI
             }
             else
             {
-                fadeCoroutine = StartCoroutine(FadeRoutine(1f, () =>
-                {
-                    OnShow();
-                    OnShowCompleted?.Invoke();
-                }));
+                canvasGroup.blocksRaycasts = true;
+                canvasGroup.interactable = false;
+
+                transform.localScale = Vector3.one * showScaleFrom;
+                scaleTween = transform
+                    .DOScale(1f, fadeDuration)
+                    .SetUpdate(true)
+                    .SetEase(Ease.OutCubic);
+
+                fadeTween = canvasGroup
+                    .DOFade(1f, fadeDuration)
+                    .SetUpdate(true)
+                    .SetEase(Ease.OutQuad)
+                    .OnComplete(() =>
+                    {
+                        canvasGroup.interactable = true;
+                        isVisible = true;
+                        OnShow();
+                        OnShowCompleted?.Invoke();
+                        fadeTween = null;
+                        scaleTween = null;
+                    });
             }
         }
 
         public virtual void Hide(bool instant = false)
         {
             OnHideStarted?.Invoke();
-            StopFadeCoroutine();
+            KillTweens();
 
             if (instant || fadeDuration <= 0 || !gameObject.activeInHierarchy)
             {
@@ -85,16 +104,32 @@ namespace Runner.UI
             }
             else
             {
-                fadeCoroutine = StartCoroutine(FadeRoutine(0f, () =>
-                {
-                    OnHide();
-                    OnHideCompleted?.Invoke();
+                canvasGroup.interactable = false;
 
-                    if (disableOnHide)
+                scaleTween = transform
+                    .DOScale(showScaleFrom, fadeDuration)
+                    .SetUpdate(true)
+                    .SetEase(Ease.InCubic);
+
+                fadeTween = canvasGroup
+                    .DOFade(0f, fadeDuration)
+                    .SetUpdate(true)
+                    .SetEase(Ease.InQuad)
+                    .OnComplete(() =>
                     {
-                        gameObject.SetActive(false);
-                    }
-                }));
+                        canvasGroup.blocksRaycasts = false;
+                        isVisible = false;
+                        OnHide();
+                        OnHideCompleted?.Invoke();
+
+                        if (disableOnHide)
+                        {
+                            gameObject.SetActive(false);
+                        }
+
+                        fadeTween = null;
+                        scaleTween = null;
+                    });
             }
         }
 
@@ -103,46 +138,16 @@ namespace Runner.UI
             canvasGroup.alpha = visible ? 1f : 0f;
             canvasGroup.interactable = visible;
             canvasGroup.blocksRaycasts = visible;
+            transform.localScale = Vector3.one;
             isVisible = visible;
         }
 
-        private void StopFadeCoroutine()
+        private void KillTweens()
         {
-            if (fadeCoroutine != null)
-            {
-                StopCoroutine(fadeCoroutine);
-                fadeCoroutine = null;
-            }
-        }
-
-        private IEnumerator FadeRoutine(float targetAlpha, Action onComplete)
-        {
-            bool fadingIn = targetAlpha > 0.5f;
-
-            if (fadingIn)
-            {
-                canvasGroup.blocksRaycasts = true;
-            }
-
-            canvasGroup.interactable = false;
-
-            float elapsed = 0f;
-            float startAlpha = canvasGroup.alpha;
-
-            while (elapsed < fadeDuration)
-            {
-                elapsed += Time.unscaledDeltaTime;
-                canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsed / fadeDuration);
-                yield return null;
-            }
-
-            canvasGroup.alpha = targetAlpha;
-            canvasGroup.interactable = fadingIn;
-            canvasGroup.blocksRaycasts = fadingIn;
-            isVisible = fadingIn;
-
-            onComplete?.Invoke();
-            fadeCoroutine = null;
+            fadeTween?.Kill();
+            fadeTween = null;
+            scaleTween?.Kill();
+            scaleTween = null;
         }
 
         protected virtual void OnShow() { }
@@ -150,7 +155,12 @@ namespace Runner.UI
 
         protected virtual void OnDisable()
         {
-            StopFadeCoroutine();
+            KillTweens();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            KillTweens();
         }
     }
 }

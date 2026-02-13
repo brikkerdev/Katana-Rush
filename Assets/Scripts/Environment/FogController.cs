@@ -7,13 +7,17 @@ namespace Runner.Environment
     {
         public static FogController Instance { get; private set; }
 
-        [Header("Fog Mode")]
-        [SerializeField] private FogMode fogMode = FogMode.ExponentialSquared;
+        [SerializeField] private Shader fogShader;
+
+        [Header("Fog Settings")]
+        [SerializeField] private float fogStartDistance = 10f;
+        [SerializeField] private float fogEndDistance = 100f;
+        [SerializeField] private float fogHeightFalloff = 0.1f;
+        [SerializeField] private float fogBaseHeight = 0f;
 
         [Header("Night Adjustments")]
-        [SerializeField] private float nightFogDensityMultiplier = 0.7f;
+        [SerializeField] private float nightFogDensityMultiplier = 1.3f;
         [SerializeField] private float nightFogColorDarkening = 0.3f;
-        [SerializeField] private float nightAmbientDarkening = 0.4f;
 
         [Header("Dawn/Dusk Adjustments")]
         [SerializeField] private Color dawnDuskFogTint = new Color(1f, 0.7f, 0.5f);
@@ -24,25 +28,41 @@ namespace Runner.Environment
 
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
+        [SerializeField] private bool fogEnabled = true;
 
         private DayNightCycle dayNightCycle;
         private BiomeManager biomeManager;
+        private Material fogMaterial;
 
         private Color baseFogColor;
         private float baseFogDensity;
-        private Color baseAmbientColor;
 
         private Color currentFogColor;
         private float currentFogDensity;
-        private Color currentAmbientColor;
+        private float currentFogStart;
+        private float currentFogEnd;
 
         private Color targetFogColor;
         private float targetFogDensity;
-        private Color targetAmbientColor;
+        private float targetFogStart;
+        private float targetFogEnd;
 
         private bool isInitialized;
 
         public bool IsInitialized => isInitialized;
+        public Material FogMaterial => fogMaterial;
+        public bool FogEnabled
+        {
+            get => fogEnabled;
+            set => fogEnabled = value;
+        }
+
+        private static readonly int FogColorId = Shader.PropertyToID("_FogColor");
+        private static readonly int FogStartId = Shader.PropertyToID("_FogStart");
+        private static readonly int FogEndId = Shader.PropertyToID("_FogEnd");
+        private static readonly int FogDensityId = Shader.PropertyToID("_FogDensity");
+        private static readonly int FogHeightFalloffId = Shader.PropertyToID("_FogHeightFalloff");
+        private static readonly int FogBaseHeightId = Shader.PropertyToID("_FogBaseHeight");
 
         private void Awake()
         {
@@ -52,6 +72,31 @@ namespace Runner.Environment
                 return;
             }
             Instance = this;
+
+            CreateMaterial();
+        }
+
+        private void CreateMaterial()
+        {
+            if (fogShader == null)
+            {
+                Debug.LogError("[FogController] Hidden/CustomFog shader not found!");
+                return;
+            }
+
+            if (!fogShader.isSupported)
+            {
+                Debug.LogError("[FogController] CustomFog shader is not supported!");
+                return;
+            }
+
+            fogMaterial = new Material(fogShader);
+            fogMaterial.hideFlags = HideFlags.HideAndDontSave;
+
+            if (showDebug)
+            {
+                Debug.Log("[FogController] Material created successfully");
+            }
         }
 
         public void Initialize(DayNightCycle dayNight, BiomeManager biome)
@@ -66,12 +111,17 @@ namespace Runner.Environment
                 if (biomeManager.VisualCurrentBiome != null)
                 {
                     SetBaseFogFromBiome(biomeManager.VisualCurrentBiome);
-                    ApplyFogImmediate();
                 }
             }
+            else
+            {
+                baseFogColor = new Color(0.7f, 0.8f, 0.9f);
+                baseFogDensity = 1f;
+            }
 
-            RenderSettings.fogMode = fogMode;
-            RenderSettings.fog = true;
+            ApplyFogImmediate();
+
+            RenderSettings.fog = false;
 
             isInitialized = true;
 
@@ -84,10 +134,12 @@ namespace Runner.Environment
         private void Update()
         {
             if (!isInitialized) return;
+            if (fogMaterial == null) return;
+            if (!fogEnabled) return;
 
             CalculateTargetFog();
             UpdateFogTransition();
-            ApplyFog();
+            ApplyFogToMaterial();
         }
 
         private void CalculateTargetFog()
@@ -100,16 +152,12 @@ namespace Runner.Environment
 
             targetFogDensity = baseFogDensity * Mathf.Lerp(1f, nightFogDensityMultiplier, nightFactor);
 
+            float distanceMultiplier = Mathf.Lerp(1f, 0.7f, nightFactor);
+            targetFogStart = fogStartDistance * distanceMultiplier;
+            targetFogEnd = fogEndDistance * distanceMultiplier;
+
             Color nightAdjustedFog = baseFogColor * Mathf.Lerp(1f, nightFogColorDarkening, nightFactor);
-
-            Color dawnDuskTintedFog = Color.Lerp(nightAdjustedFog, dawnDuskFogTint * baseFogColor, dawnDuskFactor * dawnDuskTintStrength);
-
-            targetFogColor = dawnDuskTintedFog;
-
-            targetAmbientColor = baseAmbientColor * Mathf.Lerp(1f, nightAmbientDarkening, nightFactor);
-
-            Color dawnDuskAmbient = Color.Lerp(targetAmbientColor, dawnDuskFogTint * baseAmbientColor, dawnDuskFactor * 0.2f);
-            targetAmbientColor = dawnDuskAmbient;
+            targetFogColor = Color.Lerp(nightAdjustedFog, dawnDuskFogTint * baseFogColor, dawnDuskFactor * dawnDuskTintStrength);
         }
 
         private float CalculateDayFactor(float time)
@@ -156,14 +204,20 @@ namespace Runner.Environment
 
             currentFogColor = Color.Lerp(currentFogColor, targetFogColor, speed);
             currentFogDensity = Mathf.Lerp(currentFogDensity, targetFogDensity, speed);
-            currentAmbientColor = Color.Lerp(currentAmbientColor, targetAmbientColor, speed);
+            currentFogStart = Mathf.Lerp(currentFogStart, targetFogStart, speed);
+            currentFogEnd = Mathf.Lerp(currentFogEnd, targetFogEnd, speed);
         }
 
-        private void ApplyFog()
+        private void ApplyFogToMaterial()
         {
-            RenderSettings.fogColor = currentFogColor;
-            RenderSettings.fogDensity = currentFogDensity;
-            RenderSettings.ambientLight = currentAmbientColor;
+            if (fogMaterial == null) return;
+
+            fogMaterial.SetColor(FogColorId, currentFogColor);
+            fogMaterial.SetFloat(FogStartId, currentFogStart);
+            fogMaterial.SetFloat(FogEndId, currentFogEnd);
+            fogMaterial.SetFloat(FogDensityId, currentFogDensity);
+            fogMaterial.SetFloat(FogHeightFalloffId, fogHeightFalloff);
+            fogMaterial.SetFloat(FogBaseHeightId, fogBaseHeight);
         }
 
         private void ApplyFogImmediate()
@@ -172,9 +226,10 @@ namespace Runner.Environment
 
             currentFogColor = targetFogColor;
             currentFogDensity = targetFogDensity;
-            currentAmbientColor = targetAmbientColor;
+            currentFogStart = targetFogStart;
+            currentFogEnd = targetFogEnd;
 
-            ApplyFog();
+            ApplyFogToMaterial();
         }
 
         private void OnBiomeChanged(BiomeData biome)
@@ -193,16 +248,15 @@ namespace Runner.Environment
         {
             baseFogColor = biome.FogColor;
             baseFogDensity = biome.FogDensity;
-            baseAmbientColor = biome.AmbientColor * biome.AmbientIntensity;
-
-            RenderSettings.fog = biome.OverrideFog;
+            fogEnabled = biome.OverrideFog;
         }
 
-        public void SetFogDirect(Color color, float density, Color ambient, bool immediate = false)
+        public void SetFogDirect(Color color, float density, float start, float end, bool immediate = false)
         {
             baseFogColor = color;
             baseFogDensity = density;
-            baseAmbientColor = ambient;
+            fogStartDistance = start;
+            fogEndDistance = end;
 
             if (immediate)
             {
@@ -229,6 +283,11 @@ namespace Runner.Environment
             if (biomeManager != null)
             {
                 biomeManager.OnBiomeChanged -= OnBiomeChanged;
+            }
+
+            if (fogMaterial != null)
+            {
+                DestroyImmediate(fogMaterial);
             }
 
             if (Instance == this) Instance = null;

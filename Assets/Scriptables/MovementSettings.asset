@@ -157,6 +157,7 @@ MonoBehaviour:
   slideColliderHeight: 1
   slideColliderCenterY: 1
   slideCooldown: 0.2
+  slideSpeedBoost: 1.15
   groundCheckRadius: 1
   groundCheckOffset: 0.1
   groundLayer:

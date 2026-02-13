@@ -302,7 +302,7 @@ namespace Runner.UI
             {
                 gameplayScreen.ShowCountdown(resumeCountdownSeconds);
 
-                yield return new WaitForSecondsRealtime(resumeCountdownSeconds + 0.3f);
+                yield return new WaitForSecondsRealtime(resumeCountdownSeconds + 0.5f);
             }
 
             if (Game.Instance != null && Game.Instance.State == GameState.Paused)
@@ -434,19 +434,15 @@ namespace Runner.UI
             if (IsLoading) return;
 
             float distance = Game.Instance != null ? Game.Instance.RunDistance : 0f;
+            int score = Game.Instance != null ? Game.Instance.Score : 0;
 
             bool isNewHighScore = SaveManager.TrySetHighScore((int)distance);
             SaveManager.AddDistance(distance);
             SaveManager.SaveIfDirty();
 
-            if (isNewHighScore)
-            {
-                Game.Instance?.Sound?.PlayNewHighScore();
-            }
-
             if (gameOverScreen != null)
             {
-                gameOverScreen.Setup(distance, coinsCollectedThisRun);
+                gameOverScreen.Setup(distance, coinsCollectedThisRun, score);
             }
 
             ShowScreen(ScreenType.GameOver);

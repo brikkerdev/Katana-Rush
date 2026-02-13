@@ -151,6 +151,11 @@ namespace Runner.UI
         {
             base.OnShow();
 
+            if (previewRenderer != null)
+            {
+                previewRenderer.Activate();
+            }
+
             InputReader.Instance?.DisableGameplayInput();
             InventoryManager.Instance?.TryUnlockCompletedChallenges();
 
@@ -181,6 +186,11 @@ namespace Runner.UI
         protected override void OnHide()
         {
             base.OnHide();
+
+            if (previewRenderer != null)
+            {
+                previewRenderer.Deactivate();
+            }
 
             InputReader.Instance?.EnableGameplayInput();
             rouletteAnimator?.Cancel();

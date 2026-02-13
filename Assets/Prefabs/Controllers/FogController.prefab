@@ -44,11 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be676c9c83690254db587506dc5f26d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Environment.FogController
-  fogMode: 3
+  fogShader: {fileID: 4800000, guid: c09db57c3e4bb6c4ea35c3fee470238a, type: 3}
+  fogStartDistance: 10
+  fogEndDistance: 100
+  fogHeightFalloff: 0.1
+  fogBaseHeight: 0
   nightFogDensityMultiplier: 0.7
   nightFogColorDarkening: 0.3
-  nightAmbientDarkening: 0.4
   dawnDuskFogTint: {r: 1, g: 0.7, b: 0.5, a: 1}
   dawnDuskTintStrength: 0.3
   transitionSpeed: 1
-  showDebug: 0
+  showDebug: 1
+  fogEnabled: 1

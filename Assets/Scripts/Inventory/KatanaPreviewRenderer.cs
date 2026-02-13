@@ -20,10 +20,12 @@ namespace Runner.Inventory
 
         public GameObject currentKatanaInstance;
         private bool isLocked;
+        private bool isActive;
         private Renderer[] katanaRenderers;
         private Material[] originalMaterials;
 
         public RenderTexture RenderTexture => renderTexture;
+        public bool IsActive => isActive;
 
         private void Awake()
         {
@@ -36,14 +38,53 @@ namespace Runner.Inventory
             if (previewCamera != null)
             {
                 previewCamera.targetTexture = renderTexture;
+                previewCamera.enabled = false;
             }
+
+            isActive = false;
         }
 
         private void Update()
         {
+            if (!isActive) return;
+
             if (autoRotate && katanaHolder != null && currentKatanaInstance != null)
             {
                 katanaHolder.Rotate(Vector3.right, rotationSpeed * Time.unscaledDeltaTime);
+            }
+        }
+
+        public void Activate()
+        {
+            if (isActive) return;
+
+            isActive = true;
+
+            if (previewCamera != null)
+            {
+                previewCamera.enabled = true;
+            }
+
+            if (katanaHolder != null)
+            {
+                katanaHolder.gameObject.SetActive(true);
+            }
+        }
+
+        public void Deactivate()
+        {
+            if (!isActive) return;
+
+            isActive = false;
+
+            if (previewCamera != null)
+            {
+                previewCamera.enabled = false;
+            }
+
+            if (katanaHolder != null)
+            {
+                katanaHolder.gameObject.SetActive(false);
             }
         }
 
@@ -59,7 +100,6 @@ namespace Runner.Inventory
             isLocked = locked;
 
             currentKatanaInstance = Instantiate(katana.ModelPrefab, katanaHolder);
-            Debug.Log(currentKatanaInstance.name);
             currentKatanaInstance.transform.localPosition = katanaOffset;
             currentKatanaInstance.transform.localRotation = Quaternion.Euler(katanaRotation);
 

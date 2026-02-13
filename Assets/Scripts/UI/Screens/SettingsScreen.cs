@@ -13,6 +13,9 @@ namespace Runner.UI
         [SerializeField] private Slider sfxSlider;
         [SerializeField] private Toggle vibrationToggle;
 
+        [Header("Audio Feedback")]
+        [SerializeField] private float sfxTestCooldown = 0.15f;
+
         [Header("Graphics")]
         [SerializeField] private TMP_Dropdown qualityDropdown;
 
@@ -25,6 +28,11 @@ namespace Runner.UI
 
         private readonly List<string> languageCodes = new List<string>();
         private ScreenType returnToScreen = ScreenType.MainMenu;
+
+        private float lastSfxTestTime;
+        private float lastMusicValue;
+        private float lastSfxValue;
+        private bool isInitializing;
 
         private const string MusicKey = "MusicVolume";
         private const string SfxKey = "SFXVolume";
@@ -151,17 +159,27 @@ namespace Runner.UI
 
         private void LoadSettings()
         {
+            isInitializing = true;
+
+            float musicValue = PlayerPrefs.GetFloat(MusicKey, 1f);
+            float sfxValue = PlayerPrefs.GetFloat(SfxKey, 1f);
+
+            lastMusicValue = musicValue;
+            lastSfxValue = sfxValue;
+
             if (musicSlider != null)
-                musicSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(MusicKey, 1f));
+                musicSlider.SetValueWithoutNotify(musicValue);
 
             if (sfxSlider != null)
-                sfxSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(SfxKey, 1f));
+                sfxSlider.SetValueWithoutNotify(sfxValue);
 
             if (vibrationToggle != null)
                 vibrationToggle.SetIsOnWithoutNotify(PlayerPrefs.GetInt(VibrationKey, 1) == 1);
 
             ApplySavedGraphicsPreset();
             LoadLanguageSelection();
+
+            isInitializing = false;
         }
 
         private void ApplySavedGraphicsPreset()
@@ -226,7 +244,12 @@ namespace Runner.UI
             PlayerPrefs.SetFloat(MusicKey, value);
 
             if (Game.Instance?.Sound != null)
-                Game.Instance.Sound.MasterVolume = value;
+                Game.Instance.Sound.MusicVolume = value;
+
+            if (!isInitializing && Mathf.Abs(value - lastMusicValue) > 0.01f)
+            {
+                lastMusicValue = value;
+            }
 
             SaveSettings();
         }
@@ -241,12 +264,37 @@ namespace Runner.UI
                 Game.Instance.Sound.UiVolume = value;
             }
 
+            if (!isInitializing && Mathf.Abs(value - lastSfxValue) > 0.01f)
+            {
+                lastSfxValue = value;
+                PlaySfxTestSound();
+            }
+
             SaveSettings();
+        }
+
+        private void PlaySfxTestSound()
+        {
+            if (Time.unscaledTime - lastSfxTestTime < sfxTestCooldown)
+                return;
+
+            lastSfxTestTime = Time.unscaledTime;
+
+            if (Game.Instance?.Sound != null)
+            {
+                Game.Instance.Sound.PlayButtonClick();
+            }
         }
 
         private void OnVibrationChanged(bool enabled)
         {
             PlayerPrefs.SetInt(VibrationKey, enabled ? 1 : 0);
+
+            if (enabled)
+            {
+                Handheld.Vibrate();
+            }
+
             SaveSettings();
         }
 
@@ -279,12 +327,34 @@ namespace Runner.UI
 
         private void OnResetClicked()
         {
-            if (musicSlider != null) musicSlider.value = 1f;
-            if (sfxSlider != null) sfxSlider.value = 1f;
-            if (vibrationToggle != null) vibrationToggle.isOn = true;
-            if (qualityDropdown != null) qualityDropdown.value = 1;
+            isInitializing = true;
+
+            if (musicSlider != null)
+            {
+                musicSlider.value = 1f;
+                lastMusicValue = 1f;
+            }
+
+            if (sfxSlider != null)
+            {
+                sfxSlider.value = 1f;
+                lastSfxValue = 1f;
+            }
+
+            if (vibrationToggle != null)
+                vibrationToggle.isOn = true;
+
+            if (qualityDropdown != null)
+                qualityDropdown.value = 1;
 
             ResetLanguageToDefault();
+
+            isInitializing = false;
+
+            if (Game.Instance?.Sound != null)
+            {
+                Game.Instance.Sound.PlayButtonClick();
+            }
         }
 
         private void ResetLanguageToDefault()

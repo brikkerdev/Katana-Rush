@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Runner.Player.Data;
+using Runner.Save;
 
 namespace Runner.Player.Movement
 {
@@ -73,6 +74,8 @@ namespace Runner.Player.Movement
             isDashing = true;
             dashTimer = 0f;
             dashProgress = 0f;
+
+            SaveManager.AddDashUsed();
 
             OnDashCountChanged?.Invoke(dashesRemaining, maxDashes);
             OnDashStarted?.Invoke();

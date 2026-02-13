@@ -89,6 +89,8 @@ namespace Runner.Player
                 Game.Instance?.Sound?.PlayDash();
                 Game.Instance?.AddScore(100);
 
+                SaveManager.AddEnemyKill();
+
                 if (AbilityManager.Instance != null && AbilityManager.Instance.HasKillReward)
                 {
                     var reward = AbilityManager.Instance.KillReward;

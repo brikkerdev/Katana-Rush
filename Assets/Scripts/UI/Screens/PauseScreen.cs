@@ -40,7 +40,7 @@ namespace Runner.UI
         {
             if (currentDistanceText != null && Game.Instance != null)
             {
-                currentDistanceText.text = $"Distance: {Game.Instance.RunDistance:F0}m";
+                currentDistanceText.text = $"{Game.Instance.RunDistance:F0}m";
             }
         }
 

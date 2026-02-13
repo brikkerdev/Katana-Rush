@@ -28,7 +28,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 734c8f0ac09f7174daae715475329925, type: 2}
   - {fileID: 11400000, guid: 5df13006efc14614193ca20589f57d8f, type: 2}
   - {fileID: 11400000, guid: aecc361c90ef11742818aefbfe0b7fea, type: 2}
-  commonPrice: 250
-  rarePrice: 500
-  epicPrice: 1000
-  legendaryPrice: 2000
+  - {fileID: 11400000, guid: f071641cc90c427499ffc364dc490083, type: 2}
+  commonPrice: 100
+  rarePrice: 250
+  epicPrice: 500
+  legendaryPrice: 1000

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Lightsaber_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: 82c326a5-2125-4e91-b2f2-8083844c02bc
+  nameKey: katana_name_lightsaber
+  descriptionKey: katana_description_lightsaber
+  icon: {fileID: 579291651, guid: 7a88705a1e5f2d6459c7373690a341fc, type: 3}
+  rarity: 2
+  playerPreset: {fileID: 11400000, guid: c990f68aa12d4554cbae929b0eb5dd25, type: 2}
+  modelPrefab: {fileID: 5629595443287924581, guid: 66d1939c3ae9ed043ba93181e788633a, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 5daf9bbeafc17c24b8a23cb7ee9da190, type: 2}
+  slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  ability: {fileID: 11400000, guid: c6865d7beb9fcb7498ab660e8bc3bb1d, type: 2}
+  challengeRequirement:
+    type: 0
+    targetValue: 0
+    descriptionKey: 

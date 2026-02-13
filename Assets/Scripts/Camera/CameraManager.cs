@@ -143,8 +143,7 @@ namespace Runner.CameraSystem
         private void UpdatePosition()
         {
             Vector3 basePosition = target.position;
-
-            // Apply horizontal clamping for lanes
+            
             if (clampHorizontal)
             {
                 float clampedX = Mathf.Clamp(

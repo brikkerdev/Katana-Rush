@@ -16,6 +16,15 @@ namespace Runner.Audio
         [SerializeField, Range(0f, 1f)] private float masterVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float sfxVolume = 1f;
         [SerializeField, Range(0f, 1f)] private float uiVolume = 1f;
+        [SerializeField, Range(0f, 1f)] private float musicVolume = 1f;
+
+        [Header("Music Settings")]
+        [SerializeField] private AudioClip[] musicTracks;
+        [SerializeField, Range(0f, 1f)] private float menuMusicVolume = 0.3f;
+        [SerializeField, Range(0f, 1f)] private float gameplayMusicVolume = 0.7f;
+        [SerializeField] private float musicFadeDuration = 1.5f;
+        [SerializeField] private float trackTransitionDelay = 0.5f;
+        [SerializeField] private bool preloadOnAwake = true;
 
         [Header("Player Sounds")]
         [SerializeField] private AudioClip jumpSound;
@@ -107,10 +116,30 @@ namespace Runner.Audio
         private float lastScoreTickTime;
         private int consecutiveScoreTicks;
 
+        private AudioSource musicSourceA;
+        private AudioSource musicSourceB;
+        private AudioSource activeMusicSource;
+        private List<int> playlist;
+        private int currentTrackIndex;
+        private bool isGameplayMode;
+        private float targetMusicVolume;
+        private Coroutine musicFadeCoroutine;
+        private Coroutine trackMonitorCoroutine;
+        private Coroutine preloadCoroutine;
+        private bool isMusicPlaying;
+        private bool isPreloading;
+        private bool isPreloaded;
+        private HashSet<int> preloadedTracks;
+        private int nextTrackToPreload = -1;
+
         public float MasterVolume
         {
             get => masterVolume;
-            set => masterVolume = Mathf.Clamp01(value);
+            set
+            {
+                masterVolume = Mathf.Clamp01(value);
+                UpdateMusicVolume();
+            }
         }
 
         public float SfxVolume
@@ -125,6 +154,20 @@ namespace Runner.Audio
             set => uiVolume = Mathf.Clamp01(value);
         }
 
+        public float MusicVolume
+        {
+            get => musicVolume;
+            set
+            {
+                musicVolume = Mathf.Clamp01(value);
+                UpdateMusicVolume();
+            }
+        }
+
+        public bool IsMusicPlaying => isMusicPlaying;
+        public bool IsPreloaded => isPreloaded;
+        public AudioClip CurrentTrack => activeMusicSource?.clip;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -137,6 +180,12 @@ namespace Runner.Audio
             DontDestroyOnLoad(gameObject);
 
             InitializePool();
+            InitializeMusicSystem();
+
+            if (preloadOnAwake)
+            {
+                PreloadAllMusic();
+            }
         }
 
         private void InitializePool()
@@ -151,6 +200,38 @@ namespace Runner.Audio
             {
                 sourcePool.Add(CreateSource());
             }
+        }
+
+        private void InitializeMusicSystem()
+        {
+            var musicParent = new GameObject("MusicSources").transform;
+            musicParent.SetParent(transform);
+
+            var goA = new GameObject("MusicSource_A");
+            goA.transform.SetParent(musicParent);
+            musicSourceA = goA.AddComponent<AudioSource>();
+            ConfigureMusicSource(musicSourceA);
+
+            var goB = new GameObject("MusicSource_B");
+            goB.transform.SetParent(musicParent);
+            musicSourceB = goB.AddComponent<AudioSource>();
+            ConfigureMusicSource(musicSourceB);
+
+            activeMusicSource = musicSourceA;
+            playlist = new List<int>();
+            preloadedTracks = new HashSet<int>();
+            targetMusicVolume = menuMusicVolume;
+            isGameplayMode = false;
+        }
+
+        private void ConfigureMusicSource(AudioSource source)
+        {
+            source.playOnAwake = false;
+            source.loop = false;
+            source.spatialBlend = 0f;
+            source.priority = 0;
+            source.ignoreListenerPause = true;
+            source.volume = 0f;
         }
 
         private AudioSource CreateSource()
@@ -211,6 +292,360 @@ namespace Runner.Audio
             source.gameObject.SetActive(false);
             activeSources.Remove(source);
         }
+
+        #region Preloading
+
+        public void PreloadAllMusic()
+        {
+            if (isPreloading || isPreloaded) return;
+            if (musicTracks == null || musicTracks.Length == 0) return;
+
+            preloadCoroutine = StartCoroutine(PreloadMusicCoroutine());
+        }
+
+        private IEnumerator PreloadMusicCoroutine()
+        {
+            isPreloading = true;
+            preloadedTracks.Clear();
+
+            for (int i = 0; i < musicTracks.Length; i++)
+            {
+                var clip = musicTracks[i];
+                if (clip == null) continue;
+
+                if (clip.loadState != AudioDataLoadState.Loaded)
+                {
+                    clip.LoadAudioData();
+
+                    while (clip.loadState == AudioDataLoadState.Loading)
+                    {
+                        yield return null;
+                    }
+                }
+
+                preloadedTracks.Add(i);
+                yield return null;
+            }
+
+            isPreloading = false;
+            isPreloaded = true;
+        }
+
+        private IEnumerator PreloadTrackAsync(int trackIndex)
+        {
+            if (trackIndex < 0 || trackIndex >= musicTracks.Length) yield break;
+
+            var clip = musicTracks[trackIndex];
+            if (clip == null) yield break;
+
+            if (clip.loadState == AudioDataLoadState.Loaded)
+            {
+                preloadedTracks.Add(trackIndex);
+                yield break;
+            }
+
+            clip.LoadAudioData();
+
+            while (clip.loadState == AudioDataLoadState.Loading)
+            {
+                yield return null;
+            }
+
+            preloadedTracks.Add(trackIndex);
+        }
+
+        private void PreloadNextTrack()
+        {
+            if (playlist.Count == 0) return;
+
+            int nextIndex = (currentTrackIndex + 1) % playlist.Count;
+            int nextTrackId = playlist[nextIndex];
+
+            if (!preloadedTracks.Contains(nextTrackId))
+            {
+                nextTrackToPreload = nextTrackId;
+                StartCoroutine(PreloadTrackAsync(nextTrackId));
+            }
+        }
+
+        #endregion
+
+        #region Music System
+
+        public void StartMusic()
+        {
+            if (musicTracks == null || musicTracks.Length == 0)
+            {
+                return;
+            }
+
+            if (isMusicPlaying) return;
+
+            GeneratePlaylist();
+            currentTrackIndex = 0;
+            isMusicPlaying = true;
+
+            StartCoroutine(StartMusicAsync());
+        }
+
+        private IEnumerator StartMusicAsync()
+        {
+            int trackId = playlist[currentTrackIndex];
+            var clip = musicTracks[trackId];
+
+            if (clip.loadState != AudioDataLoadState.Loaded)
+            {
+                clip.LoadAudioData();
+                while (clip.loadState == AudioDataLoadState.Loading)
+                {
+                    yield return null;
+                }
+            }
+
+            preloadedTracks.Add(trackId);
+            PlayTrackImmediate(clip);
+            PreloadNextTrack();
+
+            if (trackMonitorCoroutine != null)
+            {
+                StopCoroutine(trackMonitorCoroutine);
+            }
+            trackMonitorCoroutine = StartCoroutine(MonitorTrackEnd());
+        }
+
+        public void StopMusic()
+        {
+            if (!isMusicPlaying) return;
+
+            isMusicPlaying = false;
+
+            if (trackMonitorCoroutine != null)
+            {
+                StopCoroutine(trackMonitorCoroutine);
+                trackMonitorCoroutine = null;
+            }
+
+            if (musicFadeCoroutine != null)
+            {
+                StopCoroutine(musicFadeCoroutine);
+            }
+
+            musicFadeCoroutine = StartCoroutine(FadeMusicOut(musicFadeDuration));
+        }
+
+        public void SetMusicGameplay(bool isGameplay)
+        {
+            if (isGameplayMode == isGameplay) return;
+
+            isGameplayMode = isGameplay;
+            targetMusicVolume = isGameplay ? gameplayMusicVolume : menuMusicVolume;
+
+            if (musicFadeCoroutine != null)
+            {
+                StopCoroutine(musicFadeCoroutine);
+            }
+
+            musicFadeCoroutine = StartCoroutine(FadeMusicToTarget(musicFadeDuration));
+        }
+
+        public void SkipTrack()
+        {
+            if (!isMusicPlaying) return;
+
+            StartCoroutine(PlayNextTrackAsync());
+        }
+
+        private void GeneratePlaylist()
+        {
+            playlist.Clear();
+
+            for (int i = 0; i < musicTracks.Length; i++)
+            {
+                if (musicTracks[i] != null)
+                {
+                    playlist.Add(i);
+                }
+            }
+
+            for (int i = playlist.Count - 1; i > 0; i--)
+            {
+                int randomIndex = Random.Range(0, i + 1);
+                (playlist[i], playlist[randomIndex]) = (playlist[randomIndex], playlist[i]);
+            }
+        }
+
+        private void PlayTrackImmediate(AudioClip track)
+        {
+            if (track == null) return;
+
+            AudioSource newSource = (activeMusicSource == musicSourceA) ? musicSourceB : musicSourceA;
+            AudioSource oldSource = activeMusicSource;
+
+            newSource.clip = track;
+            newSource.volume = 0f;
+            newSource.Play();
+
+            activeMusicSource = newSource;
+
+            if (musicFadeCoroutine != null)
+            {
+                StopCoroutine(musicFadeCoroutine);
+            }
+
+            musicFadeCoroutine = StartCoroutine(CrossfadeTracks(oldSource, newSource, musicFadeDuration));
+        }
+
+        private IEnumerator PlayNextTrackAsync()
+        {
+            currentTrackIndex++;
+
+            if (currentTrackIndex >= playlist.Count)
+            {
+                GeneratePlaylist();
+                currentTrackIndex = 0;
+            }
+
+            int trackId = playlist[currentTrackIndex];
+            var clip = musicTracks[trackId];
+
+            if (clip.loadState != AudioDataLoadState.Loaded)
+            {
+                clip.LoadAudioData();
+                while (clip.loadState == AudioDataLoadState.Loading)
+                {
+                    yield return null;
+                }
+            }
+
+            preloadedTracks.Add(trackId);
+            PlayTrackImmediate(clip);
+            PreloadNextTrack();
+        }
+
+        private IEnumerator MonitorTrackEnd()
+        {
+            while (isMusicPlaying)
+            {
+                if (activeMusicSource != null && activeMusicSource.clip != null)
+                {
+                    float timeRemaining = activeMusicSource.clip.length - activeMusicSource.time;
+
+                    if (timeRemaining <= musicFadeDuration + 2f)
+                    {
+                        PreloadNextTrack();
+                    }
+
+                    if (timeRemaining <= musicFadeDuration + 0.1f && activeMusicSource.isPlaying)
+                    {
+                        yield return new WaitForSecondsRealtime(trackTransitionDelay);
+
+                        if (isMusicPlaying)
+                        {
+                            yield return StartCoroutine(PlayNextTrackAsync());
+                        }
+
+                        if (activeMusicSource != null && activeMusicSource.clip != null)
+                        {
+                            float waitTime = activeMusicSource.clip.length - musicFadeDuration - 3f;
+                            if (waitTime > 0)
+                            {
+                                yield return new WaitForSecondsRealtime(waitTime);
+                            }
+                        }
+                    }
+                }
+
+                yield return new WaitForSecondsRealtime(0.5f);
+            }
+        }
+
+        private IEnumerator CrossfadeTracks(AudioSource fromSource, AudioSource toSource, float duration)
+        {
+            float elapsed = 0f;
+            float fromStartVolume = fromSource.volume;
+            float toTargetVolume = GetCurrentMusicVolume();
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = elapsed / duration;
+                float smoothT = t * t * (3f - 2f * t);
+
+                fromSource.volume = Mathf.Lerp(fromStartVolume, 0f, smoothT);
+                toSource.volume = Mathf.Lerp(0f, toTargetVolume, smoothT);
+
+                yield return null;
+            }
+
+            fromSource.volume = 0f;
+            fromSource.Stop();
+            fromSource.clip = null;
+
+            toSource.volume = toTargetVolume;
+        }
+
+        private IEnumerator FadeMusicToTarget(float duration)
+        {
+            float elapsed = 0f;
+            float startVolume = activeMusicSource.volume;
+            float endVolume = GetCurrentMusicVolume();
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = elapsed / duration;
+                float smoothT = t * t * (3f - 2f * t);
+
+                activeMusicSource.volume = Mathf.Lerp(startVolume, endVolume, smoothT);
+
+                yield return null;
+            }
+
+            activeMusicSource.volume = endVolume;
+        }
+
+        private IEnumerator FadeMusicOut(float duration)
+        {
+            float elapsed = 0f;
+            float startVolumeA = musicSourceA.volume;
+            float startVolumeB = musicSourceB.volume;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                float t = elapsed / duration;
+
+                musicSourceA.volume = Mathf.Lerp(startVolumeA, 0f, t);
+                musicSourceB.volume = Mathf.Lerp(startVolumeB, 0f, t);
+
+                yield return null;
+            }
+
+            musicSourceA.Stop();
+            musicSourceA.clip = null;
+            musicSourceA.volume = 0f;
+
+            musicSourceB.Stop();
+            musicSourceB.clip = null;
+            musicSourceB.volume = 0f;
+        }
+
+        private float GetCurrentMusicVolume()
+        {
+            return targetMusicVolume * musicVolume * masterVolume;
+        }
+
+        private void UpdateMusicVolume()
+        {
+            if (activeMusicSource != null && activeMusicSource.isPlaying)
+            {
+                activeMusicSource.volume = GetCurrentMusicVolume();
+            }
+        }
+
+        #endregion
+
+        #region SFX Playback
 
         public AudioSource Play(AudioClip clip, float volume = 1f, float pitch = 1f, bool loop = false)
         {
@@ -340,6 +775,10 @@ namespace Runner.Audio
                 ReturnSource(source);
             }
         }
+
+        #endregion
+
+        #region Sound Effects
 
         public void PlayJump()
         {
@@ -679,6 +1118,8 @@ namespace Runner.Audio
             Play3DWithVariation(obstacleDestroySound, position, 0.6f, 1f, 0.1f, 2f, 25f);
         }
 
+        #endregion
+
         private void Update()
         {
             for (int i = activeSources.Count - 1; i >= 0; i--)
@@ -698,6 +1139,11 @@ namespace Runner.Audio
 
         private void OnDestroy()
         {
+            if (preloadCoroutine != null)
+            {
+                StopCoroutine(preloadCoroutine);
+            }
+
             if (Instance == this)
             {
                 Instance = null;

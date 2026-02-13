@@ -8,6 +8,7 @@ using Runner.Player.Movement;
 using Runner.Player.Visual;
 using Runner.Enemy;
 using Runner.Effects;
+using Runner.Save;
 
 namespace Runner.Player.Core
 {
@@ -204,6 +205,7 @@ namespace Runner.Player.Core
             UpdateHandlers(dt);
             UpdateMovement(dt);
             UpdateRunDistance();
+            UpdateTracking(dt);
 
             CheckLanding();
             CheckBufferedJump();
@@ -247,6 +249,12 @@ namespace Runner.Player.Core
             runDistance = (transform.position.z - startPosition.z) / 2;
         }
 
+        private void UpdateTracking(float dt)
+        {
+            SaveManager.AddPlayTime(dt);
+            SaveManager.UpdateAutoSave(dt);
+        }
+
         private void CheckLanding()
         {
             if (motor.JustLanded)
@@ -259,6 +267,7 @@ namespace Runner.Player.Core
         public void OnBulletBlocked()
         {
             playerAnimator?.PlayBlockHitReaction();
+            SaveManager.AddBulletDeflected();
             OnBlockPerformed?.Invoke();
         }
 
@@ -272,6 +281,7 @@ namespace Runner.Player.Core
                 visual?.PlayJumpSquash();
                 playerAnimator?.PlayJumpAnimation();
                 Game.Instance?.Sound?.PlayJump();
+                SaveManager.AddJumpPerformed();
             }
         }
 
@@ -291,6 +301,7 @@ namespace Runner.Player.Core
                 motor.SetVerticalVelocity(velocity);
                 visual?.PlayJumpSquash();
                 playerAnimator?.PlayJumpAnimation();
+                SaveManager.AddJumpPerformed();
 
                 if (isDoubleJump)
                     Game.Instance?.Sound?.PlayDoubleJump();

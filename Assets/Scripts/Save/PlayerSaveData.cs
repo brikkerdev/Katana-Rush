@@ -14,6 +14,11 @@ namespace Runner.Save
         public int totalDashesUsed;
         public int totalGamesPlayed;
         public int totalCoinsCollected;
+        public int totalBulletsDeflected;
+        public int totalJumpsPerformed;
+        public float totalPlayTime;
+        public int longestKillStreak;
+        public int currentKillStreak;
         public string equippedKatanaId;
         public List<string> ownedKatanaIds = new List<string>();
     }
@@ -23,6 +28,8 @@ namespace Runner.Save
         private const string SAVE_KEY = "PlayerSaveData";
         private static PlayerSaveData cachedData;
         private static bool isDirty;
+        private static float autoSaveTimer;
+        private const float AUTO_SAVE_INTERVAL = 30f;
 
         public static PlayerSaveData Data
         {
@@ -73,6 +80,7 @@ namespace Runner.Save
             PlayerPrefs.SetString(SAVE_KEY, json);
             PlayerPrefs.Save();
             isDirty = false;
+            autoSaveTimer = 0f;
         }
 
         public static void MarkDirty()
@@ -84,6 +92,17 @@ namespace Runner.Save
         public static void SaveIfDirty()
         {
             if (isDirty)
+            {
+                Save();
+            }
+        }
+
+        public static void UpdateAutoSave(float deltaTime)
+        {
+            if (!isDirty) return;
+
+            autoSaveTimer += deltaTime;
+            if (autoSaveTimer >= AUTO_SAVE_INTERVAL)
             {
                 Save();
             }
@@ -145,12 +164,52 @@ namespace Runner.Save
         public static void AddEnemyKill()
         {
             Data.totalEnemiesKilled++;
+            Data.currentKillStreak++;
+
+            if (Data.currentKillStreak > Data.longestKillStreak)
+            {
+                Data.longestKillStreak = Data.currentKillStreak;
+            }
+
             MarkDirty();
+        }
+
+        public static void ResetKillStreak()
+        {
+            Data.currentKillStreak = 0;
+        }
+
+        public static int GetCurrentKillStreak()
+        {
+            return Data.currentKillStreak;
+        }
+
+        public static int GetLongestKillStreak()
+        {
+            return Data.longestKillStreak;
         }
 
         public static void AddDashUsed()
         {
             Data.totalDashesUsed++;
+            MarkDirty();
+        }
+
+        public static void AddBulletDeflected()
+        {
+            Data.totalBulletsDeflected++;
+            MarkDirty();
+        }
+
+        public static void AddJumpPerformed()
+        {
+            Data.totalJumpsPerformed++;
+            MarkDirty();
+        }
+
+        public static void AddPlayTime(float seconds)
+        {
+            Data.totalPlayTime += seconds;
             MarkDirty();
         }
 
@@ -175,6 +234,16 @@ namespace Runner.Save
                     return Data.totalGamesPlayed;
                 case ChallengeType.CoinsCollected:
                     return Data.totalCoinsCollected;
+                case ChallengeType.BulletsDeflected:
+                    return Data.totalBulletsDeflected;
+                case ChallengeType.JumpsPerformed:
+                    return Data.totalJumpsPerformed;
+                case ChallengeType.PlayTime:
+                    return Data.totalPlayTime;
+                case ChallengeType.HighScore:
+                    return Data.highScore;
+                case ChallengeType.LongestKillStreak:
+                    return Data.longestKillStreak;
                 default:
                     return 0f;
             }
@@ -222,6 +291,11 @@ namespace Runner.Save
         EnemiesKilled,
         DashesUsed,
         GamesPlayed,
-        CoinsCollected
+        CoinsCollected,
+        BulletsDeflected,
+        JumpsPerformed,
+        PlayTime,
+        HighScore,
+        LongestKillStreak
     }
 }

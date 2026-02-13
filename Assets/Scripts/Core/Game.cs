@@ -1,17 +1,18 @@
-using UnityEngine;
-using System;
-using Runner.Input;
-using Runner.Player;
-using Runner.LevelGeneration;
-using Runner.CameraSystem;
-using Runner.Inventory;
-using Runner.Player.Data;
-using Runner.Enemy;
-using Runner.Save;
-using Runner.Environment;
-using Runner.Effects;
-using Runner.Player.Core;
 using Runner.Audio;
+using Runner.CameraSystem;
+using Runner.Effects;
+using Runner.Enemy;
+using Runner.Environment;
+using Runner.Input;
+using Runner.Inventory;
+using Runner.LevelGeneration;
+using Runner.Player;
+using Runner.Player.Core;
+using Runner.Player.Data;
+using Runner.Save;
+using Runner.UI;
+using System;
+using UnityEngine;
 
 namespace Runner.Core
 {
@@ -31,6 +32,7 @@ namespace Runner.Core
         [SerializeField] private FogController fogControllerPrefab;
         [SerializeField] private ParticleController particleControllerPrefab;
         [SerializeField] private SoundController soundControllerPrefab;
+        [SerializeField] private DayNightUiController dayNightUIControllerPrefab;
 
         [Header("Scene References")]
         [SerializeField] private Transform playerSpawnPoint;
@@ -64,6 +66,7 @@ namespace Runner.Core
         public FogController FogController { get; private set; }
         public CameraManager CameraManager => cameraManager;
         public CameraEffects CameraEffects => cameraEffects;
+        public DayNightUiController DayNightUIController { get; private set; }
 
         public GameState State { get; private set; }
         public float GameSpeed { get; private set; } = 1f;
@@ -88,6 +91,7 @@ namespace Runner.Core
         public event Action<int> OnMultiplierChanged;
         public event Action<bool> OnMagnetChanged;
         public event Action<bool> OnSpeedBoostChanged;
+        public event Action<int> OnScoreChanged;
 
         private void Awake()
         {
@@ -112,6 +116,7 @@ namespace Runner.Core
             CreateInputReader();
             CreateBulletPool();
             CreateDayNightCycle();
+            CreateDayNightUIController();
             CreatePlayer();
             CreateBiomeManager();
             CreateLevelGenerator();
@@ -120,9 +125,11 @@ namespace Runner.Core
             InitializeCamera();
             SubscribeToEvents();
 
+            Sound?.StartMusic();
+
             State = GameState.Ready;
-            OnGameInitialized?.Invoke();
         }
+
 
         private void FindSceneReferences()
         {
@@ -136,6 +143,30 @@ namespace Runner.Core
                 if (sunLight == null) sunLight = sceneSetup.SunLight;
                 if (moonLight == null) moonLight = sceneSetup.MoonLight;
             }
+        }
+
+        // Add method
+        private void CreateDayNightUIController()
+        {
+            if (DayNightUiController.Instance != null)
+            {
+                DayNightUIController = DayNightUiController.Instance;
+                DayNightUIController.Initialize(DayNightCycle);
+                return;
+            }
+
+            if (dayNightUIControllerPrefab != null)
+            {
+                DayNightUIController = Instantiate(dayNightUIControllerPrefab);
+            }
+            else
+            {
+                var go = new GameObject("DayNightUIController");
+                DayNightUIController = go.AddComponent<DayNightUiController>();
+            }
+
+            DayNightUIController.name = "DayNightUIController";
+            DayNightUIController.Initialize(DayNightCycle);
         }
 
         private void CreateSoundController()
@@ -160,9 +191,11 @@ namespace Runner.Core
 
             float savedSfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
             float savedMusic = PlayerPrefs.GetFloat("MusicVolume", 1f);
+
             Sound.SfxVolume = savedSfx;
             Sound.UiVolume = savedSfx;
-            Sound.MasterVolume = savedMusic;
+            Sound.MusicVolume = savedMusic;
+            Sound.MasterVolume = 1f;
         }
 
         private void CreateParticleController()
@@ -306,6 +339,7 @@ namespace Runner.Core
             if (FogController.Instance != null)
             {
                 FogController = FogController.Instance;
+                FogController.Initialize(DayNightCycle, BiomeManager);
                 return;
             }
 
@@ -448,7 +482,11 @@ namespace Runner.Core
             cameraEffects?.PlayDeathEffect();
             Sound?.PlayDeath();
             Sound?.PlayGameOver();
+            Sound?.SetMusicGameplay(false);
             ResetPowerups();
+            SaveManager.ResetKillStreak();
+            SaveManager.AddDistance(RunDistance);
+            SaveManager.SaveIfDirty();
             OnGameOver?.Invoke();
         }
 
@@ -457,6 +495,7 @@ namespace Runner.Core
             State = GameState.Playing;
             cameraManager?.SetState(CameraState.Gameplay);
             Sound?.PlayRevive();
+            Sound?.SetMusicGameplay(true);
         }
 
         private void HandlePresetChanged(PlayerPreset preset)
@@ -481,12 +520,15 @@ namespace Runner.Core
             Score = 0;
             lastMilestone = 0;
             ResetPowerups();
+            SaveManager.ResetKillStreak();
 
             Player?.StartRunning();
             InputReader?.EnableGameplayInput();
             cameraManager?.SetState(CameraState.Gameplay);
 
             Sound?.PlayGameStart();
+            Sound?.SetMusicGameplay(true);
+            OnScoreChanged?.Invoke(Score);
             OnGameStarted?.Invoke();
         }
 
@@ -524,6 +566,7 @@ namespace Runner.Core
             cameraManager?.SetState(CameraState.Death);
             cameraEffects?.PlayDeathEffect();
 
+            Sound?.SetMusicGameplay(false);
             OnGameOver?.Invoke();
         }
 
@@ -533,6 +576,7 @@ namespace Runner.Core
             Score = 0;
             lastMilestone = 0;
             ResetPowerups();
+            SaveManager.ResetKillStreak();
 
             BulletPool?.ReturnAllBullets();
             Player?.Reset();
@@ -550,6 +594,7 @@ namespace Runner.Core
             }
 
             cameraManager?.SetState(CameraState.Menu);
+            Sound?.SetMusicGameplay(false);
             State = GameState.Ready;
 
             OnGameRestarted?.Invoke();
@@ -558,10 +603,10 @@ namespace Runner.Core
         public void AddScore(int amount)
         {
             int multipliedAmount = amount * ScoreMultiplier;
-            int previousScore = Score;
             Score += multipliedAmount;
 
             Sound?.PlayScoreTick();
+            OnScoreChanged?.Invoke(Score);
 
             int currentMilestone = Score / scoreMilestoneInterval;
             if (currentMilestone > lastMilestone)

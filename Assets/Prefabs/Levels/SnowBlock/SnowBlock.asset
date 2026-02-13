@@ -31,7 +31,7 @@ MonoBehaviour:
   enemySpawnMultiplier: 1
   overrideFog: 1
   fogColor: {r: 0.6273585, g: 0.9564828, b: 1, a: 1}
-  fogDensity: 0.003
+  fogDensity: 1
   ambientColor: {r: 0.7122642, g: 0.95172757, b: 1, a: 1}
   ambientIntensity: 1
   skyDayTint: {r: 1, g: 1, b: 1, a: 1}
