@@ -1,4 +1,6 @@
 using UnityEngine;
+using DG.Tweening;
+using Runner.LevelGeneration;
 
 namespace Runner.Environment
 {
@@ -33,10 +35,17 @@ namespace Runner.Environment
 
         private Transform pivot;
         private float startTime;
+        private bool isPaused;
+        private float overrideTargetTime;
+        private float timeBeforeOverride;
+        private bool isOverrideActive;
+        private Tween timeTransitionTween;
 
         public float CurrentTime => currentTime;
         public float CurrentHour => currentTime * 24f;
         public bool IsDay => currentTime > 0.25f && currentTime < 0.75f;
+        public bool IsPaused => isPaused;
+        public bool IsOverrideActive => isOverrideActive;
 
         private void Awake()
         {
@@ -137,7 +146,10 @@ namespace Runner.Environment
 
         private void Update()
         {
-            AdvanceTime();
+            if (!isPaused)
+            {
+                AdvanceTime();
+            }
             UpdateLighting();
         }
 
@@ -241,6 +253,99 @@ namespace Runner.Environment
             return Mathf.Lerp(0.6f, 1f, Mathf.Clamp01(peakFactor)) * maxAmbientIntensity;
         }
 
+        public void ApplyBiomeTimeOverride(BiomeData biome)
+        {
+            if (biome == null) return;
+
+            KillTimeTransition();
+
+            if (!biome.HasTimeOverride)
+            {
+                if (isOverrideActive)
+                {
+                    ReleaseTimeOverride(biome.TimeTransitionDuration);
+                }
+                return;
+            }
+
+            float targetTime = biome.GetForcedTimeValue();
+            if (targetTime < 0f) return;
+
+            if (!isOverrideActive)
+            {
+                timeBeforeOverride = currentTime;
+            }
+
+            isOverrideActive = true;
+            overrideTargetTime = targetTime;
+
+            float duration = biome.TimeTransitionDuration;
+
+            if (duration <= 0f)
+            {
+                currentTime = targetTime;
+                isPaused = biome.PauseCycleDuringOverride;
+                UpdateLighting();
+                return;
+            }
+
+            float from = currentTime;
+            float to = targetTime;
+
+            float forwardDist = (to - from + 1f) % 1f;
+            float backwardDist = (from - to + 1f) % 1f;
+            bool goForward = forwardDist <= backwardDist;
+
+            timeTransitionTween = DOTween.To(
+                () => currentTime,
+                x =>
+                {
+                    currentTime = x % 1f;
+                    if (currentTime < 0f) currentTime += 1f;
+                },
+                goForward ? from + forwardDist : from - backwardDist,
+                duration
+            )
+            .SetEase(Ease.InOutSine)
+            .SetLink(gameObject)
+            .OnComplete(() =>
+            {
+                currentTime = targetTime;
+                isPaused = biome.PauseCycleDuringOverride;
+            });
+
+            if (showDebug)
+            {
+                Debug.Log($"[DayNightCycle] Override to {biome.TimeOverride} (time={targetTime:F2}) over {duration}s");
+            }
+        }
+
+        public void ReleaseTimeOverride(float transitionDuration = 2f)
+        {
+            if (!isOverrideActive) return;
+
+            KillTimeTransition();
+
+            isOverrideActive = false;
+            isPaused = false;
+
+            if (transitionDuration <= 0f)
+            {
+                return;
+            }
+
+            if (showDebug)
+            {
+                Debug.Log($"[DayNightCycle] Releasing override, resuming cycle");
+            }
+        }
+
+        private void KillTimeTransition()
+        {
+            timeTransitionTween?.Kill();
+            timeTransitionTween = null;
+        }
+
         public void SetTime(float normalizedTime)
         {
             currentTime = Mathf.Repeat(normalizedTime, 1f);
@@ -252,14 +357,33 @@ namespace Runner.Environment
             SetTime(hour / 24f);
         }
 
+        public void Pause()
+        {
+            isPaused = true;
+        }
+
+        public void Resume()
+        {
+            if (!isOverrideActive)
+            {
+                isPaused = false;
+            }
+        }
+
         public void Reset()
         {
+            KillTimeTransition();
+
             currentTime = startTime;
+            isPaused = false;
+            isOverrideActive = false;
+
             UpdateLighting();
         }
 
         private void OnDestroy()
         {
+            KillTimeTransition();
             if (Instance == this) Instance = null;
         }
 

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433a101e3db177c448725f70a500d36f, type: 3}
+  m_Name: Waves
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
+  biomeName: Waves
+  debugColor: {r: 1, g: 1, b: 1, a: 1}
+  segments:
+  - {fileID: 6844235478968440788, guid: 54bf153df453a3a4d9a4e3d156af6ab2, type: 3}
+  - {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
+  transitions:
+  - targetBiome: {fileID: 11400000, guid: a7b40b39fec145e45804afe0c3288f71, type: 2}
+    exitSegments:
+    - {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
+  environmentPrefab: {fileID: 5436482676337235900, guid: 54ecb96c48a8af940b2ad68cc8c94cbc, type: 3}
+  environmentOffset: {x: 0, y: 0, z: 0}
+  minLength: 1600
+  maxLength: 1600
+  minDifficulty: 0
+  maxDifficulty: 1
+  enemySpawnMultiplier: 1
+  overrideFog: 1
+  fogColor: {r: 1, g: 0.64705884, b: 0.94194394, a: 1}
+  fogDensity: 0.002
+  ambientColor: {r: 0.98739606, g: 0.5803922, b: 1, a: 1}
+  ambientIntensity: 0.1
+  skyDayTint: {r: 1, g: 0.3726415, b: 0.6911885, a: 1}
+  skyNightTint: {r: 0.2924528, g: 0, b: 0.2811711, a: 1}
+  skyTintStrength: 0.75

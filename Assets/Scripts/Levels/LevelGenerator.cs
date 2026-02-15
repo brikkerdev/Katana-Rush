@@ -12,6 +12,11 @@ namespace Runner.LevelGeneration
         [SerializeField] private float despawnDistance = 30f;
         [SerializeField] private int initialSegmentCount = 5;
 
+        [Header("Reveal Animation")]
+        [SerializeField] private bool enableRevealAnimation = true;
+        [SerializeField] private float revealStaggerBetweenSegments = 0.1f;
+        [SerializeField] private float initialRevealDelay = 0.2f;
+
         [Header("Pooling")]
         [SerializeField] private bool usePooling = true;
         [SerializeField] private int poolSizePerSegment = 3;
@@ -28,9 +33,11 @@ namespace Runner.LevelGeneration
         private float nextSpawnZ;
         private LevelSegment lastSpawnedSegment;
         private bool isInitialized;
+        private int spawnCounter;
 
         private List<ActiveSegment> activeSegments = new List<ActiveSegment>();
-        private Dictionary<LevelSegment, Queue<LevelSegment>> segmentPools = new Dictionary<LevelSegment, Queue<LevelSegment>>();
+        private Dictionary<LevelSegment, Queue<LevelSegment>> segmentPools =
+            new Dictionary<LevelSegment, Queue<LevelSegment>>();
 
         private struct ActiveSegment
         {
@@ -46,6 +53,7 @@ namespace Runner.LevelGeneration
         {
             player = playerTransform;
             biomeManager = manager;
+            spawnCounter = 0;
 
             FindSpawners();
             GenerateInitialSegments();
@@ -61,30 +69,28 @@ namespace Runner.LevelGeneration
         private void FindSpawners()
         {
             if (enemySpawner == null)
-            {
                 enemySpawner = FindFirstObjectByType<EnemySpawner>();
-            }
 
             if (collectibleSpawner == null)
-            {
                 collectibleSpawner = FindFirstObjectByType<CollectibleSpawner>();
-            }
         }
 
         private void GenerateInitialSegments()
         {
             nextSpawnZ = 0f;
+            spawnCounter = 0;
 
             for (int i = 0; i < initialSegmentCount; i++)
             {
-                SpawnNextSegment();
+                SpawnNextSegment(isInitialSpawn: true);
             }
+
+            spawnCounter = 0;
         }
 
         private void Update()
         {
-            if (!isInitialized) return;
-            if (player == null) return;
+            if (!isInitialized || player == null) return;
 
             SpawnSegmentsAhead();
             DespawnSegmentsBehind();
@@ -97,7 +103,7 @@ namespace Runner.LevelGeneration
 
             while (nextSpawnZ < threshold && safety > 0)
             {
-                SpawnNextSegment();
+                SpawnNextSegment(isInitialSpawn: false);
                 safety--;
             }
         }
@@ -116,7 +122,7 @@ namespace Runner.LevelGeneration
             collectibleSpawner?.DespawnCollectiblesBeforeZ(threshold);
         }
 
-        private void SpawnNextSegment()
+        private void SpawnNextSegment(bool isInitialSpawn)
         {
             if (biomeManager == null)
             {
@@ -139,6 +145,23 @@ namespace Runner.LevelGeneration
             instance.transform.rotation = Quaternion.identity;
             instance.gameObject.SetActive(true);
 
+            if (enableRevealAnimation)
+            {
+                float delay;
+
+                if (isInitialSpawn)
+                {
+                    delay = initialRevealDelay + spawnCounter * revealStaggerBetweenSegments;
+                }
+                else
+                {
+                    delay = 0f;
+                }
+
+                PlaySegmentReveal(instance, delay);
+                spawnCounter++;
+            }
+
             var active = new ActiveSegment
             {
                 Instance = instance,
@@ -148,7 +171,6 @@ namespace Runner.LevelGeneration
             };
 
             activeSegments.Add(active);
-
             SpawnSegmentContent(instance);
 
             if (showDebug)
@@ -159,6 +181,18 @@ namespace Runner.LevelGeneration
 
             nextSpawnZ += instance.Length;
             lastSpawnedSegment = prefab;
+        }
+
+        private void PlaySegmentReveal(LevelSegment segment, float delay)
+        {
+            SegmentReveal reveal = segment.GetComponent<SegmentReveal>();
+
+            if (reveal == null)
+            {
+                reveal = segment.gameObject.AddComponent<SegmentReveal>();
+            }
+
+            reveal.PlayReveal(delay);
         }
 
         private void EnsureSegmentPooled(LevelSegment prefab)
@@ -191,6 +225,9 @@ namespace Runner.LevelGeneration
 
         private void ReturnSegmentToPool(ActiveSegment segment)
         {
+            SegmentReveal reveal = segment.Instance.GetComponent<SegmentReveal>();
+            reveal?.ResetReveal();
+
             segment.Instance.ResetSegment();
             segment.Instance.gameObject.SetActive(false);
 
@@ -230,6 +267,7 @@ namespace Runner.LevelGeneration
 
             nextSpawnZ = 0f;
             lastSpawnedSegment = null;
+            spawnCounter = 0;
 
             GenerateInitialSegments();
 

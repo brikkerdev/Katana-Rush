@@ -122,6 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 990439703226177419}
   - component: {fileID: 2361544665937102644}
+  - component: {fileID: 2090306924222561665}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -159,6 +160,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683ceeeabfe8f6e4c9ec3253c78a85a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeEnvironment
+--- !u!114 &2090306924222561665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5436482676337235900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c84952f9fad1bd24dae93a5bbb5f3ea0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.EnvironmentReveal
+  revealDuration: 1.2
+  dropDistance: 15
+  revealEase: 9
+  animateTarget: {fileID: 990439703226177419}
+  revealGroups: []
 --- !u!1001 &7290728602621293693
 PrefabInstance:
   m_ObjectHideFlags: 0

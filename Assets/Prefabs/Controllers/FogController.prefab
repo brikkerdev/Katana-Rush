@@ -48,7 +48,8 @@ MonoBehaviour:
   fogStartDistance: 10
   fogEndDistance: 100
   fogHeightFalloff: 0.1
-  fogBaseHeight: 0
+  fogBaseHeight: 100
+  sphereRadius: 500
   nightFogDensityMultiplier: 0.7
   nightFogColorDarkening: 0.3
   dawnDuskFogTint: {r: 1, g: 0.7, b: 0.5, a: 1}

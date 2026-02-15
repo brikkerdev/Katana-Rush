@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433a101e3db177c448725f70a500d36f, type: 3}
+  m_Name: Roofs
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
+  biomeName: Roofs
+  debugColor: {r: 1, g: 1, b: 1, a: 1}
+  segments:
+  - {fileID: 6844235478968440788, guid: 947c1012165b36449b3430cebdc63835, type: 3}
+  - {fileID: 6844235478968440788, guid: 87c25e18268bd3746b2ce8cac83c17ee, type: 3}
+  transitions:
+  - targetBiome: {fileID: 11400000, guid: 3bfb43a40c035694f89a37a997a852e4, type: 2}
+    exitSegments:
+    - {fileID: 6844235478968440788, guid: 87c25e18268bd3746b2ce8cac83c17ee, type: 3}
+  environmentPrefab: {fileID: 5436482676337235900, guid: 6389c12049ed8ce4683ea3feeccf2892, type: 3}
+  environmentOffset: {x: 0, y: 0, z: 0}
+  minLength: 1600
+  maxLength: 1600
+  minDifficulty: 0
+  maxDifficulty: 1
+  enemySpawnMultiplier: 1
+  overrideFog: 1
+  fogColor: {r: 0.6745098, g: 0.81108284, b: 1, a: 1}
+  fogDensity: 0.002
+  ambientColor: {r: 0.8160377, g: 0.97643214, b: 1, a: 1}
+  ambientIntensity: 0.1
+  skyDayTint: {r: 1, g: 1, b: 1, a: 1}
+  skyNightTint: {r: 1, g: 1, b: 1, a: 1}
+  skyTintStrength: 0
+  timeOverride: 0
+  forcedTime: 0.5
+  pauseCycleDuringOverride: 1
+  timeTransitionDuration: 2

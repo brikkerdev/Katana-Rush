@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 0
+  m_Fog: 1
   m_FogColor: {r: 0.6273585, g: 0.9564828, b: 1, a: 1}
   m_FogMode: 2
   m_FogDensity: 0.003
@@ -30,7 +30,7 @@ RenderSettings:
   m_HaloStrength: 1
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
-  m_HaloTexture: {fileID: 2800000, guid: 15819cb5c0b8fe14a8ad3ecc27f6fa94, type: 3}
+  m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
@@ -9740,7 +9740,7 @@ MonoBehaviour:
   useDayNightCycle: 1
   useSkyController: 1
   useFogController: 1
-  scoreMilestoneInterval: 1000
+  scoreMilestoneInterval: 1600
   speedBoostMultiplier: 1.3
 --- !u!4 &962742105
 Transform:
@@ -17694,7 +17694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf24daa26c4f4b4b99a2d4cbb804549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.SceneSetup
-  startingBiome: {fileID: 11400000, guid: 3bfb43a40c035694f89a37a997a852e4, type: 2}
+  startingBiome: {fileID: 11400000, guid: a7b40b39fec145e45804afe0c3288f71, type: 2}
   sunLight: {fileID: 410087040}
   moonLight: {fileID: 122156966}
 --- !u!4 &2093762285

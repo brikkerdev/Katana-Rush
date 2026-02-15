@@ -76,6 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8145581671520240927}
   - component: {fileID: 6844235478968440788}
+  - component: {fileID: -6106389875762990493}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -100,8 +101,6 @@ Transform:
   - {fileID: 9169945971117932876}
   - {fileID: 4636772634073919617}
   - {fileID: 8089072778848887209}
-  - {fileID: 3278976066072285298}
-  - {fileID: 1311857168166941409}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6844235478968440788
@@ -128,6 +127,26 @@ MonoBehaviour:
   - {fileID: 4628678628183756058}
   - {fileID: 7665504441078318040}
   - {fileID: 5229559344580073153}
+--- !u!114 &-6106389875762990493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290709317113475879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5fed170bba9a62468b9d6447e22b3c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.SegmentReveal
+  revealDuration: 0.6
+  dropDistance: 8
+  revealEase: 27
+  overshoot: 1.2
+  visualRoot: {fileID: 8089072778848887209}
+  staggerChildren: 0
+  staggerDelay: 0.05
+  maxStaggeredChildren: 10
 --- !u!1 &1650188065940374148
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,11 +206,11 @@ Transform:
   m_GameObject: {fileID: 2121491691410695488}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: -17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8145581671520240927}
+  m_Father: {fileID: 8089072778848887209}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6641144969187427862
 GameObject:
@@ -221,11 +240,11 @@ Transform:
   m_GameObject: {fileID: 6641144969187427862}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 50}
+  m_LocalPosition: {x: 0, y: 0, z: 23}
   m_LocalScale: {x: 1.5, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8145581671520240927}
+  m_Father: {fileID: 8089072778848887209}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6067523535953787556
 MeshFilter:
@@ -380,6 +399,8 @@ Transform:
   - {fileID: 1116483392290871566}
   - {fileID: 9142060211905585269}
   - {fileID: 7183377357339076247}
+  - {fileID: 3278976066072285298}
+  - {fileID: 1311857168166941409}
   m_Father: {fileID: 8145581671520240927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &143851629470732587

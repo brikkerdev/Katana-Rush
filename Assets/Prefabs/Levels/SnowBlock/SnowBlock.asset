@@ -19,7 +19,7 @@ MonoBehaviour:
   - {fileID: 6844235478968440788, guid: 9c9b439d072acd84c981b106ce9bc4a1, type: 3}
   - {fileID: 6844235478968440788, guid: 7cff71f595e8e5d4381002a6b650072a, type: 3}
   transitions:
-  - targetBiome: {fileID: 11400000, guid: 83fa665adb91367448cd12bf219cdbf2, type: 2}
+  - targetBiome: {fileID: 11400000, guid: 78bb5eb3b8728784889bb9e49474c655, type: 2}
     exitSegments:
     - {fileID: 6844235478968440788, guid: b1e016f72f26380488b851eff80a3cf7, type: 3}
   environmentPrefab: {fileID: 7800426110740515453, guid: d611006a76996444c8f486607c461c0c, type: 3}
@@ -31,7 +31,7 @@ MonoBehaviour:
   enemySpawnMultiplier: 1
   overrideFog: 1
   fogColor: {r: 0.6273585, g: 0.9564828, b: 1, a: 1}
-  fogDensity: 1
+  fogDensity: 0.01
   ambientColor: {r: 0.7122642, g: 0.95172757, b: 1, a: 1}
   ambientIntensity: 1
   skyDayTint: {r: 1, g: 1, b: 1, a: 1}

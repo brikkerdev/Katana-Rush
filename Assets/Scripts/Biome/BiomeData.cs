@@ -43,6 +43,12 @@ namespace Runner.LevelGeneration
         [SerializeField] private Color skyNightTint = Color.white;
         [SerializeField, Range(0f, 1f)] private float skyTintStrength = 0f;
 
+        [Header("Day/Night Override")]
+        [SerializeField] private TimeOverrideMode timeOverride = TimeOverrideMode.None;
+        [SerializeField, Range(0f, 1f)] private float forcedTime = 0.5f;
+        [SerializeField] private bool pauseCycleDuringOverride = true;
+        [SerializeField] private float timeTransitionDuration = 2f;
+
         public string BiomeName => biomeName;
         public Color DebugColor => debugColor;
         public LevelSegment[] Segments => segments;
@@ -62,6 +68,30 @@ namespace Runner.LevelGeneration
         public Color SkyDayTint => skyDayTint;
         public Color SkyNightTint => skyNightTint;
         public float SkyTintStrength => skyTintStrength;
+        public TimeOverrideMode TimeOverride => timeOverride;
+        public float ForcedTime => forcedTime;
+        public bool PauseCycleDuringOverride => pauseCycleDuringOverride;
+        public float TimeTransitionDuration => timeTransitionDuration;
+        public bool HasTimeOverride => timeOverride != TimeOverrideMode.None;
+
+        public float GetForcedTimeValue()
+        {
+            switch (timeOverride)
+            {
+                case TimeOverrideMode.ForceDay:
+                    return 0.5f;
+                case TimeOverrideMode.ForceNight:
+                    return 0.0f;
+                case TimeOverrideMode.ForceSunrise:
+                    return 0.25f;
+                case TimeOverrideMode.ForceSunset:
+                    return 0.75f;
+                case TimeOverrideMode.Custom:
+                    return forcedTime;
+                default:
+                    return -1f;
+            }
+        }
 
         public float GetRandomLength()
         {
@@ -145,6 +175,16 @@ namespace Runner.LevelGeneration
             if (minDifficulty > maxDifficulty) maxDifficulty = minDifficulty;
         }
 #endif
+    }
+
+    public enum TimeOverrideMode
+    {
+        None,
+        ForceDay,
+        ForceNight,
+        ForceSunrise,
+        ForceSunset,
+        Custom
     }
 
     [System.Serializable]

@@ -1,6 +1,7 @@
-using UnityEngine;
+using Runner.Environment;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Runner.LevelGeneration
 {
@@ -79,6 +80,11 @@ namespace Runner.LevelGeneration
 
             SpawnEnvironmentForBiome(currentBiome, 0f);
 
+            if (DayNightCycle.Instance != null)
+            {
+                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
+            }
+
             IsInitialized = true;
 
             if (showDebug)
@@ -137,6 +143,11 @@ namespace Runner.LevelGeneration
             visualNextBiome = null;
 
             OnBiomeChanged?.Invoke(visualCurrentBiome);
+
+            if (DayNightCycle.Instance != null)
+            {
+                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
+            }
 
             if (showDebug)
             {
@@ -261,9 +272,7 @@ namespace Runner.LevelGeneration
             if (biome.EnvironmentPrefab == null)
             {
                 if (showDebug)
-                {
                     Debug.Log($"[BiomeManager] {biome.BiomeName} has no environment prefab");
-                }
                 return;
             }
 
@@ -272,9 +281,7 @@ namespace Runner.LevelGeneration
 
             BiomeEnvironment environment = go.GetComponent<BiomeEnvironment>();
             if (environment == null)
-            {
                 environment = go.AddComponent<BiomeEnvironment>();
-            }
 
             Vector3 position = new Vector3(
                 biome.EnvironmentOffset.x,
@@ -289,10 +296,14 @@ namespace Runner.LevelGeneration
             environment.Setup(biome, zPosition);
             activeEnvironments.Add(environment);
 
-            if (showDebug)
+            EnvironmentReveal reveal = go.GetComponent<EnvironmentReveal>();
+            if (reveal != null)
             {
-                Debug.Log($"[BiomeManager] Spawned {biome.BiomeName} environment at Z={zPosition}");
+                reveal.PlayReveal(0.1f);
             }
+
+            if (showDebug)
+                Debug.Log($"[BiomeManager] Spawned {biome.BiomeName} environment at Z={zPosition}");
         }
 
         private void CleanupOldEnvironments()
@@ -346,6 +357,11 @@ namespace Runner.LevelGeneration
             visualTransitionPending = false;
 
             SpawnEnvironmentForBiome(currentBiome, 0f);
+
+            if (DayNightCycle.Instance != null)
+            {
+                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
+            }
 
             OnBiomeChanged?.Invoke(visualCurrentBiome);
 
