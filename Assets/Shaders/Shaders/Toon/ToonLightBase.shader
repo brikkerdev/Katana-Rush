@@ -2,8 +2,14 @@ Shader "Lpk/LightModel/ToonLightBase"
 {
     Properties
     {
+        [Enum(Opaque,0,Transparent,1)] _SurfaceType ("Surface Type", Float) = 0
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 0
+        [Enum(Off,0,On,1)] _ZWrite ("ZWrite", Float) = 1
+
         _BaseMap            ("Texture", 2D)                       = "white" {}
         _BaseColor          ("Color", Color)                      = (0.5,0.5,0.5,1)
+        _Alpha              ("Alpha", Range(0, 1))                = 1
 
         [Space]
         _EmissionMap        ("Emission Map", 2D)                  = "black" {}
@@ -39,12 +45,16 @@ Shader "Lpk/LightModel/ToonLightBase"
             Name "Forward"
             Tags { "LightMode" = "ForwardBase" }
 
+            Blend [_SrcBlend] [_DstBlend]
+            ZWrite [_ZWrite]
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma multi_compile_fwdbase
             #pragma multi_compile_instancing
+            #pragma shader_feature_local _SURFACE_TRANSPARENT
 
             #include "UnityCG.cginc"
             #include "AutoLight.cginc"
@@ -55,6 +65,7 @@ Shader "Lpk/LightModel/ToonLightBase"
 
             UNITY_INSTANCING_BUFFER_START(Props)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
+                UNITY_DEFINE_INSTANCED_PROP(float, _Alpha)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _EmissionColor)
                 UNITY_DEFINE_INSTANCED_PROP(float, _EmissionStrength)
                 UNITY_DEFINE_INSTANCED_PROP(float, _ShadowStep)
@@ -112,6 +123,7 @@ Shader "Lpk/LightModel/ToonLightBase"
                 UNITY_SETUP_INSTANCE_ID(i);
 
                 float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(Props, _BaseColor);
+                float alpha = UNITY_ACCESS_INSTANCED_PROP(Props, _Alpha);
                 float4 emissionColor = UNITY_ACCESS_INSTANCED_PROP(Props, _EmissionColor);
                 float emissionStrength = UNITY_ACCESS_INSTANCED_PROP(Props, _EmissionStrength);
                 float shadowStep = UNITY_ACCESS_INSTANCED_PROP(Props, _ShadowStep);
@@ -135,6 +147,8 @@ Shader "Lpk/LightModel/ToonLightBase"
                 NL = NL * 0.5 + 0.5;
 
                 float4 baseMap = tex2D(_BaseMap, i.uv);
+
+                float finalAlpha = baseMap.a * baseColor.a * alpha;
 
                 float shadow = SHADOW_ATTENUATION(i);
 
@@ -160,7 +174,7 @@ Shader "Lpk/LightModel/ToonLightBase"
 
                 UNITY_APPLY_FOG(i.fogCoord, finalColor);
 
-                return float4(finalColor, 1.0);
+                return float4(finalColor, finalAlpha);
             }
             ENDCG
         }
@@ -188,6 +202,7 @@ Shader "Lpk/LightModel/ToonLightBase"
 
             UNITY_INSTANCING_BUFFER_START(Props)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
+                UNITY_DEFINE_INSTANCED_PROP(float, _Alpha)
                 UNITY_DEFINE_INSTANCED_PROP(float, _ShadowStep)
                 UNITY_DEFINE_INSTANCED_PROP(float, _ShadowStepSmooth)
                 UNITY_DEFINE_INSTANCED_PROP(float, _SpecularStep)
@@ -240,6 +255,7 @@ Shader "Lpk/LightModel/ToonLightBase"
                 UNITY_SETUP_INSTANCE_ID(i);
 
                 float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(Props, _BaseColor);
+                float alpha = UNITY_ACCESS_INSTANCED_PROP(Props, _Alpha);
                 float shadowStep = UNITY_ACCESS_INSTANCED_PROP(Props, _ShadowStep);
                 float shadowStepSmooth = UNITY_ACCESS_INSTANCED_PROP(Props, _ShadowStepSmooth);
                 float specularStep = UNITY_ACCESS_INSTANCED_PROP(Props, _SpecularStep);
@@ -271,6 +287,8 @@ Shader "Lpk/LightModel/ToonLightBase"
 
                 float4 baseMap = tex2D(_BaseMap, i.uv);
 
+                float finalAlpha = baseMap.a * baseColor.a * alpha;
+
                 float shadowNL = smoothstep(shadowStep - shadowStepSmooth,
                                             shadowStep + shadowStepSmooth, NL);
 
@@ -284,7 +302,7 @@ Shader "Lpk/LightModel/ToonLightBase"
 
                 UNITY_APPLY_FOG(i.fogCoord, finalColor);
 
-                return float4(finalColor, 1.0);
+                return float4(finalColor, finalAlpha);
             }
             ENDCG
         }
@@ -295,11 +313,15 @@ Shader "Lpk/LightModel/ToonLightBase"
             Cull Front
             Tags { "LightMode" = "Always" }
 
+            Blend [_SrcBlend] [_DstBlend]
+            ZWrite [_ZWrite]
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_fog
             #pragma shader_feature_local _OUTLINE_ON
+            #pragma multi_compile_instancing
 
             #include "UnityCG.cginc"
 
@@ -307,21 +329,30 @@ Shader "Lpk/LightModel/ToonLightBase"
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
             {
                 float4 pos : SV_POSITION;
                 UNITY_FOG_COORDS(0)
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             float _OutlineWidth;
             float4 _OutlineColor;
 
+            UNITY_INSTANCING_BUFFER_START(OutlineProps)
+                UNITY_DEFINE_INSTANCED_PROP(float, _Alpha)
+            UNITY_INSTANCING_BUFFER_END(OutlineProps)
+
             v2f vert(appdata v)
             {
                 v2f o;
                 UNITY_INITIALIZE_OUTPUT(v2f, o);
+
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
 
                 #ifdef _OUTLINE_ON
                     float3 expandedPos = v.vertex.xyz + v.normal * _OutlineWidth * 0.1;
@@ -336,10 +367,13 @@ Shader "Lpk/LightModel/ToonLightBase"
 
             float4 frag(v2f i) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(i);
+
                 #ifdef _OUTLINE_ON
+                    float alpha = UNITY_ACCESS_INSTANCED_PROP(OutlineProps, _Alpha);
                     float3 finalColor = _OutlineColor.rgb;
                     UNITY_APPLY_FOG(i.fogCoord, finalColor);
-                    return float4(finalColor, 1.0);
+                    return float4(finalColor, _OutlineColor.a * alpha);
                 #else
                     discard;
                     return float4(0, 0, 0, 0);
@@ -366,15 +400,24 @@ Shader "Lpk/LightModel/ToonLightBase"
 
             #include "UnityCG.cginc"
 
+            sampler2D _BaseMap;
+
+            UNITY_INSTANCING_BUFFER_START(ShadowProps)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
+                UNITY_DEFINE_INSTANCED_PROP(float, _Alpha)
+            UNITY_INSTANCING_BUFFER_END(ShadowProps)
+
             struct appdata
             {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
+                float2 uv     : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
             {
+                float2 uv : TEXCOORD0;
                 V2F_SHADOW_CASTER;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -384,12 +427,22 @@ Shader "Lpk/LightModel/ToonLightBase"
                 v2f o;
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
+                o.uv = v.uv;
                 TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);
                 return o;
             }
 
             float4 frag(v2f i) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(i);
+
+                float4 baseColor = UNITY_ACCESS_INSTANCED_PROP(ShadowProps, _BaseColor);
+                float alpha = UNITY_ACCESS_INSTANCED_PROP(ShadowProps, _Alpha);
+                float texAlpha = tex2D(_BaseMap, i.uv).a;
+                float finalAlpha = texAlpha * baseColor.a * alpha;
+
+                clip(finalAlpha - 0.5);
+
                 SHADOW_CASTER_FRAGMENT(i);
             }
             ENDCG
@@ -397,4 +450,6 @@ Shader "Lpk/LightModel/ToonLightBase"
     }
 
     Fallback "Diffuse"
+
+    CustomEditor "ToonLightBaseInspector"
 }

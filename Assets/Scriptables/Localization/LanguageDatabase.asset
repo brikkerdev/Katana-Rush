@@ -313,6 +313,12 @@ MonoBehaviour:
       text: GO!
     - languageCode: ru
       text: "\u041F\u041E\u0413\u041D\u0410\u041B\u0418!"
+  - key: ui_highscore
+    translations:
+    - languageCode: en
+      text: highscore
+    - languageCode: ru
+      text: "\u0440\u0435\u043A\u043E\u0440\u0434"
   - key: ui_inventory
     translations:
     - languageCode: en

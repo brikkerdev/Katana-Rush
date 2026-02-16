@@ -49,6 +49,9 @@ MonoBehaviour:
   viewDistance: 200
   despawnDistance: 30
   initialSegmentCount: 3
+  enableRevealAnimation: 1
+  revealStaggerBetweenSegments: 0.1
+  initialRevealDelay: 0.2
   usePooling: 1
   poolSizePerSegment: 3
   enemySpawner: {fileID: -4214440399133520785}
@@ -90,7 +93,7 @@ MonoBehaviour:
   healthPackPrefab: {fileID: 0}
   speedBoostPrefab: {fileID: 0}
   magnetPrefab: {fileID: 0}
-  multiplierPrefab: {fileID: 0}
+  multiplierPrefab: {fileID: 8275622741553750974, guid: 95de016b2c0a8fc4d9588bd235433b7f, type: 3}
   coinPoolSize: 100
   powerUpPoolSize: 10
   powerUpChance: 0.1

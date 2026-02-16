@@ -145,7 +145,7 @@ namespace Runner.UI
             if (highScoreText != null)
             {
                 int highScore = SaveManager.GetHighScore();
-                highScoreText.text = $"BEST: {highScore}m";
+                highScoreText.text = $"BEST: {highScore}";
                 highScoreText.transform
                     .DOScale(1f, elementPopDuration)
                     .SetUpdate(true)

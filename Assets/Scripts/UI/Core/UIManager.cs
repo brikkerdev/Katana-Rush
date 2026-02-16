@@ -436,7 +436,7 @@ namespace Runner.UI
             float distance = Game.Instance != null ? Game.Instance.RunDistance : 0f;
             int score = Game.Instance != null ? Game.Instance.Score : 0;
 
-            bool isNewHighScore = SaveManager.TrySetHighScore((int)distance);
+            bool isNewHighScore = SaveManager.TrySetHighScore(score);
             SaveManager.AddDistance(distance);
             SaveManager.SaveIfDirty();
 

@@ -17,7 +17,6 @@ namespace Runner.UI
 
         [Header("Player Info")]
         [SerializeField] private TextMeshProUGUI highScoreText;
-        [SerializeField] private TextMeshProUGUI coinsText;
 
         [Header("Tween Settings")]
         [SerializeField] private float tapPulseMin = 0.4f;
@@ -118,16 +117,6 @@ namespace Runner.UI
                     .SetDelay(0.1f);
             }
 
-            if (coinsText != null)
-            {
-                coinsText.transform.localScale = Vector3.zero;
-                coinsText.transform
-                    .DOScale(1f, buttonPopDuration)
-                    .SetUpdate(true)
-                    .SetEase(Ease.OutBack)
-                    .SetDelay(0.2f);
-            }
-
             if (settingsButton != null)
             {
                 settingsButton.transform.localScale = Vector3.zero;
@@ -156,7 +145,6 @@ namespace Runner.UI
 
             if (tapToStartText != null) tapToStartText.transform.DOKill();
             if (highScoreText != null) highScoreText.transform.DOKill();
-            if (coinsText != null) coinsText.transform.DOKill();
             if (settingsButton != null) settingsButton.transform.DOKill();
             if (inventoryButton != null) inventoryButton.transform.DOKill();
         }
@@ -166,13 +154,7 @@ namespace Runner.UI
             if (highScoreText != null)
             {
                 int highScore = SaveManager.GetHighScore();
-                highScoreText.text = $"BEST: {highScore}m";
-            }
-
-            if (coinsText != null)
-            {
-                int coins = SaveManager.GetCoins();
-                coinsText.text = coins.ToString();
+                highScoreText.text = $"{highScore}";
             }
         }
 

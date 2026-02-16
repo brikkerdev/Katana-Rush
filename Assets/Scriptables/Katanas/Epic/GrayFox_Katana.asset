@@ -15,11 +15,11 @@ MonoBehaviour:
   id: fe115fa7-b768-4c96-8972-7a9a237d97a2
   nameKey: katana_name_gray_fox
   descriptionKey: katana_description_gray_fox
-  icon: {fileID: 1186181954, guid: 69018f08b78c3b94e8021e94042fd7be, type: 3}
+  icon: {fileID: 358922716, guid: 8e6bcf98de008a546bdeed09b630d06d, type: 3}
   rarity: 2
   playerPreset: {fileID: 11400000, guid: 3c756c8d70406c64592d72de3f634e01, type: 2}
-  modelPrefab: {fileID: 5523870091327307348, guid: f5f52187e06789e4d8399f68e97721f1, type: 3}
-  bladeMaterial: {fileID: 2100000, guid: 871439ea2efacd8469c26fda9e40008a, type: 2}
+  modelPrefab: {fileID: 5992304937109876340, guid: edcef82a05f03654286b6595e9b60739, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 43966130809509c4882f2e98deb22071, type: 2}
   slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
   trailEffectPrefab: {fileID: 0}
   ability: {fileID: 11400000, guid: ecf432743569f51419d269c11e727fce, type: 2}

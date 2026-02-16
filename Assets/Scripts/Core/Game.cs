@@ -53,6 +53,11 @@ namespace Runner.Core
         [Header("Powerup Settings")]
         [SerializeField] private float speedBoostMultiplier = 1.3f;
 
+        [Header("Distance Score")]
+        [SerializeField] private float metersPerScore = 1f;
+
+        private float lastScoredZ;
+
         public InputReader InputReader { get; private set; }
         public Player.Player Player { get; private set; }
         public ParticleController ParticleController { get; private set; }
@@ -75,6 +80,7 @@ namespace Runner.Core
         public int ScoreMultiplier { get; private set; } = 1;
         public bool IsMagnetActive { get; private set; }
         public bool IsSpeedBoostActive { get; private set; }
+
 
         private int lastMilestone;
         private float multiplierTimer;
@@ -436,7 +442,23 @@ namespace Runner.Core
         {
             if (State != GameState.Playing) return;
 
+            UpdateDistanceScore();
             UpdatePowerups();
+        }
+
+        private void UpdateDistanceScore()
+        {
+            if (Player == null) return;
+
+            float currentZ = Player.transform.position.z;
+            float delta = currentZ - lastScoredZ;
+
+            if (delta >= metersPerScore)
+            {
+                int points = Mathf.FloorToInt(delta / metersPerScore);
+                lastScoredZ += points * metersPerScore;
+                AddScore(points);
+            }
         }
 
         private void UpdatePowerups()
@@ -519,6 +541,7 @@ namespace Runner.Core
             State = GameState.Playing;
             Score = 0;
             lastMilestone = 0;
+            lastScoredZ = Player != null ? Player.transform.position.z : 0f;
             ResetPowerups();
             SaveManager.ResetKillStreak();
 
@@ -575,6 +598,7 @@ namespace Runner.Core
             Time.timeScale = 1f;
             Score = 0;
             lastMilestone = 0;
+            lastScoredZ = 0f;
             ResetPowerups();
             SaveManager.ResetKillStreak();
 
@@ -605,7 +629,6 @@ namespace Runner.Core
             int multipliedAmount = amount * ScoreMultiplier;
             Score += multipliedAmount;
 
-            Sound?.PlayScoreTick();
             OnScoreChanged?.Invoke(Score);
 
             int currentMilestone = Score / scoreMilestoneInterval;

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using Runner.Core;
@@ -9,13 +8,11 @@ namespace Runner.UI
     public class GameplayScreen : UIScreen
     {
         [Header("Score Display")]
-        [SerializeField] private TextMeshProUGUI distanceText;
         [SerializeField] private TextMeshProUGUI coinsText;
         [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private string distanceFormat = "{0:F0}m";
-        [SerializeField] private string scoreFormat = "{0}";
+        [SerializeField] private int scoreDigits = 7;
+        [SerializeField] private float monoSpaceEm = 0.6f;
 
-        [Header("Buttons")]
         [SerializeField] private UIButton pauseButton;
 
         [Header("Multiplier")]
@@ -31,9 +28,24 @@ namespace Runner.UI
         [SerializeField] private float distanceMilestoneInterval = 100f;
 
         [Header("Tween Settings")]
-        [SerializeField] private float scorePunchScale = 0.15f;
         [SerializeField] private float coinPunchScale = 0.25f;
         [SerializeField] private float scoreCountDuration = 0.3f;
+
+        [Header("Score Heat")]
+        [SerializeField] private Color scoreHeatColor = new Color(1f, 0.8f, 0.2f);
+        [SerializeField] private Color scoreMaxHeatColor = new Color(1f, 0.3f, 0.1f);
+        [SerializeField] private float heatThreshold = 50f;
+        [SerializeField] private float maxHeatThreshold = 150f;
+        [SerializeField] private float heatCooldownSpeed = 30f;
+        [SerializeField] private float heatColorDuration = 0.3f;
+
+        [Header("Score Shake")]
+        [SerializeField] private float shakeStrength = 5f;
+        [SerializeField] private int shakeVibrato = 10;
+        [SerializeField] private float shakeDuration = 0.4f;
+        [SerializeField] private float shakeRandomness = 90f;
+        [SerializeField] private float shakeThreshold = 100f;
+        [SerializeField] private float shakeCooldown = 0.3f;
 
         private int currentCoins;
         private int displayedScore;
@@ -41,9 +53,17 @@ namespace Runner.UI
         private float distanceAnimationSpeed = 50f;
         private bool isCountingDown;
         private int lastDistanceMilestone;
+        [SerializeField] private float scoreHeat;
+        private int lastScoreValue;
+        private Color currentScoreTargetColor;
+        private bool isHeated;
+        private bool isMaxHeated;
+        private float lastShakeTime;
+        private Color scoreBaseColor;
 
         private Tween scoreAnimTween;
-        private Tween scorePunchTween;
+        private Tween scoreColorTween;
+        private Tween scoreShakeTween;
         private Tween coinPunchTween;
         private Tween multiplierScaleTween;
         private Tween multiplierPunchTween;
@@ -54,11 +74,37 @@ namespace Runner.UI
         {
             base.Awake();
             screenType = ScreenType.Gameplay;
+            CacheBaseColor();
+            currentScoreTargetColor = scoreBaseColor;
 
             if (pauseButton != null)
             {
                 pauseButton.OnClick += OnPauseClicked;
             }
+        }
+
+        private void CacheBaseColor()
+        {
+            if (scoreText != null)
+            {
+                scoreBaseColor = scoreText.color;
+            }
+            else
+            {
+                scoreBaseColor = Color.white;
+            }
+        }
+
+        private Color GetCurrentBaseColor()
+        {
+            if (scoreText == null) return scoreBaseColor;
+
+            if (DayNightUiController.Instance != null)
+            {
+                return scoreText.color;
+            }
+
+            return scoreBaseColor;
         }
 
         protected override void OnShow()
@@ -109,6 +155,10 @@ namespace Runner.UI
 
             scoreAnimTween?.Kill();
             displayedScore = Game.Instance.Score;
+            lastScoreValue = displayedScore;
+            scoreHeat = 0f;
+            isHeated = false;
+            isMaxHeated = false;
             UpdateScoreDisplay(displayedScore);
             ShowMultiplier(Game.Instance.ScoreMultiplier);
         }
@@ -119,10 +169,22 @@ namespace Runner.UI
             currentCoins = 0;
             displayedScore = 0;
             lastDistanceMilestone = 0;
+            scoreHeat = 0f;
+            lastScoreValue = 0;
+            isHeated = false;
+            isMaxHeated = false;
+            lastShakeTime = -shakeCooldown;
 
-            UpdateDistanceDisplay(0f);
+            CacheBaseColor();
+            currentScoreTargetColor = scoreBaseColor;
+
             UpdateCoinsDisplay(0);
             UpdateScoreDisplay(0);
+
+            if (scoreText != null)
+            {
+                scoreColorTween?.Kill();
+            }
 
             if (multiplierContainer != null)
             {
@@ -137,53 +199,85 @@ namespace Runner.UI
             if (Game.Instance.State != GameState.Playing) return;
             if (isCountingDown) return;
 
-            UpdateDistance();
+            UpdateScoreHeat();
         }
 
-        private void UpdateDistance()
+        private void UpdateScoreHeat()
         {
-            float actualDistance = Game.Instance.RunDistance;
+            if (scoreHeat <= 0f) return;
 
-            if (displayedDistance < actualDistance)
+            scoreHeat = Mathf.MoveTowards(scoreHeat, 0f, heatCooldownSpeed * Time.deltaTime);
+
+            if (isMaxHeated && scoreHeat < maxHeatThreshold)
             {
-                displayedDistance = Mathf.MoveTowards(
-                    displayedDistance,
-                    actualDistance,
-                    distanceAnimationSpeed * Time.deltaTime
-                );
-                UpdateDistanceDisplay(displayedDistance);
+                isMaxHeated = false;
+                TransitionScoreColor(scoreHeatColor);
             }
 
-            int currentMilestone = (int)(actualDistance / distanceMilestoneInterval);
-            if (currentMilestone > lastDistanceMilestone)
+            if (isHeated && scoreHeat < heatThreshold * 0.5f)
             {
-                lastDistanceMilestone = currentMilestone;
-                Game.Instance?.Sound?.PlayDistanceMilestone();
+                isHeated = false;
+                isMaxHeated = false;
+                ReturnToBaseColor();
+            }
+        }
 
-                if (distanceText != null)
+        private void ReturnToBaseColor()
+        {
+            if (scoreText == null) return;
+
+            currentScoreTargetColor = GetCurrentBaseColor();
+            scoreColorTween?.Kill();
+
+            scoreColorTween = scoreText
+                .DOColor(currentScoreTargetColor, heatColorDuration)
+                .SetUpdate(true)
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() =>
                 {
-                    distanceText.transform.DOKill();
-                    distanceText.transform.localScale = Vector3.one;
-                    distanceText.transform
-                        .DOPunchScale(Vector3.one * 0.2f, 0.4f, 6, 0.5f)
-                        .SetUpdate(true);
-                }
-            }
-        }
+                    if (DayNightUiController.Instance != null && scoreText != null && !isHeated)
+                    {
+                        DayNightUiController.Instance.RegisterText(scoreText);
+                    }
+                });
 
-        private void UpdateDistanceDisplay(float distance)
-        {
-            if (distanceText != null)
+            if (DayNightUiController.Instance != null)
             {
-                distanceText.text = string.Format(distanceFormat, distance);
+                DayNightUiController.Instance.UnregisterText(scoreText);
             }
         }
 
         private void HandleScoreChanged(int newScore)
         {
-            scoreAnimTween?.Kill();
+            int delta = newScore - lastScoreValue;
+            lastScoreValue = newScore;
 
-            int startScore = displayedScore;
+            scoreHeat += delta;
+
+            if (scoreHeat >= maxHeatThreshold && !isMaxHeated)
+            {
+                isMaxHeated = true;
+                isHeated = true;
+                TransitionScoreColor(scoreMaxHeatColor);
+                TryShakeScore();
+            }
+            else if (scoreHeat >= shakeThreshold)
+            {
+                TryShakeScore();
+
+                if (!isMaxHeated && !isHeated)
+                {
+                    isHeated = true;
+                    TransitionScoreColor(scoreHeatColor);
+                }
+            }
+            else if (scoreHeat >= heatThreshold && !isHeated)
+            {
+                isHeated = true;
+                TransitionScoreColor(scoreHeatColor);
+            }
+
+            scoreAnimTween?.Kill();
 
             scoreAnimTween = DOTween.To(
                 () => (float)displayedScore,
@@ -195,22 +289,64 @@ namespace Runner.UI
                 newScore,
                 scoreCountDuration
             ).SetUpdate(true).SetEase(Ease.OutQuad);
+        }
 
-            if (scoreText != null && newScore > 0)
+        private void TryShakeScore()
+        {
+            if (scoreText == null) return;
+            if (Time.unscaledTime - lastShakeTime < shakeCooldown) return;
+
+            lastShakeTime = Time.unscaledTime;
+
+            scoreShakeTween?.Kill();
+            scoreText.rectTransform.anchoredPosition = Vector2.zero;
+
+            float intensity = Mathf.Clamp01((scoreHeat - shakeThreshold) / (maxHeatThreshold - shakeThreshold));
+            float currentShakeStrength = Mathf.Lerp(shakeStrength * 0.5f, shakeStrength, intensity);
+
+            scoreShakeTween = scoreText.rectTransform
+                .DOShakeAnchorPos(
+                    shakeDuration,
+                    currentShakeStrength,
+                    shakeVibrato,
+                    shakeRandomness,
+                    false,
+                    true,
+                    ShakeRandomnessMode.Harmonic
+                )
+                .SetUpdate(true)
+                .OnComplete(() =>
+                {
+                    if (scoreText != null)
+                        scoreText.rectTransform.anchoredPosition = Vector2.zero;
+                });
+        }
+
+        private void TransitionScoreColor(Color targetColor)
+        {
+            if (scoreText == null) return;
+            if (currentScoreTargetColor == targetColor) return;
+
+            if (DayNightUiController.Instance != null)
             {
-                scorePunchTween?.Kill();
-                scoreText.transform.localScale = Vector3.one;
-                scorePunchTween = scoreText.transform
-                    .DOPunchScale(Vector3.one * scorePunchScale, 0.25f, 5, 0.5f)
-                    .SetUpdate(true);
+                DayNightUiController.Instance.UnregisterText(scoreText);
             }
+
+            currentScoreTargetColor = targetColor;
+            scoreColorTween?.Kill();
+
+            scoreColorTween = scoreText
+                .DOColor(targetColor, heatColorDuration)
+                .SetUpdate(true)
+                .SetEase(Ease.OutQuad);
         }
 
         private void UpdateScoreDisplay(int score)
         {
             if (scoreText != null)
             {
-                scoreText.text = string.Format(scoreFormat, score);
+                string padded = score.ToString().PadLeft(scoreDigits, '0');
+                scoreText.text = $"<mspace={monoSpaceEm}em>{padded}</mspace>";
             }
         }
 
@@ -383,14 +519,23 @@ namespace Runner.UI
         private void KillGameplayTweens()
         {
             scoreAnimTween?.Kill();
-            scorePunchTween?.Kill();
+            scoreColorTween?.Kill();
+            scoreShakeTween?.Kill();
             coinPunchTween?.Kill();
             multiplierScaleTween?.Kill();
             multiplierPunchTween?.Kill();
 
-            if (scoreText != null) scoreText.transform.DOKill();
+            if (scoreText != null)
+            {
+                scoreText.transform.DOKill();
+                scoreText.rectTransform.anchoredPosition = Vector2.zero;
+
+                if (!isHeated && !isMaxHeated && DayNightUiController.Instance != null)
+                {
+                    DayNightUiController.Instance.RegisterText(scoreText);
+                }
+            }
             if (coinsText != null) coinsText.transform.DOKill();
-            if (distanceText != null) distanceText.transform.DOKill();
             if (countdownText != null) countdownText.transform.DOKill();
             if (multiplierContainer != null) multiplierContainer.transform.DOKill();
         }
