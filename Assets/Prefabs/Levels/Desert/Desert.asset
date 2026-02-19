@@ -17,6 +17,7 @@ MonoBehaviour:
   segments:
   - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
   - {fileID: 6844235478968440788, guid: 9732ae13032b00348852cb29546d94e1, type: 3}
+  - {fileID: 6844235478968440788, guid: f14f603e08fd51848b80cfd855263e15, type: 3}
   transitions:
   - targetBiome: {fileID: 11400000, guid: e9091e869e1446a43ab30c849176efa8, type: 2}
     exitSegments:

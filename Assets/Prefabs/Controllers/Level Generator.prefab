@@ -90,9 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawner
   coinPrefab: {fileID: 6289697328851377566, guid: 49de00c97cd77c44dbd526100a5b04c7, type: 3}
-  healthPackPrefab: {fileID: 0}
   speedBoostPrefab: {fileID: 0}
-  magnetPrefab: {fileID: 0}
+  magnetPrefab: {fileID: 2338999916597536679, guid: 02c5c1764bd643e489e902ae3b450eb8, type: 3}
   multiplierPrefab: {fileID: 7734474173464922827, guid: 95de016b2c0a8fc4d9588bd235433b7f, type: 3}
   coinPoolSize: 100
   powerUpPoolSize: 10

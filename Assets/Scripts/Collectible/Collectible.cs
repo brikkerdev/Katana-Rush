@@ -76,7 +76,7 @@ namespace Runner.Collectibles
             gameObject.SetActive(true);
         }
 
-        public void Collect()
+        public virtual void Collect()
         {
             if (isCollected) return;
 
