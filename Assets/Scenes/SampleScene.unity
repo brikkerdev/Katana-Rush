@@ -3880,7 +3880,6 @@ GameObject:
   - component: {fileID: 276529200}
   - component: {fileID: 276529202}
   - component: {fileID: 276529201}
-  - component: {fileID: 276529203}
   m_Layer: 5
   m_Name: icon
   m_TagString: Untagged
@@ -3905,7 +3904,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -128, y: -128}
+  m_SizeDelta: {x: -96, y: -96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &276529201
 MonoBehaviour:
@@ -3927,7 +3926,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2026883492, guid: f33e3ee2403aaff44afeae681df06ff5, type: 3}
+  m_Sprite: {fileID: 1829911005, guid: a77cb622df016304482c711282468598, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3945,20 +3944,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 276529199}
   m_CullTransparentMesh: 1
---- !u!114 &276529203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 276529199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e757d8aa7bfc86d42945ef215a5ff89b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.DayNightUIElement
-  targetGraphic: {fileID: 276529201}
-  targetText: {fileID: 0}
 --- !u!1 &277228855
 GameObject:
   m_ObjectHideFlags: 0
@@ -10102,6 +10087,7 @@ MonoBehaviour:
   particleControllerPrefab: {fileID: 5240765469439108588, guid: 95a6e414f03a7214e933c9786ce964e8, type: 3}
   soundControllerPrefab: {fileID: 6014441948232181048, guid: f3c709ec80a54244cb7d9ae120de57c7, type: 3}
   dayNightUIControllerPrefab: {fileID: 978160268854356110, guid: d2b8fc355d615d245a88a52c0000ca1f, type: 3}
+  magnetControllerPrefab: {fileID: 4477273042286929276, guid: ee2b4ab08e01d71468b49b419f243ad6, type: 3}
   playerSpawnPoint: {fileID: 1748236326}
   cameraManager: {fileID: 1415522946}
   cameraEffects: {fileID: 189794314}
@@ -14949,7 +14935,6 @@ GameObject:
   - component: {fileID: 1607491065}
   - component: {fileID: 1607491067}
   - component: {fileID: 1607491066}
-  - component: {fileID: 1607491068}
   m_Layer: 5
   m_Name: icon
   m_TagString: Untagged
@@ -14996,7 +14981,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6717884257390833292, guid: ffb7372d450c98b499e47132a445ae90, type: 3}
+  m_Sprite: {fileID: 1996131451, guid: d715597442a757e43a1bbc6a4cb09691, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15014,20 +14999,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1607491064}
   m_CullTransparentMesh: 1
---- !u!114 &1607491068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1607491064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e757d8aa7bfc86d42945ef215a5ff89b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.DayNightUIElement
-  targetGraphic: {fileID: 1607491066}
-  targetText: {fileID: 0}
 --- !u!1 &1610342538
 GameObject:
   m_ObjectHideFlags: 0
@@ -18213,8 +18184,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.PowerUpTimerBar
   radius: 0.25
   thickness: 0.15
-  fillColor: {r: 0, g: 1, b: 0.38171244, a: 1}
-  backgroundColor: {r: 0, g: 0.25, b: 0.17083335, a: 1}
+  fillColor: {r: 1, g: 0.594161, b: 0, a: 1}
+  backgroundColor: {r: 0.6792453, g: 0.144162, b: 0, a: 1}
   outlineColor: {r: 0, g: 0, b: 0, a: 0.8}
   iconImage: {fileID: 276529201}
   shader: {fileID: 4800000, guid: 926cd2a289be35941be7d18c2f4c7535, type: 3}

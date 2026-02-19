@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\UI\Screens\GameOverScreen.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\TargetedDeflectAbility.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Magnet\MagnetController.cs" />
     <Compile Include="Assets\Scripts\Environment\DayNightCycle.cs" />
     <Compile Include="Assets\Scripts\Biome\BiomeData.cs" />
     <Compile Include="Assets\Scripts\Sound\PlayerFootsteps.cs" />

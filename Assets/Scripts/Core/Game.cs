@@ -6,12 +6,11 @@ using Runner.Environment;
 using Runner.Input;
 using Runner.Inventory;
 using Runner.LevelGeneration;
-using Runner.Player;
-using Runner.Player.Core;
 using Runner.Player.Data;
 using Runner.Save;
 using Runner.UI;
 using System;
+using Magnet;
 using UnityEngine;
 
 namespace Runner.Core
@@ -33,7 +32,8 @@ namespace Runner.Core
         [SerializeField] private ParticleController particleControllerPrefab;
         [SerializeField] private SoundController soundControllerPrefab;
         [SerializeField] private DayNightUiController dayNightUIControllerPrefab;
-
+        [SerializeField] private MagnetController magnetControllerPrefab;
+        
         [Header("Scene References")]
         [SerializeField] private Transform playerSpawnPoint;
         [SerializeField] private CameraManager cameraManager;
@@ -72,7 +72,8 @@ namespace Runner.Core
         public CameraManager CameraManager => cameraManager;
         public CameraEffects CameraEffects => cameraEffects;
         public DayNightUiController DayNightUIController { get; private set; }
-
+        public MagnetController MagnetController { get; private set; }
+        
         public GameState State { get; private set; }
         public float GameSpeed { get; private set; } = 1f;
         public float RunDistance => Player != null ? Player.transform.position.z - startZ : 0f;
@@ -143,6 +144,7 @@ namespace Runner.Core
             CreateFogController();
             CreateSkyController();
             InitializeCamera();
+            CreateMagnetController();
             SubscribeToEvents();
 
             Sound?.StartMusic();
@@ -165,7 +167,16 @@ namespace Runner.Core
             }
         }
 
-        // Add method
+        private void CreateMagnetController()
+        {
+            if (magnetControllerPrefab != null)
+            {
+                MagnetController = Instantiate(magnetControllerPrefab);
+            }
+            
+            MagnetController.Initialize(Player, LevelGenerator.collectibleSpawner);
+        }
+        
         private void CreateDayNightUIController()
         {
             if (DayNightUiController.Instance != null)
@@ -495,6 +506,7 @@ namespace Runner.Core
                 if (magnetTimer <= 0f)
                 {
                     IsMagnetActive = false;
+                    MagnetController.DeactivateMagnet();
                     OnMagnetChanged?.Invoke(false);
                 }
             }
@@ -699,6 +711,7 @@ namespace Runner.Core
             IsMagnetActive = true;
             magnetTimer = duration;
             magnetDuration = duration;
+            MagnetController.ActivateMagnet();
             Sound?.PlayPowerupCollect();
             OnMagnetChanged?.Invoke(true);
         }

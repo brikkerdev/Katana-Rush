@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 60732
+  controlID: 63210
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 60733
+  controlID: 63211
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 60734
+  controlID: 63212
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -244,9 +244,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 36ae0000
-      m_LastClickedID: 0
-      m_ExpandedIDs: f633e9ff9e93ebffa693ebffc294ebff9ca0ebff5868efffb07befff0411f1ff1c11f1ff6415f1ff1a21f1ff3221f1ff8425f1ff2c7cf1ff447cf1ff9280f1ff32fbf3ff4afbf3ff92fff3ff445df4ff5c5df4ffae61f4ffa075f4ffb875f4ff047af4ffb232f5ffca32f5ff1a37f5ff3c70ffff6e70ffffc470ffffa872ffff10fbffffd2b2000014b40000285002003a5302008a540200c83e0300da4103002a4303005c8a03005eac0300b4ac0300bcac0300c0af030042b00300aeb00300bcb0030006b10300d0b1030046b2030032ac0400
+      m_SelectedIDs: d4ab0400
+      m_LastClickedID: 306132
+      m_ExpandedIDs: 404be6ff484be6ff866ee6ff8e6ee6ff3670e6ff107ce6fff633e9ff9e93ebffa693ebffc294ebff9ca0ebff5868efffb07befff0411f1ff1c11f1ff6415f1ff1a21f1ff3221f1ff8425f1ff2c7cf1ff447cf1ff9280f1ff32fbf3ff4afbf3ff92fff3ff445df4ff5c5df4ffae61f4ffa075f4ffb875f4ff047af4ffb232f5ffca32f5ff1a37f5ff3c70ffff6e70ffffc470ffffa872ffff10fbffffd2b2000014b40000285002003a5302008a540200c83e0300da4103002a4303005c8a03005eac0300b4ac0300bcac0300c0af030042b00300aeb00300bcb0030006b10300d0b1030046b20300f0a70400f0aa0400d4ab040032ac0400fcac040072ad0400
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -809,9 +809,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -4.1180654, y: 10.059906, z: 382.76193}
+    m_Target: {x: 0.53438044, y: 9.581, z: 820.3038}
     speed: 2
-    m_Value: {x: -4.1180654, y: 10.059906, z: 382.76193}
+    m_Value: {x: 0.53438044, y: 9.581, z: 820.3038}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -857,9 +857,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.076831505, y: 0.90903, z: -0.19382693, w: 0.36136067}
+    m_Target: {x: 0.15091956, y: -0.020816224, z: 0.003012414, w: 0.9885215}
     speed: 2
-    m_Value: {x: 0.07681657, y: 0.9088533, z: -0.19378924, w: 0.36129043}
+    m_Value: {x: 0.15088984, y: -0.020812126, z: 0.003011821, w: 0.9883269}
   m_Size:
     m_Target: 3.7325258
     speed: 2
@@ -1130,7 +1130,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs/Levels/Desert
+    - Assets/Prefabs/Collectable
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1140,16 +1140,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefabs/Levels/Desert
+  - Assets/Prefabs/Collectable
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Unity Games\KatanaRush
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 154}
-    m_SelectedIDs: 340e0100
-    m_LastClickedID: 69172
-    m_ExpandedIDs: 00000000f8e000000ee2000016e200001ae20000a4e200001efb000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 79}
+    m_SelectedIDs: 9ce20000
+    m_LastClickedID: 58012
+    m_ExpandedIDs: 00000000f8e000000ee200001ae20000a4e200001efb000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1204,8 +1204,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 36ae0000
-    m_LastClickedInstanceID: 44598
+    m_SelectedInstanceIDs: d4ab0400
+    m_LastClickedInstanceID: 306132
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300000000000084c600003cf800002afc0000483dfeff48c2000014c30000a4fefdff78ca000070c700005e07020044040000a8cf00000ed8000098b7000026dcf9ff8218010090be000040130300901502008e08f7ff
     m_RenameOverlay:

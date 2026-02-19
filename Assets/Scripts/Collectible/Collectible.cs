@@ -57,14 +57,14 @@ namespace Runner.Collectibles
             {
                 bobTimer += Time.deltaTime * bobSpeed;
                 float yOffset = Mathf.Sin(bobTimer) * bobHeight;
-                transform.localPosition = originalPosition + Vector3.up * yOffset;
+                visualRoot.transform.localPosition = originalPosition + Vector3.up * yOffset;
             }
         }
 
         public void Setup(Vector3 position)
         {
             transform.position = position;
-            originalPosition = transform.localPosition;
+            originalPosition = visualRoot.transform.localPosition;
             isCollected = false;
             bobTimer = Random.value * Mathf.PI * 2f;
 
