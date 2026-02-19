@@ -21,6 +21,9 @@ MonoBehaviour:
   - targetBiome: {fileID: 11400000, guid: e9091e869e1446a43ab30c849176efa8, type: 2}
     exitSegments:
     - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
+  - targetBiome: {fileID: 11400000}
+    exitSegments:
+    - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
   environmentPrefab: {fileID: 5436482676337235900, guid: 0cfa2e84906db0a4296a0437107ad952, type: 3}
   environmentOffset: {x: 0, y: 0, z: 0}
   minLength: 1600
@@ -36,3 +39,7 @@ MonoBehaviour:
   skyDayTint: {r: 1, g: 1, b: 1, a: 1}
   skyNightTint: {r: 1, g: 1, b: 1, a: 1}
   skyTintStrength: 0
+  timeOverride: 0
+  forcedTime: 0.5
+  pauseCycleDuringOverride: 1
+  timeTransitionDuration: 2
