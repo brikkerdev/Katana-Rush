@@ -333,6 +333,11 @@ namespace Runner.LevelGeneration
 
         public void Reset(BiomeData startingBiome)
         {
+            Reset(startingBiome, 0f);
+        }
+
+        public void Reset(BiomeData startingBiome, float startZ)
+        {
             for (int i = activeEnvironments.Count - 1; i >= 0; i--)
             {
                 if (activeEnvironments[i] != null)
@@ -348,15 +353,15 @@ namespace Runner.LevelGeneration
                 return;
             }
 
-            SetupBiome(startingBiome, 0f);
+            SetupBiome(startingBiome, startZ);
             PrepareNextBiome();
 
             visualCurrentBiome = startingBiome;
             visualNextBiome = null;
-            visualTransitionZ = 0f;
+            visualTransitionZ = startZ;
             visualTransitionPending = false;
 
-            SpawnEnvironmentForBiome(currentBiome, 0f);
+            SpawnEnvironmentForBiome(currentBiome, startZ);
 
             if (DayNightCycle.Instance != null)
             {
@@ -367,7 +372,52 @@ namespace Runner.LevelGeneration
 
             if (showDebug)
             {
-                Debug.Log("[BiomeManager] Reset complete");
+                Debug.Log($"[BiomeManager] Reset complete at Z={startZ}");
+            }
+        }
+
+        public void ResetAtDeath(BiomeData currentBiomeAtDeath, float deathZ, BiomeData nextBiomeAtDeath)
+        {
+            for (int i = activeEnvironments.Count - 1; i >= 0; i--)
+            {
+                if (activeEnvironments[i] != null)
+                {
+                    Destroy(activeEnvironments[i].gameObject);
+                }
+            }
+            activeEnvironments.Clear();
+
+            if (currentBiomeAtDeath == null)
+            {
+                Debug.LogError("[BiomeManager] ResetAtDeath called with null currentBiomeAtDeath!");
+                return;
+            }
+
+            SetupBiome(currentBiomeAtDeath, deathZ);
+            
+            // Don't call PrepareNextBiome() - we want to continue from the next biome that was active at death
+            if (nextBiomeAtDeath != null)
+            {
+                nextBiome = nextBiomeAtDeath;
+            }
+
+            visualCurrentBiome = currentBiomeAtDeath;
+            visualNextBiome = nextBiomeAtDeath;
+            visualTransitionZ = deathZ;
+            visualTransitionPending = false;
+
+            SpawnEnvironmentForBiome(currentBiome, deathZ);
+
+            if (DayNightCycle.Instance != null)
+            {
+                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
+            }
+
+            OnBiomeChanged?.Invoke(visualCurrentBiome);
+
+            if (showDebug)
+            {
+                Debug.Log($"[BiomeManager] ResetAtDeath complete at Z={deathZ}, biome={currentBiomeAtDeath.BiomeName}");
             }
         }
 

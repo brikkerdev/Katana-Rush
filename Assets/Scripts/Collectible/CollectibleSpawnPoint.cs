@@ -102,7 +102,6 @@ namespace Runner.Collectibles
             {
                 CollectibleType.Coin => Color.yellow,
                 CollectibleType.CoinGroup => new Color(1f, 0.8f, 0f),
-                CollectibleType.HealthPack => Color.green,
                 CollectibleType.SpeedBoost => Color.cyan,
                 CollectibleType.Magnet => Color.magenta,
                 CollectibleType.Multiplier => Color.blue,

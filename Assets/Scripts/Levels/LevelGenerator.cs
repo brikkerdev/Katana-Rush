@@ -77,7 +77,6 @@ namespace Runner.LevelGeneration
 
         private void GenerateInitialSegments()
         {
-            nextSpawnZ = 0f;
             spawnCounter = 0;
 
             for (int i = 0; i < initialSegmentCount; i++)
@@ -256,6 +255,11 @@ namespace Runner.LevelGeneration
 
         public void Reset()
         {
+            Reset(0f);
+        }
+
+        public void Reset(float startZ)
+        {
             enemySpawner?.DespawnAllEnemies();
             collectibleSpawner?.DespawnAllCollectibles();
 
@@ -265,7 +269,7 @@ namespace Runner.LevelGeneration
             }
             activeSegments.Clear();
 
-            nextSpawnZ = 0f;
+            nextSpawnZ = startZ;
             lastSpawnedSegment = null;
             spawnCounter = 0;
 
@@ -273,7 +277,7 @@ namespace Runner.LevelGeneration
 
             if (showDebug)
             {
-                Debug.Log("[LevelGenerator] Reset complete");
+                Debug.Log($"[LevelGenerator] Reset complete at Z={startZ}");
             }
         }
 

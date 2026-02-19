@@ -86,6 +86,19 @@ namespace Runner.Core
         private float multiplierTimer;
         private float magnetTimer;
         private float speedBoostTimer;
+        private float multiplierDuration;
+        private float magnetDuration;
+        private float speedBoostDuration;
+        private float lastDeathZ = 0f;
+        private BiomeData deathBiome;
+        private BiomeData deathNextBiome;
+
+        public float MultiplierTimeRemaining => multiplierTimer;
+        public float MultiplierDuration => multiplierDuration;
+        public float MagnetTimeRemaining => magnetTimer;
+        public float MagnetDuration => magnetDuration;
+        public float SpeedBoostTimeRemaining => speedBoostTimer;
+        public float SpeedBoostDuration => speedBoostDuration;
 
         public event Action OnGameInitialized;
         public event Action OnGameStarted;
@@ -500,6 +513,15 @@ namespace Runner.Core
         private void HandlePlayerDeath()
         {
             State = GameState.GameOver;
+            lastDeathZ = Player != null ? Player.transform.position.z : 0f;
+            
+            // Save the current biome state at death
+            if (BiomeManager != null)
+            {
+                deathBiome = BiomeManager.CurrentBiome;
+                deathNextBiome = BiomeManager.NextBiome;
+            }
+            
             cameraManager?.SetState(CameraState.Death);
             cameraEffects?.PlayDeathEffect();
             Sound?.PlayDeath();
@@ -605,17 +627,39 @@ namespace Runner.Core
             BulletPool?.ReturnAllBullets();
             Player?.Reset();
 
-            BiomeData startingBiome = sceneSetup?.StartingBiome;
-            BiomeManager?.Reset(startingBiome);
+            // Use the saved biome state from death, or fall back to starting biome
+            if (deathBiome != null && lastDeathZ > 0f)
+            {
+                BiomeManager?.ResetAtDeath(deathBiome, lastDeathZ, deathNextBiome);
+            }
+            else
+            {
+                BiomeData startingBiome = sceneSetup?.StartingBiome;
+                BiomeManager?.Reset(startingBiome);
+            }
 
-            LevelGenerator?.Reset();
+            LevelGenerator?.Reset(lastDeathZ);
             FogController?.Reset();
             SkyController?.Reset();
 
-            if (Player != null && playerSpawnPoint != null)
+            if (Player != null)
             {
-                Player.transform.position = playerSpawnPoint.position;
+                // If we have a valid death position, spawn there; otherwise use spawn point
+                if (lastDeathZ > 0f)
+                {
+                    Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.zero;
+                    Player.transform.position = new Vector3(spawnPos.x, spawnPos.y, lastDeathZ);
+                }
+                else if (playerSpawnPoint != null)
+                {
+                    Player.transform.position = playerSpawnPoint.position;
+                }
             }
+
+            // Clear death state for next game
+            lastDeathZ = 0f;
+            deathBiome = null;
+            deathNextBiome = null;
 
             cameraManager?.SetState(CameraState.Menu);
             Sound?.SetMusicGameplay(false);
@@ -643,6 +687,7 @@ namespace Runner.Core
         {
             ScoreMultiplier = multiplier;
             multiplierTimer = duration;
+            multiplierDuration = duration;
             Sound?.PlayPowerupCollect();
             OnMultiplierChanged?.Invoke(ScoreMultiplier);
         }
@@ -651,6 +696,7 @@ namespace Runner.Core
         {
             IsMagnetActive = true;
             magnetTimer = duration;
+            magnetDuration = duration;
             Sound?.PlayPowerupCollect();
             OnMagnetChanged?.Invoke(true);
         }
@@ -659,6 +705,7 @@ namespace Runner.Core
         {
             IsSpeedBoostActive = true;
             speedBoostTimer = duration;
+            speedBoostDuration = duration;
             GameSpeed = speedBoostMultiplier;
             Sound?.PlayPowerupCollect();
             OnSpeedBoostChanged?.Invoke(true);
@@ -668,10 +715,13 @@ namespace Runner.Core
         {
             ScoreMultiplier = 1;
             multiplierTimer = 0f;
+            multiplierDuration = 0f;
             IsMagnetActive = false;
             magnetTimer = 0f;
+            magnetDuration = 0f;
             IsSpeedBoostActive = false;
             speedBoostTimer = 0f;
+            speedBoostDuration = 0f;
             GameSpeed = 1f;
         }
 

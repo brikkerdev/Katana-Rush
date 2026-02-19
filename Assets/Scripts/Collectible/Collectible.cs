@@ -1,7 +1,5 @@
 using UnityEngine;
-using Runner.Save;
 using Runner.Core;
-using Runner.Inventory;
 
 namespace Runner.Collectibles
 {
@@ -9,19 +7,16 @@ namespace Runner.Collectibles
     {
         Coin,
         CoinGroup,
-        HealthPack,
         SpeedBoost,
         Magnet,
         Multiplier,
         DashRestore
     }
 
-    public class Collectible : MonoBehaviour, IResettable
+    public abstract class Collectible : MonoBehaviour, IResettable
     {
         [Header("Settings")]
-        [SerializeField] private CollectibleType collectibleType = CollectibleType.Coin;
         [SerializeField] private int value = 1;
-        [SerializeField] private float magnetRadius = 0f;
         [SerializeField] private float effectDuration = 5f;
 
         [Header("Visual")]
@@ -34,13 +29,12 @@ namespace Runner.Collectibles
         private Vector3 originalPosition;
         private float bobTimer;
 
-        public CollectibleType Type => collectibleType;
+        public abstract CollectibleType Type { get; }
         public int Value => value;
         public bool IsCollected => isCollected;
-        public float MagnetRadius => magnetRadius;
         public float EffectDuration => effectDuration;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             originalPosition = transform.localPosition;
 
@@ -99,63 +93,8 @@ namespace Runner.Collectibles
             gameObject.SetActive(false);
         }
 
-        private void PlayCollectSound()
-        {
-            switch (collectibleType)
-            {
-                case CollectibleType.Coin:
-                case CollectibleType.CoinGroup:
-                    Game.Instance?.Sound?.PlayCoinCollect();
-                    break;
-
-                case CollectibleType.HealthPack:
-                    Game.Instance?.Sound?.PlayHealthCollect();
-                    break;
-
-                case CollectibleType.SpeedBoost:
-                case CollectibleType.Magnet:
-                case CollectibleType.Multiplier:
-                case CollectibleType.DashRestore:
-                    Game.Instance?.Sound?.PlayPowerupCollect();
-                    break;
-            }
-        }
-
-        private void ApplyCollectEffect()
-        {
-            switch (collectibleType)
-            {
-                case CollectibleType.Coin:
-                case CollectibleType.CoinGroup:
-                    int coinAmount = value;
-                    if (AbilityManager.Instance != null)
-                    {
-                        coinAmount *= AbilityManager.Instance.GetCoinMultiplier();
-                    }
-                    SaveManager.AddCoins(coinAmount);
-                    UI.UIManager.Instance?.NotifyCoinsCollected(coinAmount);
-                    break;
-
-                case CollectibleType.DashRestore:
-                    Game.Instance?.Player?.Controller?.RestoreDashes();
-                    break;
-
-                case CollectibleType.Multiplier:
-                    Game.Instance?.ActivateMultiplier(value, effectDuration);
-                    break;
-
-                case CollectibleType.Magnet:
-                    Game.Instance?.ActivateMagnet(effectDuration);
-                    break;
-
-                case CollectibleType.SpeedBoost:
-                    Game.Instance?.ActivateSpeedBoost(effectDuration);
-                    break;
-
-                case CollectibleType.HealthPack:
-                    break;
-            }
-        }
+        protected abstract void ApplyCollectEffect();
+        protected abstract void PlayCollectSound();
 
         public void Reset()
         {

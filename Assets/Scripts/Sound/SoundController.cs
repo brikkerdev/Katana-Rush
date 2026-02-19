@@ -67,7 +67,6 @@ namespace Runner.Audio
         [SerializeField] private AudioClip coinCollectSound;
         [SerializeField] private AudioClip gemCollectSound;
         [SerializeField] private AudioClip powerupCollectSound;
-        [SerializeField] private AudioClip healthCollectSound;
 
         [Header("Shop Sounds")]
         [SerializeField] private AudioClip purchaseSuccessSound;
@@ -932,11 +931,6 @@ namespace Runner.Audio
         public void PlayPowerupCollect()
         {
             Play(powerupCollectSound, 0.8f, 1f);
-        }
-
-        public void PlayHealthCollect()
-        {
-            Play(healthCollectSound, 0.7f, 1f);
         }
 
         public void PlayPurchaseSuccess()

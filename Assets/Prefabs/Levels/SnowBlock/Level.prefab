@@ -2324,7 +2324,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8675243239210250110, guid: f96aa6d9b468b554f91249132fa0d177, type: 3}
       propertyPath: spawnChance
-      value: 0.71
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8675243239210250110, guid: f96aa6d9b468b554f91249132fa0d177, type: 3}
+      propertyPath: collectibleType
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

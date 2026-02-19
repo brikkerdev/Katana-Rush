@@ -120,13 +120,12 @@ MonoBehaviour:
   allowConsecutive: 1
   enemySpawnPoints:
   - {fileID: 5488233979360072411}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8120851841576587385}
   collectibleSpawnPoints:
   - {fileID: 2799031032606776924}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3188349108586747942}
+  - {fileID: 9168665515657695244}
+  - {fileID: 2261253137497891813}
 --- !u!114 &-6106389875762990493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,6 +767,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5568120859470030106, guid: 2b8f8db0fcb3a2e4586d8d0ed0c53abc, type: 3}
   m_PrefabInstance: {fileID: 395529517319563954}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8120851841576587385 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8488788014749481675, guid: 2b8f8db0fcb3a2e4586d8d0ed0c53abc, type: 3}
+  m_PrefabInstance: {fileID: 395529517319563954}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b45be0b813b862749a4d36f6272eab74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Enemy.EnemySpawnPoint
 --- !u!1001 &529458237743497074
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -834,6 +844,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7833230362916203074, guid: 7bd382e4fd397d84d9da95002163dee3, type: 3}
   m_PrefabInstance: {fileID: 529458237743497074}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9168665515657695244 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8675243239210250110, guid: 7bd382e4fd397d84d9da95002163dee3, type: 3}
+  m_PrefabInstance: {fileID: 529458237743497074}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002d4765c9026e94c84bb15e18f22e07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawnPoint
 --- !u!1001 &850766209391924873
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1562,6 +1583,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bd382e4fd397d84d9da95002163dee3, type: 3}
+--- !u!114 &3188349108586747942 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8675243239210250110, guid: 7bd382e4fd397d84d9da95002163dee3, type: 3}
+  m_PrefabInstance: {fileID: 6078713101862270808}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002d4765c9026e94c84bb15e18f22e07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawnPoint
 --- !u!4 &4102450366190181658 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7833230362916203074, guid: 7bd382e4fd397d84d9da95002163dee3, type: 3}
@@ -1776,6 +1808,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7833230362916203074, guid: 7bd382e4fd397d84d9da95002163dee3, type: 3}
   m_PrefabInstance: {fileID: 7423395070204759195}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2261253137497891813 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8675243239210250110, guid: 7bd382e4fd397d84d9da95002163dee3, type: 3}
+  m_PrefabInstance: {fileID: 7423395070204759195}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002d4765c9026e94c84bb15e18f22e07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawnPoint
 --- !u!1001 &8228041894397830340
 PrefabInstance:
   m_ObjectHideFlags: 0

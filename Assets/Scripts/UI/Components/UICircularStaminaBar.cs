@@ -10,17 +10,14 @@ namespace Runner.UI
         [SerializeField] private float thickness = 0.08f;
         [SerializeField] private float smoothness = 0.01f;
         [SerializeField] private float outlineThickness = 0.008f;
-
         [SerializeField, Range(1, 10)] private int segmentCount = 3;
         [SerializeField, Range(0f, 0.45f)] private float segmentGap = 0.10f;
-
         [SerializeField] private Color readyColor = new Color(0.2f, 0.8f, 0.2f, 1f);
         [SerializeField] private Color rechargeColor = new Color(0.8f, 0.8f, 0.2f, 1f);
         [SerializeField] private Color rechargeBackgroundColor = new Color(0.3f, 0.3f, 0.1f, 0.8f);
         [SerializeField] private Color emptyColor = new Color(0.2f, 0.2f, 0.2f, 0.5f);
         [SerializeField] private Color useEffectColor = new Color(1f, 1f, 1f, 0.5f);
         [SerializeField] private Color outlineColor = new Color(0f, 0f, 0f, 0.8f);
-
         [SerializeField] private bool pulseActive;
         [SerializeField] private float pulseSpeed = 3f;
         [SerializeField] private float pulseIntensity = 0.3f;
@@ -28,7 +25,6 @@ namespace Runner.UI
 
         private Graphic graphic;
         private Material runtimeMat;
-
         private float[] values = new float[10];
         private float[] useValues = new float[10];
         private float rechargeProgress;
@@ -62,7 +58,6 @@ namespace Runner.UI
         private void Awake()
         {
             graphic = GetComponent<Graphic>();
-
             var shader = Shader.Find("UI/CircularStaminaBar");
             if (shader == null)
             {
@@ -98,13 +93,11 @@ namespace Runner.UI
         public void SetMaxDashes(int maxDashes)
         {
             segmentCount = Mathf.Clamp(maxDashes, 1, 10);
-
             for (int i = 0; i < 10; i++)
             {
                 values[i] = i < segmentCount ? 1f : 0f;
                 useValues[i] = values[i];
             }
-
             rechargeProgress = 0f;
             rechargeSegment = -1;
             Apply();
@@ -124,32 +117,28 @@ namespace Runner.UI
 
         private void Apply()
         {
+            if (runtimeMat == null) return;
+
             runtimeMat.SetFloat(RadiusID, radius);
             runtimeMat.SetFloat(ThicknessID, thickness);
             runtimeMat.SetFloat(SmoothnessID, smoothness);
             runtimeMat.SetFloat(OutlineThicknessID, outlineThickness);
-
             runtimeMat.SetInt(SegmentCountID, segmentCount);
             runtimeMat.SetFloat(SegmentGapID, segmentGap);
-
             runtimeMat.SetVector(SegmentValuesID, new Vector4(values[0], values[1], values[2], values[3]));
             runtimeMat.SetVector(SegmentValues2ID, new Vector4(values[4], values[5], values[6], values[7]));
             runtimeMat.SetVector(SegmentValues3ID, new Vector4(values[8], values[9], 1f, 1f));
-
             runtimeMat.SetVector(UseEffectValuesID, new Vector4(useValues[0], useValues[1], useValues[2], useValues[3]));
             runtimeMat.SetVector(UseEffectValues2ID, new Vector4(useValues[4], useValues[5], useValues[6], useValues[7]));
             runtimeMat.SetVector(UseEffectValues3ID, new Vector4(useValues[8], useValues[9], 1f, 1f));
-
             runtimeMat.SetFloat(RechargeProgressID, rechargeProgress);
             runtimeMat.SetInt(RechargeSegmentID, rechargeSegment);
-
             runtimeMat.SetColor(ReadyColorID, readyColor);
             runtimeMat.SetColor(RechargeColorID, rechargeColor);
             runtimeMat.SetColor(RechargeBackgroundColorID, rechargeBackgroundColor);
             runtimeMat.SetColor(EmptyColorID, emptyColor);
             runtimeMat.SetColor(UseEffectColorID, useEffectColor);
             runtimeMat.SetColor(OutlineColorID, outlineColor);
-
             runtimeMat.SetFloat(PulseSpeedID, pulseSpeed);
             runtimeMat.SetFloat(PulseIntensityID, pulseIntensity);
             runtimeMat.SetFloat(PulseActiveID, pulseActive ? 1f : 0f);

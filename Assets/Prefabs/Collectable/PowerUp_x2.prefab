@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4586274001877954767}
-  - component: {fileID: 8275622741553750974}
   - component: {fileID: 5072816448699532874}
+  - component: {fileID: 7734474173464922827}
   m_Layer: 0
   m_Name: PowerUp_x2
   m_TagString: Untagged
@@ -34,26 +34,6 @@ Transform:
   - {fileID: 7167274806561695854}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8275622741553750974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2382664390818712937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 379dd6ea5db89204eb3fbc7c2e7b16a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.Collectible
-  collectibleType: 5
-  value: 2
-  magnetRadius: 0
-  effectDuration: 40
-  visualRoot: {fileID: 7511044145587630804}
-  rotationSpeed: 90
-  bobSpeed: 2
-  bobHeight: 0.2
 --- !u!135 &5072816448699532874
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -75,6 +55,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7734474173464922827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2382664390818712937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ce6e326b3d9d24b89ab512cbed90eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.MultiplierCollectible
+  value: 2
+  effectDuration: 5
+  visualRoot: {fileID: 7511044145587630804}
+  rotationSpeed: 90
+  bobSpeed: 2
+  bobHeight: 0.2
 --- !u!1001 &7277252995778744197
 PrefabInstance:
   m_ObjectHideFlags: 0

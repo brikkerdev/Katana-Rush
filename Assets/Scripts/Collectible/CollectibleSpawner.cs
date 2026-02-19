@@ -8,7 +8,6 @@ namespace Runner.Collectibles
     {
         [Header("Collectible Prefabs")]
         [SerializeField] private Collectible coinPrefab;
-        [SerializeField] private Collectible healthPackPrefab;
         [SerializeField] private Collectible speedBoostPrefab;
         [SerializeField] private Collectible magnetPrefab;
         [SerializeField] private Collectible multiplierPrefab;
@@ -65,9 +64,6 @@ namespace Runner.Collectibles
             }
 
             // Power-ups
-            if (healthPackPrefab != null)
-                CreatePool(CollectibleType.HealthPack, healthPackPrefab, powerUpPoolSize);
-
             if (speedBoostPrefab != null)
                 CreatePool(CollectibleType.SpeedBoost, speedBoostPrefab, powerUpPoolSize);
 
