@@ -75,7 +75,7 @@ namespace Runner.Core
 
         public GameState State { get; private set; }
         public float GameSpeed { get; private set; } = 1f;
-        public float RunDistance => Player != null ? Player.transform.position.z : 0f;
+        public float RunDistance => Player != null ? Player.transform.position.z - startZ : 0f;
         public int Score { get; private set; }
         public int ScoreMultiplier { get; private set; } = 1;
         public bool IsMagnetActive { get; private set; }
@@ -90,6 +90,7 @@ namespace Runner.Core
         private float magnetDuration;
         private float speedBoostDuration;
         private float lastDeathZ = 0f;
+        private float startZ = 0f;
         private BiomeData deathBiome;
         private BiomeData deathNextBiome;
 
@@ -451,7 +452,7 @@ namespace Runner.Core
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (State != GameState.Playing) return;
 
@@ -621,6 +622,7 @@ namespace Runner.Core
             Score = 0;
             lastMilestone = 0;
             lastScoredZ = 0f;
+            startZ = lastDeathZ;
             ResetPowerups();
             SaveManager.ResetKillStreak();
 

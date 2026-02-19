@@ -278,6 +278,9 @@ namespace Runner.UI
             if (IsLoading) return;
             if (isResuming) return;
 
+            // Disable player input when pausing to prevent dash from tap
+            Game.Instance.Player?.Controller?.DisableInput();
+
             Game.Instance.PauseGame();
             ShowScreen(ScreenType.Pause);
         }
@@ -308,6 +311,9 @@ namespace Runner.UI
             if (Game.Instance != null && Game.Instance.State == GameState.Paused)
             {
                 Game.Instance.ResumeGame();
+                
+                // Re-enable player input after countdown completes
+                Game.Instance.Player?.Controller?.EnableInput();
             }
 
             isResuming = false;

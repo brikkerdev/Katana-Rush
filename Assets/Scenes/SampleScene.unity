@@ -689,6 +689,7 @@ MonoBehaviour:
   backgroundColor: {r: 0, g: 0.25, b: 0.17083335, a: 1}
   outlineColor: {r: 0, g: 0, b: 0, a: 0.8}
   iconImage: {fileID: 657467445}
+  shader: {fileID: 4800000, guid: 926cd2a289be35941be7d18c2f4c7535, type: 3}
 --- !u!114 &69086434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -701,7 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: fd46d44eae960d946a35801a9ae19b10, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -17020,6 +17021,7 @@ MonoBehaviour:
   backgroundColor: {r: 0, g: 0.25, b: 0.17083335, a: 1}
   outlineColor: {r: 0, g: 0, b: 0, a: 0.8}
   iconImage: {fileID: 1607491066}
+  shader: {fileID: 4800000, guid: 926cd2a289be35941be7d18c2f4c7535, type: 3}
 --- !u!114 &1947648004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17032,7 +17034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: fd46d44eae960d946a35801a9ae19b10, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -17252,7 +17254,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65171224545250b4d8bc2b451b32ff89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Core.MobileOptimizer
-  targetFPS: 180
+  useDeviceRefreshRate: 1
+  fallbackFPS: 60
   physicsUpdateRate: 0.02
   showFPS: 1
 --- !u!4 &1965998128
@@ -18109,7 +18112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf24daa26c4f4b4b99a2d4cbb804549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.SceneSetup
-  startingBiome: {fileID: 11400000, guid: 3bfb43a40c035694f89a37a997a852e4, type: 2}
+  startingBiome: {fileID: 11400000, guid: a7b40b39fec145e45804afe0c3288f71, type: 2}
   sunLight: {fileID: 410087040}
   moonLight: {fileID: 122156966}
 --- !u!4 &2093762285
@@ -18213,6 +18216,7 @@ MonoBehaviour:
   backgroundColor: {r: 0, g: 0.25, b: 0.17083335, a: 1}
   outlineColor: {r: 0, g: 0, b: 0, a: 0.8}
   iconImage: {fileID: 276529201}
+  shader: {fileID: 4800000, guid: 926cd2a289be35941be7d18c2f4c7535, type: 3}
 --- !u!114 &2102534576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18225,7 +18229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: fd46d44eae960d946a35801a9ae19b10, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}

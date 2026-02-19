@@ -302,11 +302,20 @@ namespace Runner.UI
         {
             presetIndex = Mathf.Clamp(presetIndex, 0, 2);
 
-            int qualityIndex = GetQualityIndexForPreset(presetIndex);
-            QualitySettings.SetQualityLevel(qualityIndex, true);
-
-            PlayerPrefs.SetInt(GraphicsPresetKey, presetIndex);
-            PlayerPrefs.SetInt(QualityLevelKey, qualityIndex);
+            // Use GraphicsSettingsManager if available
+            if (GraphicsSettingsManager.Instance != null)
+            {
+                GraphicsSettingsManager.Instance.SetPreset(presetIndex);
+            }
+            else
+            {
+                // Fallback to Unity's QualitySettings
+                int qualityIndex = GetQualityIndexForPreset(presetIndex);
+                QualitySettings.SetQualityLevel(qualityIndex, true);
+                PlayerPrefs.SetInt(GraphicsPresetKey, presetIndex);
+                PlayerPrefs.SetInt(QualityLevelKey, qualityIndex);
+            }
+            
             SaveSettings();
         }
 

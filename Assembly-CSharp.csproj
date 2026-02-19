@@ -138,6 +138,7 @@
     <Compile Include="Assets\Scripts\Player\Data\MovementSettings.cs" />
     <Compile Include="Assets\Scripts\Biome\BiomeEnvironment.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\ExtendedDashAbility.cs" />
+    <Compile Include="Assets\Scripts\Core\GraphicsSettingsManager.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerMotor.cs" />
     <Compile Include="Assets\Scripts\Player\Visual\PlayerVisual.cs" />
     <Compile Include="Assets\Scripts\UI\Core\UIButton.cs" />

@@ -59,7 +59,7 @@ Material:
     - _SunGlowSize: 0.3
     - _SunIntensity: 1.36
     - _SunSize: 0.2
-    - _TimeOfDay: 0.22021718
+    - _TimeOfDay: 0.6211625
     m_Colors:
     - _BiomeTintDay: {r: 1, g: 1, b: 1, a: 1}
     - _BiomeTintNight: {r: 1, g: 1, b: 1, a: 1}

@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.MultiplierCollectible
   value: 2
-  effectDuration: 5
+  effectDuration: 20
   visualRoot: {fileID: 7511044145587630804}
   rotationSpeed: 90
   bobSpeed: 2

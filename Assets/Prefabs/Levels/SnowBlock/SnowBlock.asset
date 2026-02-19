@@ -25,7 +25,7 @@ MonoBehaviour:
   - targetBiome: {fileID: 11400000}
     exitSegments:
     - {fileID: 6844235478968440788, guid: b1e016f72f26380488b851eff80a3cf7, type: 3}
-  environmentPrefab: {fileID: 7800426110740515453, guid: d611006a76996444c8f486607c461c0c, type: 3}
+  environmentPrefab: {fileID: 0}
   environmentOffset: {x: 0, y: 0, z: 0}
   minLength: 1600
   maxLength: 1600
