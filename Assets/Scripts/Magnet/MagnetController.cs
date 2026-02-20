@@ -73,10 +73,10 @@ namespace Magnet
 
         private IEnumerator AnimateCoinPickup(Collectible collectible)
         {
-            Vector3 targetPosition = player.transform.position;
-            Debug.Log(targetPosition);
             float currentSpeed = magnetSpeed;
 
+            Vector3 offset = new Vector3(0f, 0f, 5f);
+            
             while (!collectible.IsCollected)
             {
                 if (player == null)
@@ -84,6 +84,7 @@ namespace Magnet
                     animatingCollectibles.Remove(collectible);
                     yield break;
                 }
+                Vector3 targetPosition = player.transform.position + offset;
 
                 Vector3 direction = targetPosition - collectible.transform.position;
                 float distanceToPlayer = direction.magnitude;
@@ -98,7 +99,7 @@ namespace Magnet
                 currentSpeed += magnetAcceleration * Time.deltaTime;
 
                 // Move towards player with increasing speed
-                collectible.transform.position += direction.normalized * currentSpeed * Time.deltaTime;
+                collectible.transform.position += direction.normalized * (currentSpeed * Time.deltaTime);
 
                 // Add some rotation for visual effect
                 collectible.transform.Rotate(Vector3.up, 720f * Time.deltaTime);
