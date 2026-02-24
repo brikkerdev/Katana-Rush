@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawnPoint
   alwaysSpawn: 0
   spawnChance: 0.7
-  collectibleType: 0
+  collectibleType: 1
   groupCount: 5
   groupSpacing: 1.5
   groupPattern: 0

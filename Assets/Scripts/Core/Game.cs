@@ -738,6 +738,7 @@ namespace Runner.Core
             speedBoostTimer = 0f;
             speedBoostDuration = 0f;
             GameSpeed = 1f;
+            MagnetController.DeactivateMagnet();
         }
 
         [ContextMenu("Add 1000 money")]

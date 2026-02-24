@@ -47,6 +47,7 @@ namespace Runner.Input
         public event Action OnDash;
         public event Action OnSlide;
         public event Action OnPause;
+        public event Action OnFastFall;
 
         private bool inputEnabled = true;
 
@@ -159,7 +160,7 @@ namespace Runner.Input
                     else
                     {
                         lastGesture = "SWIPE DOWN";
-                        OnSlide?.Invoke();
+                        OnFastFall?.Invoke();
                     }
                 }
                 else if (horizontalRatio > directionalThreshold)
@@ -216,6 +217,12 @@ namespace Runner.Input
             {
                 lastGesture = "KEY: Dash";
                 OnDash?.Invoke();
+            }
+
+            if (keyboard.sKey.wasPressedThisFrame || keyboard.downArrowKey.wasPressedThisFrame)
+            {
+                lastGesture = "KEY: Fast Fall";
+                OnFastFall?.Invoke();
             }
         }
 

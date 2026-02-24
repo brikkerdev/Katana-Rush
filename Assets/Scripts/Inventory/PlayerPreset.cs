@@ -19,7 +19,7 @@ namespace Runner.Player.Data
         [SerializeField] private float laneSwitchSpeed = 15f;
 
         [Header("Jump")]
-        [Tooltip("Vertical velocity applied on jump")]
+        [Tooltip("Vertical velocity applied on jump (physics-based fallback)")]
         [SerializeField] private float jumpForce = 16f;
 
         [Tooltip("Maximum number of jumps (1 = no double jump, 2 = double jump)")]
@@ -27,6 +27,12 @@ namespace Runner.Player.Data
 
         [Tooltip("Gravity force")]
         [SerializeField] private float gravity = -45f;
+
+        [Tooltip("Jump duration in seconds (Subway Surfers style - 0 = calculate from force/gravity)")]
+        [SerializeField] private float jumpDuration = 0.5f;
+
+        [Tooltip("Jump height in units (Subway Surfers style - 0 = calculate from force/gravity)")]
+        [SerializeField] private float jumpHeight = 3f;
 
         [Header("Dash")]
         [Tooltip("Maximum number of dashes before needing to regenerate")]
@@ -59,6 +65,8 @@ namespace Runner.Player.Data
         public float JumpForce => jumpForce;
         public int MaxJumps => maxJumps;
         public float Gravity => gravity;
+        public float JumpDuration => jumpDuration;
+        public float JumpHeight => jumpHeight;
 
         public int MaxDashes => maxDashes;
         public float DashDuration => dashDuration;
@@ -88,6 +96,8 @@ namespace Runner.Player.Data
             jumpForce = other.jumpForce;
             maxJumps = other.maxJumps;
             gravity = other.gravity;
+            jumpDuration = other.jumpDuration;
+            jumpHeight = other.jumpHeight;
 
             maxDashes = other.maxDashes;
             dashDuration = other.dashDuration;

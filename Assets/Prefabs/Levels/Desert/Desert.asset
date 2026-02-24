@@ -17,15 +17,18 @@ MonoBehaviour:
   segments:
   - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
   - {fileID: 6844235478968440788, guid: 9732ae13032b00348852cb29546d94e1, type: 3}
-  - {fileID: 6844235478968440788, guid: f14f603e08fd51848b80cfd855263e15, type: 3}
+  - {fileID: 6844235478968440788, guid: a4402747a229c9e4c8bd9569bd658a32, type: 3}
+  - {fileID: 6844235478968440788, guid: 3d15a505e7013a44c8119a809b8874da, type: 3}
+  - {fileID: 6844235478968440788, guid: cbf715db6c875874086d6751056844a5, type: 3}
+  - {fileID: 6844235478968440788, guid: 4a96c0862af117244a3f9d7f19395ef0, type: 3}
   transitions:
   - targetBiome: {fileID: 11400000, guid: e9091e869e1446a43ab30c849176efa8, type: 2}
     exitSegments:
-    - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
+    - {fileID: 6844235478968440788, guid: f14f603e08fd51848b80cfd855263e15, type: 3}
   - targetBiome: {fileID: 11400000}
     exitSegments:
-    - {fileID: 6844235478968440788, guid: 3eb083de1309a64419f78b909eb8bdf0, type: 3}
-  environmentPrefab: {fileID: 0}
+    - {fileID: 6844235478968440788, guid: f14f603e08fd51848b80cfd855263e15, type: 3}
+  environmentPrefab: {fileID: 5436482676337235900, guid: 0cfa2e84906db0a4296a0437107ad952, type: 3}
   environmentOffset: {x: 0, y: 0, z: 0}
   minLength: 1600
   maxLength: 1600

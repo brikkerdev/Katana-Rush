@@ -16988,8 +16988,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.UI.PowerUpTimerBar
   radius: 0.2
   thickness: 0.15
-  fillColor: {r: 0, g: 1, b: 0.38171244, a: 1}
-  backgroundColor: {r: 0, g: 0.25, b: 0.17083335, a: 1}
+  fillColor: {r: 0, g: 0.60062504, b: 1, a: 1}
+  backgroundColor: {r: 0, g: 0.12468849, b: 0.2509804, a: 1}
   outlineColor: {r: 0, g: 0, b: 0, a: 0.8}
   iconImage: {fileID: 1607491066}
   shader: {fileID: 4800000, guid: 926cd2a289be35941be7d18c2f4c7535, type: 3}

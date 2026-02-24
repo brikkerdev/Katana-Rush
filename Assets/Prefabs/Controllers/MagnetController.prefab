@@ -45,3 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Magnet.MagnetController
   magnetRadius: 15
+  magnetSpeed: 25
+  magnetAcceleration: 15

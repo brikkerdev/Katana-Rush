@@ -172,6 +172,7 @@ namespace Runner.Player.Core
                 inputReader.OnMoveLeft += OnMoveLeftInput;
                 inputReader.OnMoveRight += OnMoveRightInput;
                 inputReader.OnDash += OnDashInput;
+                inputReader.OnFastFall += OnFastFallInput;
                 inputSubscribed = true;
             }
 
@@ -189,6 +190,7 @@ namespace Runner.Player.Core
             inputReader.OnMoveLeft -= OnMoveLeftInput;
             inputReader.OnMoveRight -= OnMoveRightInput;
             inputReader.OnDash -= OnDashInput;
+            inputReader.OnFastFall -= OnFastFallInput;
             inputSubscribed = false;
         }
 
@@ -224,7 +226,6 @@ namespace Runner.Player.Core
         {
             laneHandler.Update(dt);
             jumpHandler.Update(dt, motor.IsGrounded);
-
             motor.ApplyGravity(currentPreset.Gravity, movementSettings.fallMultiplier, dt);
         }
 
@@ -310,7 +311,10 @@ namespace Runner.Player.Core
             }
             else
             {
-                jumpHandler.BufferJump();
+                if (motor.IsGrounded)
+                {
+                    jumpHandler.BufferJump();
+                }
             }
         }
 
@@ -342,6 +346,15 @@ namespace Runner.Player.Core
                     particleController.Spawn(equippedKatana.SlashEffectPrefab, transform.position, Vector3.forward, transform);
                 }
             }
+        }
+
+        private void OnFastFallInput()
+        {
+            if (!inputEnabled) return;
+            if (motor.IsGrounded) return;
+
+            float fastFallSpeed = movementSettings.maxFallSpeed * 2f;
+            motor.SetVerticalVelocity(fastFallSpeed);
         }
 
         private void OnDashStarted()

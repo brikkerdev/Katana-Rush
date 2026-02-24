@@ -9,6 +9,8 @@ namespace Runner.Player.Movement
         private float jumpForce;
         private float gravity;
         private int maxJumps;
+        private float jumpDuration;
+        private float jumpHeight;
 
         private int jumpsRemaining;
         private float coyoteTimer;
@@ -35,6 +37,9 @@ namespace Runner.Player.Movement
             gravity = preset.Gravity;
             maxJumps = preset.MaxJumps;
             jumpsRemaining = maxJumps;
+
+            jumpDuration = preset.JumpDuration > 0.01f ? preset.JumpDuration : (2f * preset.JumpForce / Mathf.Abs(preset.Gravity));
+            jumpHeight = preset.JumpHeight > 0.01f ? preset.JumpHeight : ((preset.JumpForce * preset.JumpForce) / (2f * Mathf.Abs(preset.Gravity)));
         }
 
         public void Update(float deltaTime, bool isGrounded)
