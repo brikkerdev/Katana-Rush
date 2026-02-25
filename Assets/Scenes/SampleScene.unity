@@ -18132,7 +18132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf24daa26c4f4b4b99a2d4cbb804549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.SceneSetup
-  startingBiome: {fileID: 11400000, guid: 83fa665adb91367448cd12bf219cdbf2, type: 2}
+  startingBiome: {fileID: 11400000, guid: 21bacd8f59008c1489e41e7238c80efe, type: 2}
   sunLight: {fileID: 410087040}
   moonLight: {fileID: 122156966}
 --- !u!4 &2093762285
