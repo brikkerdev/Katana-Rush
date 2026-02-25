@@ -51,6 +51,8 @@ namespace Runner.Audio
         [SerializeField] private AudioClip enemyRagdollSound;
         [SerializeField] private AudioClip sniperChargeSound;
         [SerializeField] private AudioClip sniperFireSound;
+        [SerializeField] private AudioClip rocketFireSound;
+        [SerializeField] private AudioClip rocketExplosionSound;
 
         [Header("UI Sounds")]
         [SerializeField] private AudioClip buttonClickSound;
@@ -871,6 +873,17 @@ namespace Runner.Audio
         public void PlaySniperFire(Vector3 position)
         {
             Play3DWithVariation(sniperFireSound, position, 0.85f, 1f, 0.05f, 3f, 50f);
+        }
+
+        public void PlayRocketFire(Vector3 position)
+        {
+            Play3DWithVariation(rocketFireSound, position, 0.7f, 1f, 0.05f, 3f, 40f);
+        }
+
+        public void PlayRocketExplosion(Vector3 position, bool lethal)
+        {
+            float volume = lethal ? 0.9f : 0.7f;
+            Play3DWithVariation(rocketExplosionSound, position, volume, 1f, 0.1f, 3f, 60f);
         }
 
         public void PlayButtonClick()

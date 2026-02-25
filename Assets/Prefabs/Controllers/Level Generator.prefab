@@ -71,6 +71,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Enemy.EnemySpawner
   enemyPrefabs:
   - {fileID: 3996532993096452310, guid: 6530c3bb3afc5b14fbe5401d47bcfc1a, type: 3}
+  - {fileID: 3996532993096452310, guid: a3881709671c96f45870e84ded3cec8e, type: 3}
   poolSizePerType: 10
   minEnemiesPerSegment: 0
   maxEnemiesPerSegment: 2

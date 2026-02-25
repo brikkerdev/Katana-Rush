@@ -59,6 +59,9 @@ MonoBehaviour:
   - type: 5
     prefab: {fileID: 6820590955023660389, guid: f7e129406ccd8bc4fbc3e31e6a03a362, type: 3}
     prewarm: 0
+  - type: 9
+    prefab: {fileID: 6820590955023660389, guid: f7e129406ccd8bc4fbc3e31e6a03a362, type: 3}
+    prewarm: 0
   prefabPoolsToPrewarm:
   - prefab: {fileID: -5850168064015035106, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
     prewarm: 0

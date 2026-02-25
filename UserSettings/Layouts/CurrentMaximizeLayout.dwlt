@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 2062
+  controlID: 84021
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 2063
+  controlID: 84022
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 2064
+  controlID: 84023
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -244,9 +244,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: d0ac0000
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 10fbffff
+      m_ExpandedIDs: ae56efff0e20f7ff4c20f7ff323df7ff6a3df7ff703df7ff746df7ffb86df7ff9e8af7ff10fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -809,9 +809,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 0.92650133, y: -1.1685269, z: -1.4943993}
+    m_Target: {x: 1.527012, y: -0.47647303, z: 1.4109601}
     speed: 2
-    m_Value: {x: 0.92650133, y: -1.1685269, z: -1.4943993}
+    m_Value: {x: -2.2383504, y: -28.224348, z: 89.07283}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -857,20 +857,20 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.16002859, y: 0.7802629, z: -0.2224225, w: 0.56261253}
+    m_Target: {x: 0.1383192, y: 0.433574, z: -0.06751616, w: 0.88811606}
     speed: 2
-    m_Value: {x: 0.15999468, y: 0.78009754, z: -0.22237536, w: 0.5624933}
+    m_Value: {x: -0.23332824, y: -0.00055431714, z: 0.0001077947, w: -0.9723979}
   m_Size:
     m_Target: 3.3561945
     speed: 2
-    m_Value: 3.3561945
+    m_Value: 71.27547
   m_Ortho:
     m_Target: 0
     speed: 2
     m_Value: 0
   m_CameraSettings:
-    m_Speed: 0.6806609
-    m_SpeedNormalized: 0.34000045
+    m_Speed: 2
+    m_SpeedNormalized: 1
     m_SpeedMin: 0.001
     m_SpeedMax: 2
     m_EasingEnabled: 1
@@ -1080,7 +1080,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 2144
+  controlID: 84100
   draggingID: 0
 --- !u!114 &12
 MonoBehaviour:
@@ -1156,7 +1156,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scriptables
+    - Assets/Prefabs/Levels/Desert
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1166,16 +1166,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scriptables
+  - Assets/Prefabs/Levels/Desert
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Unity Games\KatanaRush
   m_LockTracker:
-    m_IsLocked: 0
+    m_IsLocked: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 271}
-    m_SelectedIDs: 42e60000
-    m_LastClickedID: 58946
-    m_ExpandedIDs: 00000000c4e5000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 314}
+    m_SelectedIDs: 52ec0000
+    m_LastClickedID: 60498
+    m_ExpandedIDs: 0000000092eb000004ec000008ec000054ec000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1204,7 +1204,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 60180100
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c4e5000000ca9a3bffffff7f
+    m_ExpandedIDs: 0000000092eb000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1230,10 +1230,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: d0ac0000
-    m_LastClickedInstanceID: 44240
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c62300000000000084c600003cf800002afc0000483dfeff48c2000014c30000a4fefdff78ca000070c700005e07020044040000a8cf00000ed8000098b7000026dcf9ff8218010090be000040130300901502008e08f7ff
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c62300000000000084c600003cf800002afc0000483dfeff48c2000014c30000a4fefdff78ca000070c700005e07020044040000a8cf00000ed8000098b7000026dcf9ff8218010090be000040130300901502008e08f7ff58620300
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1371,7 +1371,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Models/Biome/Desert/houses
+    - Assets/Models/Enemy
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1381,16 +1381,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Models/Biome/Desert/houses
+  - Assets/Models/Enemy
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Unity Games\KatanaRush
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 106}
-    m_SelectedIDs: b2e60000
-    m_LastClickedID: 59058
-    m_ExpandedIDs: 00000000c4e5000036e60000b4e60000b6e6000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 170}
+    m_SelectedIDs: 74cf0200
+    m_LastClickedID: 184180
+    m_ExpandedIDs: 0000000092eb000004ec000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1419,7 +1419,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c4e5000000ca9a3bffffff7f
+    m_ExpandedIDs: 0000000092eb000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1445,8 +1445,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: d0ac0000
-    m_LastClickedInstanceID: 44240
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
@@ -1465,7 +1465,7 @@ MonoBehaviour:
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 15}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -1473,7 +1473,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 21}
+    m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 16
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 200

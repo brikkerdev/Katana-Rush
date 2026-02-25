@@ -14,7 +14,8 @@ namespace Runner.Effects
         Deflect,
         Block,
         Dash,
-        Slash
+        Slash,
+        RocketExplosion
     }
 
     [Serializable]
@@ -278,6 +279,11 @@ namespace Runner.Effects
         public GameVisualEffect SpawnSlashEffect(Vector3 position, Vector3 forward)
         {
             return Spawn(VisualEffectType.Slash, position, forward);
+        }
+
+        public GameVisualEffect SpawnRocketExplosionEffect(Vector3 position, Vector3 direction)
+        {
+            return Spawn(VisualEffectType.RocketExplosion, position, direction);
         }
 
         public void ClearAllEffects()

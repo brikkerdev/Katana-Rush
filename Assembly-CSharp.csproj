@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\UI\Screens\LoadingScreen.cs" />
     <Compile Include="Assets\Scripts\UI\Components\GridRouletteAnimator.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\InventoryScreen.cs" />
+    <Compile Include="Assets\Scripts\Enemy\RocketPool.cs" />
     <Compile Include="Assets\Scripts\Inventory\KatanaDatabase.cs" />
     <Compile Include="Assets\Scripts\UI\Components\ChallengeProgressBar.cs" />
     <Compile Include="Assets\Scripts\Collectible\MagnetCollectible.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Assets\Scripts\Inventory\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Levels\Reveal\SegmentReveal.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerBlockDetector.cs" />
+    <Compile Include="Assets\Scripts\Enemy\Rocket.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\EnemyKillRewardAbility.cs" />
     <Compile Include="Assets\Scripts\Ability\KatanaAbility.cs" />
     <Compile Include="Assets\Scripts\Player\Data\MovementSettings.cs" />

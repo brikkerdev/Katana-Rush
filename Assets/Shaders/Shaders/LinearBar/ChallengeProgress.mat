@@ -61,7 +61,7 @@ Material:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
     - _ColorMask: 15
-    - _EffectValue: 0.05076353
+    - _EffectValue: 0.008917054
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -69,7 +69,7 @@ Material:
     - _StencilWriteMask: 255
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
-    - _Value: 0.4921
+    - _Value: 0
     m_Colors:
     - _BackgroundColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}

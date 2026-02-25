@@ -11,7 +11,8 @@ namespace Runner.Enemy
         Patrol,
         Chase,
         Shooter,
-        Sniper
+        Sniper,
+        RocketLauncher
     }
 
     public class Enemy : MonoBehaviour
@@ -29,6 +30,13 @@ namespace Runner.Enemy
         [SerializeField] private float fireDelay = 0.5f;
         [SerializeField] private float bulletSpeed = 20f;
         [SerializeField] private bool shootsLethalBullets = false;
+
+        [Header("Rocket Settings")]
+        [SerializeField] private bool canFireRockets = false;
+        [SerializeField] private float rocketSpeed = 15f;
+        [SerializeField] private float rocketFireRate = 1.5f;
+        [SerializeField] private float rocketExplosionRadius = 3f;
+        [SerializeField] private bool rocketsAreLethal = true;
 
         [Header("Aim Prediction")]
         [SerializeField] private bool usePrediction = true;
@@ -91,6 +99,9 @@ namespace Runner.Enemy
             if (enemyType == EnemyType.Shooter || enemyType == EnemyType.Sniper)
                 canShoot = true;
 
+            if (enemyType == EnemyType.RocketLauncher)
+                canFireRockets = true;
+
             if (enemyType == EnemyType.Sniper)
             {
                 shootsLethalBullets = true;
@@ -118,9 +129,14 @@ namespace Runner.Enemy
 
         private void Update()
         {
-            if (isDead || !canShoot || playerTarget == null) return;
+            if (isDead) return;
             if (Game.Instance == null || Game.Instance.State != GameState.Playing) return;
-            UpdateShooting();
+
+            if (canShoot && playerTarget != null)
+                UpdateShooting();
+
+            if (canFireRockets && playerTarget != null)
+                UpdateRocketFiring();
         }
 
         private void UpdateShooting()
@@ -185,6 +201,54 @@ namespace Runner.Enemy
                 Game.Instance?.Sound?.PlaySniperFire(cachedFirePosition);
             else
                 Game.Instance?.Sound?.PlayBulletFire(cachedFirePosition, shootsLethalBullets);
+
+            enemyAnimator?.PlayFireAnimation();
+        }
+
+        private void UpdateRocketFiring()
+        {
+            if (!canFire)
+            {
+                initialDelay -= Time.deltaTime;
+                if (initialDelay <= 0f) canFire = true;
+                return;
+            }
+
+            Vector3 toPlayer = playerTarget.position - cachedTransform.position;
+            if (toPlayer.sqrMagnitude > sqrFireRange) return;
+
+            float dot = Vector3.Dot(-cachedTransform.forward, toPlayer.normalized);
+            if (dot < 0f) return;
+
+            fireTimer -= Time.deltaTime;
+
+            if (fireTimer <= 0f)
+            {
+                FireRocket();
+                fireTimer = 1f / rocketFireRate;
+            }
+        }
+
+        private void FireRocket()
+        {
+            if (RocketPool.Instance == null || playerTarget == null) return;
+
+            Rocket rocket = RocketPool.Instance.GetRocket();
+            if (rocket == null) return;
+
+            cachedFirePosition = firePoint != null ? firePoint.position : cachedTransform.position + Vector3.up;
+
+            // Rockets go straight forward from the enemy's facing direction
+            Vector3 direction = -cachedTransform.forward;
+
+            rocket.Setup(cachedFirePosition, direction, rocketsAreLethal);
+            rocket.SetTarget(playerTarget);
+            rocket.SetSourceEnemy(this);
+
+            if (ParticleController.Instance != null && firePoint != null)
+                ParticleController.Instance.SpawnMuzzleFlash(firePoint, direction);
+
+            Game.Instance?.Sound?.PlayRocketFire(cachedFirePosition);
 
             enemyAnimator?.PlayFireAnimation();
         }

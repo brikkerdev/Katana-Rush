@@ -64,6 +64,7 @@ MonoBehaviour:
   gameplayMusicVolume: 0.7
   musicFadeDuration: 1.5
   trackTransitionDelay: 0.5
+  preloadOnAwake: 1
   jumpSound: {fileID: 8300000, guid: 89cfdead096313e4b881f67204c46d42, type: 3}
   doubleJumpSound: {fileID: 8300000, guid: 89cfdead096313e4b881f67204c46d42, type: 3}
   landSound: {fileID: 8300000, guid: 25bd5558b6e9efa408b15cbbc4bdcba0, type: 3}
@@ -84,6 +85,8 @@ MonoBehaviour:
   enemyRagdollSound: {fileID: 0}
   sniperChargeSound: {fileID: 0}
   sniperFireSound: {fileID: 0}
+  rocketFireSound: {fileID: 8300000, guid: af7c7a46541c343b495812ae2b3c5d28, type: 3}
+  rocketExplosionSound: {fileID: 8300000, guid: 7c96ec51a947f0842b41736a32262a7b, type: 3}
   buttonClickSound: {fileID: 8300000, guid: 6bc5d54cf7be3c94589e7fcbcb7c505a, type: 3}
   buttonHoverSound: {fileID: 0}
   buttonBackSound: {fileID: 8300000, guid: 6bc5d54cf7be3c94589e7fcbcb7c505a, type: 3}
@@ -96,7 +99,6 @@ MonoBehaviour:
   coinCollectSound: {fileID: 8300000, guid: 4ddbd19703867ad479cbb1cecc6db498, type: 3}
   gemCollectSound: {fileID: 0}
   powerupCollectSound: {fileID: 0}
-  healthCollectSound: {fileID: 0}
   purchaseSuccessSound: {fileID: 8300000, guid: 0155e7fb6ef844abc976d5f934ce1b1e, type: 3}
   purchaseFailSound: {fileID: 8300000, guid: 16458abe8d5a64f7a8082f0de46d643f, type: 3}
   equipSound: {fileID: 8300000, guid: 0ae4a20a1902842349712242a032c8ab, type: 3}
@@ -116,7 +118,7 @@ MonoBehaviour:
   countdownGoSound: {fileID: 8300000, guid: 997b70dd6d437c4449f05c18b2802d77, type: 3}
   pauseSound: {fileID: 0}
   resumeSound: {fileID: 0}
-  newHighScoreSound: {fileID: 0}
+  newHighScoreSound: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
   milestoneSound: {fileID: 0}
   scoreTickSound: {fileID: 8300000, guid: 1488cb0356b2ccf4eb93b2ca25f55c1f, type: 3}
   comboSound: {fileID: 0}

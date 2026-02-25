@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4528770899572379823}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 800}
+  m_LocalPosition: {x: 0, y: -4, z: 800}
   m_LocalScale: {x: 80, y: 1, z: 160}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -172,11 +172,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c84952f9fad1bd24dae93a5bbb5f3ea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.EnvironmentReveal
-  revealDuration: 1.2
-  dropDistance: 15
-  revealEase: 9
+  revealDuration: 0
+  dropDistance: 0
+  revealEase: 0
   animateTarget: {fileID: 990439703226177419}
-  revealGroups: []
+  revealGroups:
+  - groupRoot: {fileID: 990439703226177419}
+    delay: 0
+    duration: 1
+    dropDistance: 15
+    ease: 6
 --- !u!1001 &7290728602621293693
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -199,7 +204,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 296.76776
+      value: 215.9
       objectReference: {fileID: 0}
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.y
@@ -277,7 +282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -123.23223
+      value: -110.4
       objectReference: {fileID: 0}
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.y
