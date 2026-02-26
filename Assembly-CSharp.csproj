@@ -58,6 +58,7 @@
     <Compile Include="Assets\Scripts\Player\Visual\StaminaBarController.cs" />
     <Compile Include="Assets\Scripts\Player\Movement\JumpMovement.cs" />
     <Compile Include="Assets\Scripts\Collectible\DashRestoreCollectible.cs" />
+    <Compile Include="Assets\Scripts\Environment\ObstacleSpawner.cs" />
     <Compile Include="Assets\Scripts\Localization\Controllers\LocalizationController.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerCollision.cs" />
     <Compile Include="Assets\Scripts\UI\Components\DayNightUIElement.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\Scripts\UI\Components\BarUIVisualElement.cs" />
     <Compile Include="Assets\Scripts\Core\Game.cs" />
     <Compile Include="Assets\Scripts\Collectible\SpeedBoostCollectible.cs" />
+    <Compile Include="Assets\Scripts\Environment\DestructibleObstacle.cs" />
     <Compile Include="Assets\Scripts\Environment\FogController.cs" />
     <Compile Include="Assets\Scripts\Core\MobileOptimizer.cs" />
     <Compile Include="Assets\Scripts\Input\InputReader.cs" />
@@ -135,8 +137,10 @@
     <Compile Include="Assets\Scripts\Enemy\EnemySpawnPoint.cs" />
     <Compile Include="Assets\Scripts\Inventory\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Levels\Reveal\SegmentReveal.cs" />
+    <Compile Include="Assets\Scripts\Environment\ObstacleSpawnPoint.cs" />
     <Compile Include="Assets\Scripts\Player\Core\PlayerBlockDetector.cs" />
     <Compile Include="Assets\Scripts\Enemy\Rocket.cs" />
+    <Compile Include="Assets\Scripts\Biome\BiomeBackgroundController.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\EnemyKillRewardAbility.cs" />
     <Compile Include="Assets\Scripts\Ability\KatanaAbility.cs" />
     <Compile Include="Assets\Scripts\Player\Data\MovementSettings.cs" />
@@ -162,6 +166,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\Shaders\Shaders\CircularStaminaBar\CircularStaminaBar.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\Shaders\Shaders\Biome\SynthwaveEdgeGlow.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\AssetPacks\Free Slash VFX\Model\Katana\Katana License.txt" />
     <None Include="Assets\AssetPacks\Pine Forest_LowPoly\Shaders\Mobile_Vtx_Cutout.shader" />
@@ -175,6 +180,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\Shaders\Shaders\Biome\SythwaveSun.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />

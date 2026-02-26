@@ -13,6 +13,9 @@ namespace Runner.LevelGeneration
         [SerializeField] private float environmentPreSpawnDistance = 50f;
         [SerializeField] private float environmentDespawnDistance = 100f;
 
+        [Header("Background")]
+        [SerializeField] private BiomeBackgroundController backgroundController;
+
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
 
@@ -80,6 +83,12 @@ namespace Runner.LevelGeneration
 
             SpawnEnvironmentForBiome(currentBiome, 0f);
 
+            if (backgroundController != null)
+            {
+                backgroundController.Initialize(player);
+                backgroundController.SpawnBackgroundForBiome(currentBiome, 0f);
+            }
+
             if (DayNightCycle.Instance != null)
             {
                 DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
@@ -141,6 +150,12 @@ namespace Runner.LevelGeneration
 
             visualTransitionPending = false;
             visualNextBiome = null;
+
+            if (backgroundController != null && visualCurrentBiome != null)
+            {
+                backgroundController.TriggerMoveDown();
+                backgroundController.SpawnBackgroundForBiome(visualCurrentBiome, player.position.z, true);
+            }
 
             OnBiomeChanged?.Invoke(visualCurrentBiome);
 
@@ -219,6 +234,11 @@ namespace Runner.LevelGeneration
             spawnedLengthInCurrentBiome += exitSegment.Length;
 
             ScheduleVisualTransition(nextBiome, currentBiomeEndZ);
+
+            if (backgroundController != null)
+            {
+                backgroundController.TriggerMoveUp(currentBiomeEndZ);
+            }
 
             OnBiomeTransitionStarted?.Invoke(currentBiome, nextBiome);
 
@@ -363,6 +383,12 @@ namespace Runner.LevelGeneration
 
             SpawnEnvironmentForBiome(currentBiome, startZ);
 
+            if (backgroundController != null)
+            {
+                backgroundController.ResetBackground();
+                backgroundController.SpawnBackgroundForBiome(startingBiome, startZ);
+            }
+
             if (DayNightCycle.Instance != null)
             {
                 DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
@@ -407,6 +433,12 @@ namespace Runner.LevelGeneration
             visualTransitionPending = false;
 
             SpawnEnvironmentForBiome(currentBiome, deathZ);
+
+            if (backgroundController != null)
+            {
+                backgroundController.ResetBackground();
+                backgroundController.SpawnBackgroundForBiome(currentBiomeAtDeath, deathZ);
+            }
 
             if (DayNightCycle.Instance != null)
             {

@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Custom_SynthwaveEdgeGlow
+  m_Shader: {fileID: 4800000, guid: 556cf804f9b2e604b9f974981624e529, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _PULSE
+  - _SCANLINES
+  m_InvalidKeywords:
+  - _PULSE_ON
+  - _SCANLINES_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _ColorGradientScale: 1
+    - _GlowIntensity: 3
+    - _GlowWidth: 0.5
+    - _GradientOffset: 0
+    - _GradientScale: 1
+    - _InnerGlow: 0.05
+    - _Pulse: 1
+    - _PulseMin: 0.6
+    - _PulseSpeed: 2
+    - _RimPower: 8
+    - _ScanDensity: 300
+    - _ScanSpeed: 1.5
+    - _ScanStrength: 0.15
+    - _Scanlines: 1
+    - _WireWidth: 0.2
+    m_Colors:
+    - _EdgeColor1: {r: 0.91779137, g: 0, b: 1, a: 1}
+    - _EdgeColor2: {r: 0.64541435, g: 0, b: 1, a: 1}
+    - _FaceColor: {r: 0.12802933, g: 0, b: 0.16981131, a: 1}
+    - _GlowColor1: {r: 1, g: 0, b: 0.6, a: 1}
+    - _GlowColor2: {r: 0, g: 0.8, b: 1, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

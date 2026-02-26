@@ -8,12 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Retro1
-  m_Shader: {fileID: 4800000, guid: 313fcf3aebc04cf4ab4f8c5f2850be7f, type: 3}
+  m_Shader: {fileID: 4800000, guid: 556cf804f9b2e604b9f974981624e529, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _PULSE
+  m_InvalidKeywords:
   - _OUTLINE_ON
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -84,6 +85,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddPrecomputedVelocity: 0
+    - _Alpha: 1
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -102,15 +104,27 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _GlowIntensity: 1
+    - _GlowWidth: 0.5
+    - _GradientOffset: 0
+    - _GradientScale: 1
+    - _InnerGlow: 0.03
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _OutlineEnabled: 1
     - _OutlineWidth: 0.659
     - _Parallax: 0.005
+    - _Pulse: 1
+    - _PulseMin: 1
+    - _PulseSpeed: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _RimStep: 0.469
     - _RimStepSmooth: 0.364
+    - _ScanDensity: 14
+    - _ScanSpeed: 1.5
+    - _ScanStrength: 0.2
+    - _Scanlines: 0
     - _ShadowStep: 0.761
     - _ShadowStepSmooth: 0.606
     - _Smoothness: 0
@@ -121,13 +135,18 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _SurfaceType: 0
+    - _WireWidth: 0.2
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
     - _Color: {r: 1, g: 0.8499903, b: 0.54245275, a: 1}
+    - _EdgeColor1: {r: 0.35089868, g: 0.18560877, b: 0.4056604, a: 1}
+    - _EdgeColor2: {r: 0.22215919, g: 0.18431373, b: 0.34117648, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FaceColor: {r: 0.02, g: 0, b: 0.049999982, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

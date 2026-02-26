@@ -10136,6 +10136,7 @@ MonoBehaviour:
   soundControllerPrefab: {fileID: 6014441948232181048, guid: f3c709ec80a54244cb7d9ae120de57c7, type: 3}
   dayNightUIControllerPrefab: {fileID: 978160268854356110, guid: d2b8fc355d615d245a88a52c0000ca1f, type: 3}
   magnetControllerPrefab: {fileID: 4477273042286929276, guid: ee2b4ab08e01d71468b49b419f243ad6, type: 3}
+  obstacleSpawnerPrefab: {fileID: 0}
   playerSpawnPoint: {fileID: 1748236326}
   cameraManager: {fileID: 1415522946}
   cameraEffects: {fileID: 189794314}
@@ -18132,7 +18133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf24daa26c4f4b4b99a2d4cbb804549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.SceneSetup
-  startingBiome: {fileID: 11400000, guid: 21bacd8f59008c1489e41e7238c80efe, type: 2}
+  startingBiome: {fileID: 11400000, guid: 78bb5eb3b8728784889bb9e49474c655, type: 2}
   sunLight: {fileID: 410087040}
   moonLight: {fileID: 122156966}
 --- !u!4 &2093762285

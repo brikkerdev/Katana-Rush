@@ -20,6 +20,11 @@ namespace Runner.LevelGeneration
         [SerializeField] private GameObject environmentPrefab;
         [SerializeField] private Vector3 environmentOffset = Vector3.zero;
 
+        [Header("Background Image")]
+        [SerializeField] private GameObject backgroundImagePrefab;
+        [SerializeField] private Vector3 backgroundImageOffset = new Vector3(0f, 10f, 0f);
+        [SerializeField] private float backgroundImageMoveSpeed = 2f;
+
         [Header("Length")]
         [SerializeField] private float minLength = 200f;
         [SerializeField] private float maxLength = 400f;
@@ -55,6 +60,9 @@ namespace Runner.LevelGeneration
         public BiomeTransition[] Transitions => transitions;
         public GameObject EnvironmentPrefab => environmentPrefab;
         public Vector3 EnvironmentOffset => environmentOffset;
+        public GameObject BackgroundImagePrefab => backgroundImagePrefab;
+        public Vector3 BackgroundImageOffset => backgroundImageOffset;
+        public float BackgroundImageMoveSpeed => backgroundImageMoveSpeed;
         public float MinLength => minLength;
         public float MaxLength => maxLength;
         public float MinDifficulty => minDifficulty;

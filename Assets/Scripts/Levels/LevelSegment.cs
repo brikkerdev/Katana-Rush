@@ -1,6 +1,7 @@
 using UnityEngine;
 using Runner.Enemy;
 using Runner.Collectibles;
+using Runner.Environment;
 
 namespace Runner.LevelGeneration
 {
@@ -17,18 +18,24 @@ namespace Runner.LevelGeneration
         [Header("Collectible Spawn Points")]
         [SerializeField] private CollectibleSpawnPoint[] collectibleSpawnPoints;
 
+        [Header("Obstacle Spawn Points")]
+        [SerializeField] private ObstacleSpawnPoint[] obstacleSpawnPoints;
+
         public float Length => segmentLength;
         public float DifficultyWeight => difficultyWeight;
         public bool AllowConsecutive => allowConsecutive;
         public EnemySpawnPoint[] EnemySpawnPoints => enemySpawnPoints;
         public CollectibleSpawnPoint[] CollectibleSpawnPoints => collectibleSpawnPoints;
+        public ObstacleSpawnPoint[] ObstacleSpawnPoints => obstacleSpawnPoints;
         public int EnemySpawnPointCount => enemySpawnPoints != null ? enemySpawnPoints.Length : 0;
         public int CollectibleSpawnPointCount => collectibleSpawnPoints != null ? collectibleSpawnPoints.Length : 0;
+        public int ObstacleSpawnPointCount => obstacleSpawnPoints != null ? obstacleSpawnPoints.Length : 0;
 
         public void CollectSpawnPoints()
         {
             enemySpawnPoints = GetComponentsInChildren<EnemySpawnPoint>(true);
             collectibleSpawnPoints = GetComponentsInChildren<CollectibleSpawnPoint>(true);
+            obstacleSpawnPoints = GetComponentsInChildren<ObstacleSpawnPoint>(true);
         }
 
         public void ResetSegment()
@@ -44,7 +51,8 @@ namespace Runner.LevelGeneration
         private void OnValidate()
         {
             if (enemySpawnPoints == null || enemySpawnPoints.Length == 0 ||
-                collectibleSpawnPoints == null || collectibleSpawnPoints.Length == 0)
+                collectibleSpawnPoints == null || collectibleSpawnPoints.Length == 0 ||
+                obstacleSpawnPoints == null || obstacleSpawnPoints.Length == 0)
             {
                 CollectSpawnPoints();
             }
@@ -79,15 +87,15 @@ namespace Runner.LevelGeneration
                 }
             }
 
-            // Collectible spawn points
-            if (collectibleSpawnPoints != null)
+            // Obstacle spawn points
+            if (obstacleSpawnPoints != null)
             {
-                Gizmos.color = Color.yellow;
-                foreach (var sp in collectibleSpawnPoints)
+                Gizmos.color = new Color(1f, 0.5f, 0f);
+                foreach (var sp in obstacleSpawnPoints)
                 {
                     if (sp != null)
                     {
-                        Gizmos.DrawWireSphere(sp.transform.position, 0.4f);
+                        Gizmos.DrawWireSphere(sp.transform.position, 0.35f);
                     }
                 }
             }
@@ -97,7 +105,7 @@ namespace Runner.LevelGeneration
         private void CollectAllSpawnPoints()
         {
             CollectSpawnPoints();
-            Debug.Log($"Found {EnemySpawnPointCount} enemy spawn points and {CollectibleSpawnPointCount} collectible spawn points");
+            Debug.Log($"Found {EnemySpawnPointCount} enemy spawn points, {CollectibleSpawnPointCount} collectible spawn points, and {ObstacleSpawnPointCount} obstacle spawn points");
         }
 #endif
     }

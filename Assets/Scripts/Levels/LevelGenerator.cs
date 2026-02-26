@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Runner.Enemy;
 using Runner.Collectibles;
+using Runner.Environment;
 
 namespace Runner.LevelGeneration
 {
@@ -23,8 +24,8 @@ namespace Runner.LevelGeneration
 
         [Header("Spawners")]
         [SerializeField] private EnemySpawner enemySpawner;
-
         [SerializeField] public CollectibleSpawner collectibleSpawner;
+        [SerializeField] private ObstacleSpawner obstacleSpawner;
 
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
@@ -74,6 +75,9 @@ namespace Runner.LevelGeneration
 
             if (collectibleSpawner == null)
                 collectibleSpawner = FindFirstObjectByType<CollectibleSpawner>();
+            
+            if (obstacleSpawner == null)
+                obstacleSpawner = FindFirstObjectByType<ObstacleSpawner>();
         }
 
         private void GenerateInitialSegments()
@@ -120,6 +124,7 @@ namespace Runner.LevelGeneration
 
             enemySpawner?.DespawnEnemiesBeforeZ(threshold);
             collectibleSpawner?.DespawnCollectiblesBeforeZ(threshold);
+            obstacleSpawner?.DespawnObstaclesBeforeZ(threshold);
         }
 
         private void SpawnNextSegment(bool isInitialSpawn)
@@ -247,6 +252,7 @@ namespace Runner.LevelGeneration
 
             enemySpawner?.SpawnEnemiesForSegment(segment, player.position.z * difficulty);
             collectibleSpawner?.SpawnCollectiblesForSegment(segment);
+            obstacleSpawner?.SpawnObstaclesForSegment(segment);
         }
 
         private void DespawnSegment(ActiveSegment segment)
@@ -263,6 +269,7 @@ namespace Runner.LevelGeneration
         {
             enemySpawner?.DespawnAllEnemies();
             collectibleSpawner?.DespawnAllCollectibles();
+            obstacleSpawner?.DespawnAllObstacles();
 
             foreach (var segment in activeSegments)
             {

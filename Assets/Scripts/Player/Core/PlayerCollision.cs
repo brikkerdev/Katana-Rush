@@ -4,6 +4,7 @@ using Runner.Player.Core;
 using Runner.Collectibles;
 using Runner.Inventory;
 using Runner.Save;
+using Runner.Environment;
 
 namespace Runner.Player
 {
@@ -13,6 +14,7 @@ namespace Runner.Player
         [SerializeField] private string obstacleTag = "Obstacle";
         [SerializeField] private string collectibleTag = "Collectable";
         [SerializeField] private string enemyTag = "Enemy";
+        [SerializeField] private string destructibleObstacleTag = "DestructibleObstacle";
 
         [Header("Detection")]
         [SerializeField] private float detectionRadius = 1.2f;
@@ -22,6 +24,19 @@ namespace Runner.Player
         private Player player;
         private PlayerController controller;
         private Collider[] hitBuffer = new Collider[16];
+
+        /// <summary>
+        /// Gets the player's current velocity for physics calculations.
+        /// Used for determining impact force on obstacles.
+        /// </summary>
+        public Vector3 PlayerVelocity
+        {
+            get
+            {
+                if (controller == null) return Vector3.forward * 10f;
+                return Vector3.forward * controller.CurrentSpeed;
+            }
+        }
 
         public void Initialize(Player playerRef)
         {
@@ -62,6 +77,32 @@ namespace Runner.Player
                     }
                     col.gameObject.SetActive(false);
                 }
+                
+                // Check for destructible obstacles in overlap sphere
+                if (col.CompareTag(destructibleObstacleTag) || col.CompareTag(obstacleTag))
+                {
+                    HandleDestructibleObstacleCollision(col.gameObject);
+                }
+            }
+        }
+        
+        private void HandleDestructibleObstacleCollision(GameObject obstacleObject)
+        {
+            DestructibleObstacle destructible = obstacleObject.GetComponent<DestructibleObstacle>();
+            if (destructible == null) return;
+            if (destructible.IsDestroyed) return;
+            
+            if (controller.IsDashing)
+            {
+                // Pass player velocity for physics-based destruction effects
+                destructible.OnDashHit(PlayerVelocity);
+                return;
+            }
+            
+            // Not dashing - game over
+            if (!controller.IsInvincible)
+            {
+                Game.Instance?.GameOver();
             }
         }
 
@@ -125,8 +166,23 @@ namespace Runner.Player
 
             if (hit.gameObject.CompareTag(obstacleTag))
             {
+                // Check if it's a destructible obstacle that can be destroyed by dash
+                DestructibleObstacle destructible = hit.gameObject.GetComponent<DestructibleObstacle>();
+                if (destructible != null && controller.IsDashing)
+                {
+                    // Pass player velocity for physics-based destruction effects
+                    destructible.OnDashHit(PlayerVelocity);
+                    return;
+                }
+                
                 if (controller.IsInvincible) return;
                 Game.Instance?.GameOver();
+            }
+            
+            // Also handle explicit destructible obstacle tag
+            if (hit.gameObject.CompareTag(destructibleObstacleTag))
+            {
+                HandleDestructibleObstacleCollision(hit.gameObject);
             }
 
             if (hit.gameObject.CompareTag(enemyTag))

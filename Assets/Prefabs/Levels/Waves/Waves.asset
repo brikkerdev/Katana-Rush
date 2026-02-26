@@ -21,11 +21,11 @@ MonoBehaviour:
   - targetBiome: {fileID: 11400000, guid: a7b40b39fec145e45804afe0c3288f71, type: 2}
     exitSegments:
     - {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
-  - targetBiome: {fileID: 11400000}
-    exitSegments:
-    - {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
-  environmentPrefab: {fileID: 0}
+  environmentPrefab: {fileID: 5436482676337235900, guid: 54ecb96c48a8af940b2ad68cc8c94cbc, type: 3}
   environmentOffset: {x: 0, y: 0, z: 0}
+  backgroundImagePrefab: {fileID: 8692015542209705699, guid: 082e2ea7e47672e469b32ee5978b1ce5, type: 3}
+  backgroundImageOffset: {x: 0, y: 0, z: 4800}
+  backgroundImageMoveSpeed: 1
   minLength: 1600
   maxLength: 1600
   minDifficulty: 0
