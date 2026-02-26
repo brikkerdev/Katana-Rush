@@ -35,6 +35,10 @@ namespace Runner.LevelGeneration
         private float visualTransitionZ;
         private bool visualTransitionPending;
 
+        [Header("Biome Repetition")]
+        [SerializeField] private float repeatProbability = 0.5f;
+        private int consecutiveRepeats = 0;
+
         private List<BiomeEnvironment> activeEnvironments = new List<BiomeEnvironment>();
 
         public event Action<BiomeData> OnBiomeChanged;
@@ -116,11 +120,34 @@ namespace Runner.LevelGeneration
         private void PrepareNextBiome()
         {
             float difficulty = player != null ? player.position.z / 1000f : 0f;
-            nextBiome = currentBiome.GetRandomNextBiome(difficulty);
+            BiomeData potentialNextBiome = currentBiome.GetRandomNextBiome(difficulty);
 
-            if (showDebug && nextBiome != null)
+            // Check if we should repeat the current biome
+            bool shouldRepeat = UnityEngine.Random.value < repeatProbability;
+
+            if (shouldRepeat)
             {
-                Debug.Log($"[BiomeManager] Next biome prepared: {nextBiome.BiomeName}");
+                // Repeat current biome - reduce probability by half
+                nextBiome = currentBiome;
+                repeatProbability *= 0.5f;
+                consecutiveRepeats++;
+
+                if (showDebug)
+                {
+                    Debug.Log($"[BiomeManagerGen] Repeating biome: {currentBiome.BiomeName}, new probability: {repeatProbability}");
+                }
+            }
+            else
+            {
+                // New biome - use the selected one and reset probability
+                nextBiome = potentialNextBiome;
+                repeatProbability = 0.5f;
+                consecutiveRepeats = 0;
+
+                if (showDebug && nextBiome != null)
+                {
+                    Debug.Log($"[BiomeManagerGen] Next biome prepared: {nextBiome.BiomeName}, probability reset to 50%");
+                }
             }
         }
 
@@ -217,6 +244,7 @@ namespace Runner.LevelGeneration
         private LevelSegment GetTransitionSegment(LevelSegment lastSegment)
         {
             var transition = currentBiome.GetTransitionTo(nextBiome);
+            transitionSegmentSpawned = true;
 
             if (transition == null)
             {
@@ -230,7 +258,6 @@ namespace Runner.LevelGeneration
                 return GetRegularSegment(lastSegment);
             }
 
-            transitionSegmentSpawned = true;
             spawnedLengthInCurrentBiome += exitSegment.Length;
 
             ScheduleVisualTransition(nextBiome, currentBiomeEndZ);
@@ -266,7 +293,7 @@ namespace Runner.LevelGeneration
         {
             if (nextBiome == null)
             {
-                Debug.LogError("[BiomeManager] No next biome!");
+                Debug.LogError("[BiomeManagerGen] No next biome!");
                 return;
             }
 
@@ -274,7 +301,7 @@ namespace Runner.LevelGeneration
 
             if (showDebug)
             {
-                Debug.Log($"[BiomeManager] Segment generation switched to {nextBiome.BiomeName} at Z={newStartZ}");
+                Debug.Log($"[BiomeManagerGen] Segment generation switched to {nextBiome.BiomeName} at Z={newStartZ}");
             }
 
             SetupBiome(nextBiome, newStartZ);
@@ -381,6 +408,9 @@ namespace Runner.LevelGeneration
             visualTransitionZ = startZ;
             visualTransitionPending = false;
 
+            repeatProbability = 0.5f;
+            consecutiveRepeats = 0;
+
             SpawnEnvironmentForBiome(currentBiome, startZ);
 
             if (backgroundController != null)
@@ -431,6 +461,9 @@ namespace Runner.LevelGeneration
             visualNextBiome = nextBiomeAtDeath;
             visualTransitionZ = deathZ;
             visualTransitionPending = false;
+
+            repeatProbability = 0.5f;
+            consecutiveRepeats = 0;
 
             SpawnEnvironmentForBiome(currentBiome, deathZ);
 
