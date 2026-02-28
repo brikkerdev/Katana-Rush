@@ -14,9 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
   biomeName: Roofs
   debugColor: {r: 1, g: 1, b: 1, a: 1}
-  segments:
-  - {fileID: 6844235478968440788, guid: 947c1012165b36449b3430cebdc63835, type: 3}
-  - {fileID: 6844235478968440788, guid: 87c25e18268bd3746b2ce8cac83c17ee, type: 3}
+  segmentNodes:
+  - nodeIndex: 0
+    segment: {fileID: 6844235478968440788, guid: 947c1012165b36449b3430cebdc63835, type: 3}
+    nodeName: Segment 0
+    nodePosition: {x: 618, y: 390}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 1
+    segment: {fileID: 6844235478968440788, guid: 87c25e18268bd3746b2ce8cac83c17ee, type: 3}
+    nodeName: Segment 1
+    nodePosition: {x: 889, y: 392}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  editorScrollPosition: {x: -885.5, y: -363}
+  editorZoom: 2
   transitions:
   - targetBiome: {fileID: 11400000, guid: 3bfb43a40c035694f89a37a997a852e4, type: 2}
     exitSegments:

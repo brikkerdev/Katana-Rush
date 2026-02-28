@@ -10136,7 +10136,7 @@ MonoBehaviour:
   soundControllerPrefab: {fileID: 6014441948232181048, guid: f3c709ec80a54244cb7d9ae120de57c7, type: 3}
   dayNightUIControllerPrefab: {fileID: 978160268854356110, guid: d2b8fc355d615d245a88a52c0000ca1f, type: 3}
   magnetControllerPrefab: {fileID: 4477273042286929276, guid: ee2b4ab08e01d71468b49b419f243ad6, type: 3}
-  obstacleSpawnerPrefab: {fileID: 0}
+  obstacleSpawnerPrefab: {fileID: 2982081444385193276, guid: 47f3fe3e6e934ff448010be2d89a3382, type: 3}
   playerSpawnPoint: {fileID: 1748236326}
   cameraManager: {fileID: 1415522946}
   cameraEffects: {fileID: 189794314}

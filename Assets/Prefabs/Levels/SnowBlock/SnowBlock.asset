@@ -14,13 +14,72 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
   biomeName: SnowBlocks
   debugColor: {r: 1, g: 1, b: 1, a: 1}
-  segments:
-  - {fileID: 6844235478968440788, guid: 4c6bf053e9b11d7428e1ee56fe1813b9, type: 3}
-  - {fileID: 6844235478968440788, guid: 9c9b439d072acd84c981b106ce9bc4a1, type: 3}
-  - {fileID: 6844235478968440788, guid: 7cff71f595e8e5d4381002a6b650072a, type: 3}
-  - {fileID: 6844235478968440788, guid: e9c98295ac7ea154181336b9f136130d, type: 3}
-  - {fileID: 6844235478968440788, guid: 5a4de0551d6776c46b70d06bc8bba066, type: 3}
-  - {fileID: 6844235478968440788, guid: ee68bb360b93550439e81f1b3396363f, type: 3}
+  segmentNodes:
+  - nodeIndex: 0
+    segment: {fileID: 6844235478968440788, guid: 4c6bf053e9b11d7428e1ee56fe1813b9, type: 3}
+    nodeName: Segment 0
+    nodePosition: {x: 100, y: 100}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 1
+    segment: {fileID: 6844235478968440788, guid: 9c9b439d072acd84c981b106ce9bc4a1, type: 3}
+    nodeName: Segment 1
+    nodePosition: {x: 380, y: 100}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 2
+    segment: {fileID: 6844235478968440788, guid: 7cff71f595e8e5d4381002a6b650072a, type: 3}
+    nodeName: Segment 2
+    nodePosition: {x: 660, y: 100}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 3
+    segment: {fileID: 6844235478968440788, guid: e9c98295ac7ea154181336b9f136130d, type: 3}
+    nodeName: Segment 3
+    nodePosition: {x: 940, y: 101}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 4
+    segment: {fileID: 6844235478968440788, guid: 5a4de0551d6776c46b70d06bc8bba066, type: 3}
+    nodeName: Segment 4
+    nodePosition: {x: 100, y: 280}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 5
+    segment: {fileID: 6844235478968440788, guid: ee68bb360b93550439e81f1b3396363f, type: 3}
+    nodeName: Segment 5
+    nodePosition: {x: 380, y: 279}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 6
+    segment: {fileID: 6844235478968440788, guid: b1e016f72f26380488b851eff80a3cf7, type: 3}
+    nodeName: Segment 6
+    nodePosition: {x: 660, y: 280}
+    isStartNode: 0
+    isEndNode: 1
+    connections: 
+    weight: 1
+    cooldown: 0
+  editorScrollPosition: {x: 0, y: 0}
+  editorZoom: 1
   transitions:
   - targetBiome: {fileID: 11400000, guid: 78bb5eb3b8728784889bb9e49474c655, type: 2}
     exitSegments:

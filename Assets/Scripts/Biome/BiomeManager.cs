@@ -41,6 +41,9 @@ namespace Runner.LevelGeneration
 
         private List<BiomeEnvironment> activeEnvironments = new List<BiomeEnvironment>();
 
+        [Header("Node-Based Generation")]
+        private int currentNodeIndex = 0;
+
         public event Action<BiomeData> OnBiomeChanged;
         public event Action<BiomeData, BiomeData> OnBiomeTransitionStarted;
 
@@ -115,6 +118,7 @@ namespace Runner.LevelGeneration
             spawnedLengthInCurrentBiome = 0f;
             transitionSegmentSpawned = false;
             environmentSpawnedForNextBiome = false;
+            currentNodeIndex = 0;
         }
 
         private void PrepareNextBiome()
@@ -229,12 +233,30 @@ namespace Runner.LevelGeneration
 
         private LevelSegment GetRegularSegment(LevelSegment lastSegment)
         {
-            LevelSegment segment = currentBiome.GetRandomSegment(lastSegment);
+            LevelSegment segment = currentBiome.GetNextSegment(currentNodeIndex);
 
             if (segment == null)
             {
-                Debug.LogError($"[BiomeManager] No segments in {currentBiome.BiomeName}!");
+                Debug.LogWarning($"[BiomeManager] No segments from node {currentNodeIndex} in {currentBiome.BiomeName}! Falling back to random.");
+                segment = currentBiome.GetNextSegment(-1);
+            }
+
+            if (segment == null)
+            {
+                Debug.LogError($"[BiomeManager] No segments available in {currentBiome.BiomeName}!");
                 return null;
+            }
+
+            if (currentBiome.SegmentNodes != null)
+            {
+                for (int i = 0; i < currentBiome.SegmentNodes.Length; i++)
+                {
+                    if (currentBiome.SegmentNodes[i] != null && currentBiome.SegmentNodes[i].Segment == segment)
+                    {
+                        currentNodeIndex = i;
+                        break;
+                    }
+                }
             }
 
             spawnedLengthInCurrentBiome += segment.Length;

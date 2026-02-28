@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Project
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 382}
   m_MaxSize: {x: 10000, y: 10000}
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 126
+  controlID: 77
   draggingID: 0
 --- !u!114 &11
 MonoBehaviour:
@@ -1009,9 +1009,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 1.527012, y: -0.47647303, z: 1.4109601}
+    m_Target: {x: 3.467524, y: 27.749063, z: 1638.7036}
     speed: 2
-    m_Value: {x: 1.527012, y: -0.47647303, z: 1.4109601}
+    m_Value: {x: 3.467524, y: 27.749063, z: 1638.7036}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1057,9 +1057,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.1383192, y: 0.433574, z: -0.06751616, w: 0.88811606}
+    m_Target: {x: 0.0524429, y: -0.03629219, z: 0.0021375534, w: 0.9981874}
     speed: 2
-    m_Value: {x: 0.1383192, y: 0.43357402, z: -0.06751617, w: 0.88811606}
+    m_Value: {x: -0.052442897, y: 0.036292188, z: -0.0021375532, w: -0.99818736}
   m_Size:
     m_Target: 3.3561945
     speed: 2
@@ -1303,7 +1303,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs/Levels
+    - Assets/Prefabs/Levels/Waves
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1313,16 +1313,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefabs/Levels
+  - Assets/Prefabs/Levels/Waves
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Unity Games\KatanaRush
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 202}
-    m_SelectedIDs: b4fb0000
-    m_LastClickedID: 64436
-    m_ExpandedIDs: 000000000cfb0000
+    scrollPos: {x: 0, y: 218}
+    m_SelectedIDs: aefe0000
+    m_LastClickedID: 65198
+    m_ExpandedIDs: 000000005cfd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1351,7 +1351,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 60180100
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000000cfb0000
+    m_ExpandedIDs: 000000005cfd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1492,7 +1492,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/AssetPacks/Pine Forest_LowPoly/Prefabs
+    - Assets/Models/DestructibleObstacle
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1502,16 +1502,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/AssetPacks/Pine Forest_LowPoly/Prefabs
+  - Assets/Models/DestructibleObstacle
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Unity Games\KatanaRush
   m_LockTracker:
     m_IsLocked: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 218}
-    m_SelectedIDs: d0fb0000
-    m_LastClickedID: 64464
-    m_ExpandedIDs: 000000000cfb0000
+    scrollPos: {x: 0, y: 90}
+    m_SelectedIDs: 38fe0000
+    m_LastClickedID: 65080
+    m_ExpandedIDs: 000000005cfd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1540,7 +1540,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000000cfb0000
+    m_ExpandedIDs: 000000005cfd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

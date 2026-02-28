@@ -74,7 +74,6 @@ namespace Runner.Core
         public CameraEffects CameraEffects => cameraEffects;
         public DayNightUiController DayNightUIController { get; private set; }
         public MagnetController MagnetController { get; private set; }
-        public ObstacleSpawner ObstacleSpawner { get; private set; }
         
         public GameState State { get; private set; }
         public float GameSpeed { get; private set; } = 1f;
@@ -147,7 +146,6 @@ namespace Runner.Core
             CreateSkyController();
             InitializeCamera();
             CreateMagnetController();
-            CreateObstacleSpawner();
             SubscribeToEvents();
 
             Sound?.StartMusic();
@@ -178,24 +176,6 @@ namespace Runner.Core
             }
             
             MagnetController.Initialize(Player, LevelGenerator.collectibleSpawner);
-        }
-        
-        private void CreateObstacleSpawner()
-        {
-            if (obstacleSpawnerPrefab != null)
-            {
-                ObstacleSpawner = Instantiate(obstacleSpawnerPrefab);
-            }
-            else
-            {
-                // Try to find in scene
-                ObstacleSpawner = FindFirstObjectByType<ObstacleSpawner>();
-            }
-            
-            if (ObstacleSpawner != null)
-            {
-                ObstacleSpawner.Initialize();
-            }
         }
         
         private void CreateDayNightUIController()

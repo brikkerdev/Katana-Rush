@@ -14,9 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
   biomeName: Waves
   debugColor: {r: 1, g: 1, b: 1, a: 1}
-  segments:
-  - {fileID: 6844235478968440788, guid: 54bf153df453a3a4d9a4e3d156af6ab2, type: 3}
-  - {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
+  segmentNodes:
+  - nodeIndex: 0
+    segment: {fileID: 6844235478968440788, guid: 54bf153df453a3a4d9a4e3d156af6ab2, type: 3}
+    nodeName: Segment 0
+    nodePosition: {x: 520, y: 441}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 2
+  - nodeIndex: 1
+    segment: {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
+    nodeName: Segment 1
+    nodePosition: {x: 802, y: 439}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 2
+  - nodeIndex: 2
+    segment: {fileID: 6844235478968440788, guid: e4592fc1e81ba0b4fb36f9fd88227c23, type: 3}
+    nodeName: Segment 2
+    nodePosition: {x: 1098.8351, y: 439.80582}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 2
+  editorScrollPosition: {x: 0, y: 0}
+  editorZoom: 1
   transitions:
   - targetBiome: {fileID: 11400000, guid: a7b40b39fec145e45804afe0c3288f71, type: 2}
     exitSegments:

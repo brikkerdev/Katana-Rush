@@ -42,7 +42,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AtmosphereThickness: 1
-    - _BiomeTintStrength: 0
+    - _BiomeTintStrength: 0.75
     - _CloudsOpacity: 0.5
     - _CloudsScale: 1
     - _CloudsSpeed: 0.01
@@ -59,10 +59,10 @@ Material:
     - _SunGlowSize: 0.3
     - _SunIntensity: 1.36
     - _SunSize: 0.2
-    - _TimeOfDay: 0.6658433
+    - _TimeOfDay: 0.65522987
     m_Colors:
-    - _BiomeTintDay: {r: 1, g: 0.999997, b: 0.9999974, a: 1}
-    - _BiomeTintNight: {r: 0.9999968, g: 0.9999966, b: 0.9999968, a: 1}
+    - _BiomeTintDay: {r: 1, g: 0.3726415, b: 0.6911885, a: 1}
+    - _BiomeTintNight: {r: 0.2924528, g: 0, b: 0.2811711, a: 1}
     - _CloudsColor: {r: 1, g: 1, b: 1, a: 1}
     - _DaySkyColorHorizon: {r: 0.8, g: 0.9, b: 1, a: 1}
     - _DaySkyColorTop: {r: 0.4, g: 0.7, b: 1, a: 1}

@@ -14,9 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.BiomeData
   biomeName: Metro
   debugColor: {r: 1, g: 1, b: 1, a: 1}
-  segments:
-  - {fileID: 6844235478968440788, guid: 94167fab601497b4ea14cea49c4895a7, type: 3}
-  - {fileID: 6844235478968440788, guid: 17657e240b4e3df4c88ec5873cf4c045, type: 3}
+  segmentNodes:
+  - nodeIndex: 0
+    segment: {fileID: 6844235478968440788, guid: 94167fab601497b4ea14cea49c4895a7, type: 3}
+    nodeName: Segment 0
+    nodePosition: {x: 100, y: 100}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 1
+    segment: {fileID: 6844235478968440788, guid: 17657e240b4e3df4c88ec5873cf4c045, type: 3}
+    nodeName: Segment 1
+    nodePosition: {x: 380, y: 100}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  editorScrollPosition: {x: 316, y: 143}
+  editorZoom: 1
   transitions:
   - targetBiome: {fileID: 11400000, guid: 21bacd8f59008c1489e41e7238c80efe, type: 2}
     exitSegments:

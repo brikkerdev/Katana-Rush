@@ -25,7 +25,7 @@ namespace Runner.LevelGeneration
         [Header("Spawners")]
         [SerializeField] private EnemySpawner enemySpawner;
         [SerializeField] public CollectibleSpawner collectibleSpawner;
-        [SerializeField] private ObstacleSpawner obstacleSpawner;
+        [SerializeField] public ObstacleSpawner obstacleSpawner;
 
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;

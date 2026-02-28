@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6438457257472779620}
   - component: {fileID: -4214440399133520785}
   - component: {fileID: -6989703550485592384}
+  - component: {fileID: -9033759331572724238}
   m_Layer: 0
   m_Name: Level Generator
   m_TagString: Untagged
@@ -56,6 +57,7 @@ MonoBehaviour:
   poolSizePerSegment: 3
   enemySpawner: {fileID: -4214440399133520785}
   collectibleSpawner: {fileID: -6989703550485592384}
+  obstacleSpawner: {fileID: -9033759331572724238}
   showDebug: 1
 --- !u!114 &-4214440399133520785
 MonoBehaviour:
@@ -97,4 +99,22 @@ MonoBehaviour:
   coinPoolSize: 100
   powerUpPoolSize: 10
   powerUpChance: 0.1
+  showDebug: 0
+--- !u!114 &-9033759331572724238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7449324854767027930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44353818149818b458867356cb0643ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Environment.ObstacleSpawner
+  obstaclePrefabs:
+  - {fileID: 8234769524431257731, guid: a4a58824a57a67c4d99abdcc459e6a39, type: 3}
+  poolSizePerType: 10
+  minObstaclesPerSegment: 1
+  maxObstaclesPerSegment: 3
   showDebug: 0
