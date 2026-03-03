@@ -69,6 +69,18 @@ public class BiomeEditorWindow : EditorWindow
     private const float MINIMAP_HEIGHT = 100f;
     private bool _showMinimap = true;
 
+    private const float PREVIEW_PANEL_WIDTH = 280f;
+    private List<LevelSegment> _generatedSegments = new List<LevelSegment>();
+    private int _previewSegmentCount = 16;
+    private Vector2 _previewScrollPos;
+
+    private bool _isPlayingAnimation;
+    private int _currentAnimationIndex;
+    private float _animationTimer;
+    private float _animationSpeed = 0.5f;
+    private List<int> _animationNodeIndices = new List<int>();
+    private float[] _nodeHighlightAlpha = new float[0];
+
     private int _selectedTab = 0; // 0 = Nodes, 1 = Biome Properties
 
     [MenuItem("Window/Biome Editor")]
@@ -270,9 +282,12 @@ public class BiomeEditorWindow : EditorWindow
 
         float toolbarHeight = 32;
         float inspectorWidth = 300;
-        Rect canvasRect = new Rect(0, toolbarHeight, position.width - inspectorWidth, position.height - toolbarHeight);
+        float previewPanelWidth = PREVIEW_PANEL_WIDTH;
+        Rect previewPanelRect = new Rect(0, toolbarHeight, previewPanelWidth, position.height - toolbarHeight);
+        Rect canvasRect = new Rect(previewPanelWidth, toolbarHeight, position.width - previewPanelWidth - inspectorWidth, position.height - toolbarHeight);
         Rect inspectorRect = new Rect(position.width - inspectorWidth, toolbarHeight, inspectorWidth, position.height - toolbarHeight);
 
+        DrawPreviewPanel(previewPanelRect);
         DrawCanvas(canvasRect);
         DrawInspector(inspectorRect);
 
@@ -284,6 +299,8 @@ public class BiomeEditorWindow : EditorWindow
         DrawStatusBar(canvasRect);
 
         ProcessEvents(canvasRect);
+
+        UpdateAnimation();
 
         if (_isCreatingConnection || _isRectSelecting)
         {
@@ -356,6 +373,8 @@ public class BiomeEditorWindow : EditorWindow
             {
                 SaveBiomeData();
             }
+
+            GUILayout.Space(10);
         }
 
         EditorGUILayout.EndHorizontal();
@@ -454,6 +473,20 @@ public class BiomeEditorWindow : EditorWindow
         bool isSelected = _selectedNodeIndices.Contains(index);
         bool isHovered = _hoveredNodeIndex == index;
 
+        bool isAnimating = _isPlayingAnimation && index >= 0 && index < _animationNodeIndices.Count && _animationNodeIndices.Contains(index);
+        int animIndex = -1;
+        if (isAnimating)
+        {
+            for (int i = 0; i < _animationNodeIndices.Count; i++)
+            {
+                if (_animationNodeIndices[i] == index)
+                {
+                    animIndex = i;
+                    break;
+                }
+            }
+        }
+
         Rect nodeRect = new Rect(nodePos.x, nodePos.y, nodeWidth, nodeHeight);
 
         Color accentColor = node.IsStartNode ? StartNodeAccentColor : (node.IsEndNode ? EndNodeAccentColor : Color.clear);
@@ -478,6 +511,12 @@ public class BiomeEditorWindow : EditorWindow
             borderColor = accentColor;
         }
 
+        if (isAnimating && animIndex == _currentAnimationIndex)
+        {
+            borderColor = new Color(0.3f, 0.9f, 0.4f);
+            EditorGUI.DrawRect(new Rect(nodeRect.x - 3, nodeRect.y - 3, nodeRect.width + 6, nodeRect.height + 6), new Color(0.2f, 0.5f, 0.2f, 0.3f));
+        }
+
         DrawRoundedRectOutline(nodeRect, borderColor, 2f);
 
         Rect headerRect = new Rect(nodeRect.x, nodeRect.y, nodeRect.width, NODE_HEADER_HEIGHT * _zoom);
@@ -494,6 +533,12 @@ public class BiomeEditorWindow : EditorWindow
         }
         
         displayText += $"\nW: {node.Weight:F1} CD: {node.Cooldown}";
+
+        float spawnProb = GetNodeSpawnProbability(index);
+        if (spawnProb > 0)
+        {
+            displayText += $" P: {spawnProb:F1}%";
+        }
 
         float iconSize = 48f * _zoom;
         float textOffset = iconSize + NODE_PADDING * _zoom;
@@ -1280,6 +1325,11 @@ public class BiomeEditorWindow : EditorWindow
 
             Vector2 mousePos = e.mousePosition - canvasRect.position;
             _panOffset = mousePos - (mousePos - _panOffset) * (_zoom / oldZoom);
+            Repaint();
+        }
+        else if (e.type == EventType.KeyDown)
+        {
+            ProcessKeyboardShortcuts(e);
         }
 
         _hoveredNodeIndex = GetNodeIndexAtPosition(e.mousePosition - canvasRect.position);
@@ -1483,6 +1533,562 @@ public class BiomeEditorWindow : EditorWindow
         _biomeData.EditorZoom = _zoom;
         EditorUtility.SetDirty(_biomeData);
         AssetDatabase.SaveAssets();
+    }
+
+    private void ProcessKeyboardShortcuts(Event e)
+    {
+        if (e.keyCode == KeyCode.Delete || e.keyCode == KeyCode.Backspace)
+        {
+            DeleteSelectedNodes();
+            e.Use();
+        }
+        else if (e.control || e.command)
+        {
+            if (e.keyCode == KeyCode.A)
+            {
+                SelectAllNodes();
+                e.Use();
+            }
+            else if (e.keyCode == KeyCode.D)
+            {
+                DuplicateSelectedNodes();
+                e.Use();
+            }
+            else if (e.keyCode == KeyCode.S)
+            {
+                SaveBiomeData();
+                e.Use();
+            }
+        }
+    }
+
+    private void SelectAllNodes()
+    {
+        if (_biomeData.SegmentNodes == null) return;
+        
+        _selectedNodeIndices.Clear();
+        for (int i = 0; i < _biomeData.SegmentNodes.Length; i++)
+        {
+            _selectedNodeIndices.Add(i);
+        }
+    }
+
+    private void DuplicateSelectedNodes()
+    {
+        if (_selectedNodeIndices.Count == 0) return;
+
+        Undo.RecordObject(_biomeData, "Duplicate Nodes");
+
+        List<SegmentNodeData> nodes = new List<SegmentNodeData>(_biomeData.SegmentNodes);
+        Dictionary<int, int> originalToNewIndex = new Dictionary<int, int>();
+        HashSet<int> selectedIndices = new HashSet<int>(_selectedNodeIndices);
+
+        List<int> sortedIndices = new List<int>(_selectedNodeIndices);
+        sortedIndices.Sort();
+
+        float offset = 50f;
+        foreach (int originalIndex in sortedIndices)
+        {
+            if (originalIndex >= 0 && originalIndex < nodes.Count)
+            {
+                var originalNode = nodes[originalIndex];
+                var newNode = new SegmentNodeData(nodes.Count);
+                newNode.NodeName = originalNode.NodeName + " (Copy)";
+                newNode.NodePosition = originalNode.NodePosition + new Vector2(offset, offset);
+                newNode.Segment = originalNode.Segment;
+                newNode.IsStartNode = false;
+                newNode.IsEndNode = originalNode.IsEndNode;
+                newNode.Weight = originalNode.Weight;
+                newNode.Cooldown = originalNode.Cooldown;
+                newNode.Connections = new int[0];
+                
+                nodes.Add(newNode);
+                originalToNewIndex[originalIndex] = nodes.Count - 1;
+            }
+        }
+
+        _biomeData.SegmentNodes = nodes.ToArray();
+        
+        _selectedNodeIndices.Clear();
+        foreach (int newIndex in originalToNewIndex.Values)
+        {
+            _selectedNodeIndices.Add(newIndex);
+        }
+    }
+
+    private void SimulateBiomeSpawn()
+    {
+        if (_biomeData.SegmentNodes == null || _biomeData.SegmentNodes.Length == 0)
+        {
+            EditorUtility.DisplayDialog("Biome Spawn Simulation", "No nodes in biome to simulate.", "OK");
+            return;
+        }
+
+        List<int> startNodes = new List<int>();
+        for (int i = 0; i < _biomeData.SegmentNodes.Length; i++)
+        {
+            if (_biomeData.SegmentNodes[i].IsStartNode)
+            {
+                startNodes.Add(i);
+            }
+        }
+
+        if (startNodes.Count == 0)
+        {
+            EditorUtility.DisplayDialog("Biome Spawn Simulation", "No start node defined.", "OK");
+            return;
+        }
+
+        _generatedSegments.Clear();
+        _animationNodeIndices.Clear();
+        int currentNodeIndex = startNodes[UnityEngine.Random.Range(0, startNodes.Count)];
+        int maxSteps = _previewSegmentCount;
+        int currentStep = 0;
+        int cooldownCounter = 0;
+
+        for (int i = 0; i < _biomeData.SegmentNodes.Length; i++)
+        {
+            if (_biomeData.SegmentNodes[i] != null)
+            {
+                _biomeData.SegmentNodes[i].CurrentCooldown = 0;
+            }
+        }
+
+        while (currentStep < maxSteps)
+        {
+            var currentNode = _biomeData.SegmentNodes[currentNodeIndex];
+
+            if (currentNode.Segment != null)
+            {
+                _generatedSegments.Add(currentNode.Segment);
+                _animationNodeIndices.Add(currentNodeIndex);
+            }
+
+            if (cooldownCounter > 0)
+            {
+                cooldownCounter--;
+            }
+
+            if (currentNode.IsEndNode)
+            {
+                break;
+            }
+
+            if (currentNode.Connections == null || currentNode.Connections.Length == 0)
+            {
+                for (int i = 0; i < _biomeData.SegmentNodes.Length; i++)
+                {
+                    var node = _biomeData.SegmentNodes[i];
+                    if (node != null && node.CurrentCooldown <= 0 && node.Segment != null && !_generatedSegments.Contains(node.Segment))
+                    {
+                        currentNodeIndex = i;
+                        break;
+                    }
+                }
+                currentStep++;
+                continue;
+            }
+
+            List<int> availableConnections = new List<int>();
+            List<float> connectionWeights = new List<float>();
+
+            foreach (int connIndex in currentNode.Connections)
+            {
+                if (connIndex >= 0 && connIndex < _biomeData.SegmentNodes.Length)
+                {
+                    var targetNode = _biomeData.SegmentNodes[connIndex];
+                    if (targetNode != null && targetNode.CurrentCooldown <= 0)
+                    {
+                        availableConnections.Add(connIndex);
+                        connectionWeights.Add(targetNode.Weight);
+                    }
+                }
+            }
+
+            if (availableConnections.Count == 0)
+            {
+                for (int i = 0; i < _biomeData.SegmentNodes.Length; i++)
+                {
+                    var node = _biomeData.SegmentNodes[i];
+                    if (node != null && node.CurrentCooldown <= 0 && node.Segment != null && !_generatedSegments.Contains(node.Segment))
+                    {
+                        currentNodeIndex = i;
+                        break;
+                    }
+                }
+                currentStep++;
+                continue;
+            }
+
+            float totalWeight = 0;
+            foreach (float w in connectionWeights)
+            {
+                totalWeight += w;
+            }
+
+            float randomValue = UnityEngine.Random.Range(0f, totalWeight);
+            int selectedConnectionIndex = 0;
+            float cumulativeWeight = 0;
+
+            for (int i = 0; i < connectionWeights.Count; i++)
+            {
+                cumulativeWeight += connectionWeights[i];
+                if (randomValue <= cumulativeWeight)
+                {
+                    selectedConnectionIndex = i;
+                    break;
+                }
+            }
+
+            int nextNodeIndex = availableConnections[selectedConnectionIndex];
+            var nextNode = _biomeData.SegmentNodes[nextNodeIndex];
+
+            currentNodeIndex = nextNodeIndex;
+            cooldownCounter = nextNode.Cooldown;
+            currentStep++;
+        }
+
+        Repaint();
+    }
+
+    private void StartAnimation()
+    {
+        if (_animationNodeIndices.Count == 0) return;
+
+        _isPlayingAnimation = true;
+        _currentAnimationIndex = 0;
+        _animationTimer = 0f;
+
+        _nodeHighlightAlpha = new float[_biomeData.SegmentNodes.Length];
+        for (int i = 0; i < _nodeHighlightAlpha.Length; i++)
+        {
+            _nodeHighlightAlpha[i] = 0f;
+        }
+
+        Repaint();
+    }
+
+    private void StopAnimation()
+    {
+        _isPlayingAnimation = false;
+        _currentAnimationIndex = 0;
+        _animationTimer = 0f;
+
+        if (_nodeHighlightAlpha != null && _nodeHighlightAlpha.Length > 0)
+        {
+            for (int i = 0; i < _nodeHighlightAlpha.Length; i++)
+            {
+                _nodeHighlightAlpha[i] = 0f;
+            }
+        }
+
+        Repaint();
+    }
+
+    private void UpdateAnimation()
+    {
+        if (!_isPlayingAnimation) return;
+
+        _animationTimer += Time.deltaTime * _animationSpeed;
+
+        if (_animationTimer >= _animationSpeed)
+        {
+            _currentAnimationIndex++;
+            if (_currentAnimationIndex >= _animationNodeIndices.Count)
+            {
+                _currentAnimationIndex = 0;
+            }
+            _animationTimer = 0f;
+
+            if (_nodeHighlightAlpha != null && _nodeHighlightAlpha.Length > 0)
+            {
+                for (int i = 0; i < _nodeHighlightAlpha.Length; i++)
+                {
+                    _nodeHighlightAlpha[i] = 0f;
+                }
+            }
+        }
+
+        if (_currentAnimationIndex >= 0 && _currentAnimationIndex < _animationNodeIndices.Count)
+        {
+            int nodeIndex = _animationNodeIndices[_currentAnimationIndex];
+            if (nodeIndex >= 0 && nodeIndex < _nodeHighlightAlpha.Length)
+            {
+                float progress = _animationTimer / _animationSpeed;
+                _nodeHighlightAlpha[nodeIndex] = 1f;
+            }
+        }
+
+        Repaint();
+    }
+
+    private void DrawPreviewPanel(Rect previewRect)
+    {
+        EditorGUI.DrawRect(previewRect, new Color(0.1f, 0.1f, 0.12f));
+
+        Rect headerRect = new Rect(previewRect.x, previewRect.y, previewRect.width, 40);
+        EditorGUI.DrawRect(headerRect, new Color(0.15f, 0.15f, 0.18f));
+
+        GUIStyle headerStyle = new GUIStyle(EditorStyles.boldLabel)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            fontSize = 12
+        };
+        headerStyle.normal.textColor = TextColorPrimary;
+        GUI.Label(headerRect, "BIOME PREVIEW", headerStyle);
+
+        Rect controlsRect = new Rect(previewRect.x, previewRect.y + 40, previewRect.width, 50);
+        EditorGUI.DrawRect(controlsRect, new Color(0.12f, 0.12f, 0.14f));
+
+        float buttonWidth = (previewRect.width - 30) / 2;
+        Rect spawnButtonRect = new Rect(previewRect.x + 10, previewRect.y + 48, buttonWidth, 28);
+
+        GUIStyle spawnButtonStyle = new GUIStyle(GUI.skin.button)
+        {
+            fontSize = 11,
+            fontStyle = FontStyle.Bold
+        };
+        spawnButtonStyle.normal.textColor = TextColorPrimary;
+
+        if (_isPlayingAnimation)
+        {
+            GUI.color = new Color(0.8f, 0.3f, 0.3f);
+        }
+        if (GUI.Button(spawnButtonRect, _isPlayingAnimation ? "Stop" : "Spawn", spawnButtonStyle))
+        {
+            if (_isPlayingAnimation)
+            {
+                StopAnimation();
+            }
+            else
+            {
+                SimulateBiomeSpawn();
+            }
+        }
+        GUI.color = Color.white;
+
+        Rect playButtonRect = new Rect(previewRect.x + 15 + buttonWidth, previewRect.y + 48, buttonWidth, 28);
+        bool wasEnabled = GUI.enabled;
+        GUI.enabled = _generatedSegments.Count > 0 && !_isPlayingAnimation;
+        if (GUI.Button(playButtonRect, _isPlayingAnimation ? "Playing..." : "Play", spawnButtonStyle))
+        {
+            StartAnimation();
+        }
+        GUI.enabled = wasEnabled;
+
+        Rect speedLabelRect = new Rect(previewRect.x + 10, previewRect.y + 80, 50, 16);
+        GUIStyle labelStyle = new GUIStyle(EditorStyles.label)
+        {
+            fontSize = 10
+        };
+        labelStyle.normal.textColor = TextColorSecondary;
+        GUI.Label(speedLabelRect, "Speed:", labelStyle);
+
+        Rect speedSliderRect = new Rect(previewRect.x + 50, previewRect.y + 80, previewRect.width - 60, 16);
+        _animationSpeed = GUI.HorizontalSlider(speedSliderRect, _animationSpeed, 0.1f, 2f);
+
+        Rect speedValueRect = new Rect(previewRect.x + previewRect.width - 25, previewRect.y + 80, 25, 16);
+        GUI.Label(speedValueRect, $"{_animationSpeed:F1}x", labelStyle);
+
+        Rect scrollViewRect = new Rect(previewRect.x, previewRect.y + 100, previewRect.width, previewRect.height - 100);
+        _previewScrollPos = GUI.BeginScrollView(scrollViewRect, _previewScrollPos, new Rect(0, 0, previewRect.width - 20, _previewSegmentCount * 70 + 20), false, true);
+
+        float yOffset = 10;
+        float itemWidth = previewRect.width - 40;
+
+        if (_generatedSegments.Count == 0)
+        {
+            GUIStyle emptyStyle = new GUIStyle(EditorStyles.label)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 11
+            };
+            emptyStyle.normal.textColor = TextColorMuted;
+            GUI.Label(new Rect(0, 80, previewRect.width - 20, 30), "Click 'Spawn' to generate\na 16-segment preview", emptyStyle);
+        }
+        else
+        {
+            for (int i = 0; i < _generatedSegments.Count; i++)
+            {
+                var segment = _generatedSegments[i];
+                bool isHighlighted = _isPlayingAnimation && i == _currentAnimationIndex;
+                DrawPreviewItem(i, segment, previewRect.x + 10, yOffset, itemWidth, isHighlighted);
+                yOffset += 70;
+            }
+        }
+
+        GUI.EndScrollView();
+    }
+
+    private void DrawPreviewItem(int index, LevelSegment segment, float x, float y, float width, bool isHighlighted = false)
+    {
+        Rect itemRect = new Rect(x, y, width, 60);
+
+        Color itemBgColor = index % 2 == 0 ? new Color(0.15f, 0.15f, 0.17f) : new Color(0.13f, 0.13f, 0.15f);
+        if (isHighlighted)
+        {
+            itemBgColor = new Color(0.2f, 0.4f, 0.2f);
+        }
+        EditorGUI.DrawRect(itemRect, itemBgColor);
+
+        Color borderColor = isHighlighted ? new Color(0.3f, 0.9f, 0.4f) : new Color(0.3f, 0.3f, 0.35f);
+        DrawRoundedRectOutline(itemRect, borderColor, isHighlighted ? 2f : 1f);
+
+        GUIStyle indexStyle = new GUIStyle(EditorStyles.boldLabel)
+        {
+            fontSize = 10
+        };
+        indexStyle.normal.textColor = new Color(0.5f, 0.7f, 1f);
+        GUI.Label(new Rect(x + 5, y + 3, 20, 15), $"#{index + 1}", indexStyle);
+
+        string segmentName = segment != null ? segment.name : "None";
+        GUIStyle nameStyle = new GUIStyle(EditorStyles.label)
+        {
+            fontSize = 11,
+            fontStyle = FontStyle.Bold
+        };
+        nameStyle.normal.textColor = TextColorPrimary;
+        GUI.Label(new Rect(x + 5, y + 18, width - 30, 18), segmentName, nameStyle);
+
+        if (segment != null)
+        {
+            string infoText = $"Length: {segment.Length:F1}m";
+            GUIStyle infoStyle = new GUIStyle(EditorStyles.label)
+            {
+                fontSize = 9
+            };
+            infoStyle.normal.textColor = TextColorSecondary;
+            GUI.Label(new Rect(x + 5, y + 38, width - 30, 15), infoText, infoStyle);
+
+            Texture2D preview = GetSegmentPreview(segment);
+            if (preview != null)
+            {
+                GUI.DrawTexture(new Rect(x + width - 55, y + 5, 50, 50), preview, ScaleMode.ScaleToFit);
+            }
+        }
+    }
+
+    private Texture2D GetSegmentPreview(LevelSegment segment)
+    {
+        if (segment == null) return null;
+
+        int hashCode = segment.GetInstanceID();
+        if (_prefabPreviewCache.TryGetValue(hashCode, out Texture2D cached))
+        {
+            return cached;
+        }
+
+        GameObject prefabRoot = segment.gameObject;
+        if (prefabRoot == null) return null;
+
+        Transform[] children = prefabRoot.GetComponentsInChildren<Transform>();
+        if (children == null || children.Length == 0) return null;
+
+        Transform targetChild = null;
+        foreach (Transform child in children)
+        {
+            if (child.gameObject != prefabRoot && child.GetComponent<MeshRenderer>() != null)
+            {
+                targetChild = child;
+                break;
+            }
+        }
+
+        if (targetChild == null)
+        {
+            foreach (Transform child in children)
+            {
+                if (child.gameObject != prefabRoot)
+                {
+                    targetChild = child;
+                    break;
+                }
+            }
+        }
+
+        if (targetChild == null) return null;
+
+        Texture2D previewTexture = AssetPreview.GetAssetPreview(targetChild.gameObject);
+        if (previewTexture != null)
+        {
+            _prefabPreviewCache[hashCode] = previewTexture;
+        }
+
+        return previewTexture;
+    }
+
+    private void CalculateSpawnProbabilities(out float[] probabilities)
+    {
+        probabilities = new float[0];
+        
+        if (_biomeData.SegmentNodes == null || _biomeData.SegmentNodes.Length == 0) return;
+
+        List<int> startNodes = new List<int>();
+        for (int i = 0; i < _biomeData.SegmentNodes.Length; i++)
+        {
+            if (_biomeData.SegmentNodes[i].IsStartNode)
+            {
+                startNodes.Add(i);
+            }
+        }
+
+        if (startNodes.Count == 0) return;
+
+        Dictionary<int, float> nodeWeights = new Dictionary<int, float>();
+        
+        foreach (int startIdx in startNodes)
+        {
+            var startNode = _biomeData.SegmentNodes[startIdx];
+            if (startNode.Connections != null)
+            {
+                foreach (int connIdx in startNode.Connections)
+                {
+                    if (connIdx >= 0 && connIdx < _biomeData.SegmentNodes.Length)
+                    {
+                        var targetNode = _biomeData.SegmentNodes[connIdx];
+                        if (targetNode != null)
+                        {
+                            if (!nodeWeights.ContainsKey(connIdx))
+                            {
+                                nodeWeights[connIdx] = 0;
+                            }
+                            nodeWeights[connIdx] += targetNode.Weight;
+                        }
+                    }
+                }
+            }
+        }
+
+        probabilities = new float[_biomeData.SegmentNodes.Length];
+        float totalWeight = 0;
+        foreach (float w in nodeWeights.Values)
+        {
+            totalWeight += w;
+        }
+
+        if (totalWeight > 0)
+        {
+            foreach (var kvp in nodeWeights)
+            {
+                probabilities[kvp.Key] = (kvp.Value / totalWeight) * 100f;
+            }
+        }
+    }
+
+    private float GetNodeSpawnProbability(int nodeIndex)
+    {
+        if (_biomeData.SegmentNodes == null || nodeIndex < 0 || nodeIndex >= _biomeData.SegmentNodes.Length)
+            return 0;
+
+        float[] probabilities;
+        CalculateSpawnProbabilities(out probabilities);
+        
+        if (probabilities != null && nodeIndex < probabilities.Length)
+        {
+            return probabilities[nodeIndex];
+        }
+        
+        return 0;
     }
 
     private void DrawNoDataMessage()

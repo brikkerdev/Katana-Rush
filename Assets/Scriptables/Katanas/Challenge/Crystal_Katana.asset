@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Crystal_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: 4bcb6a39-96b0-4b9b-825e-d2d583007a99
+  nameKey: katana_name_crystal
+  descriptionKey: katana_description_crystal
+  icon: {fileID: 1694131108, guid: d17054aee81bcda49b3ed6117119ff89, type: 3}
+  rarity: 4
+  playerPreset: {fileID: 11400000, guid: 9a0e07b7337ce8e40b64d994ebd21bb7, type: 2}
+  modelPrefab: {fileID: 2894049052721084243, guid: 11aab0ab7f5182d479c90cf5de114b39, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: d3b446ef0aeeaf544adfcdd526e5360a, type: 2}
+  slashEffectPrefab: {fileID: 174940048960636371, guid: a7c5179f5d6f652459bc5b20deeacd69, type: 3}
+  trailEffectPrefab: {fileID: 0}
+  ability: {fileID: 0}
+  challengeRequirement:
+    type: 11
+    targetValue: 6
+    descriptionKey: challenge_fragments_collected_crystal

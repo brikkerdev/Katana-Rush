@@ -11,6 +11,7 @@ namespace Runner.Collectibles
         [SerializeField] private Collectible speedBoostPrefab;
         [SerializeField] private Collectible magnetPrefab;
         [SerializeField] private Collectible multiplierPrefab;
+        [SerializeField] private Collectible diamondPrefab;
 
         [Header("Pool Settings")]
         [SerializeField] private int coinPoolSize = 100;
@@ -72,6 +73,9 @@ namespace Runner.Collectibles
 
             if (multiplierPrefab != null)
                 CreatePool(CollectibleType.Multiplier, multiplierPrefab, powerUpPoolSize);
+            
+            if (diamondPrefab != null)
+                CreatePool(CollectibleType.Diamond, diamondPrefab, powerUpPoolSize);
         }
 
         private void CreatePool(CollectibleType type, Collectible prefab, int size)

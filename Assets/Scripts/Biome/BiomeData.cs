@@ -168,7 +168,7 @@ namespace Runner.LevelGeneration
 
             if (currentNodeIndex < 0 || currentNodeIndex >= segmentNodes.Length)
             {
-                return GetRandomNodeWithCooldown();
+                return GetRandomNodeWithCooldown(true);
             }
 
             var currentNode = segmentNodes[currentNodeIndex];
@@ -186,7 +186,7 @@ namespace Runner.LevelGeneration
                 return GetWeightedChildSegment(currentNode);
             }
             
-            return GetRandomNodeWithCooldown();
+            return GetRandomNodeWithCooldown(true);
         }
 
         private LevelSegment GetWeightedChildSegment(SegmentNodeData parentNode)
@@ -233,7 +233,7 @@ namespace Runner.LevelGeneration
             return parentNode.Segment;
         }
 
-        private LevelSegment GetRandomNodeWithCooldown()
+        private LevelSegment GetRandomNodeWithCooldown(bool preferStartNodes = false)
         {
             if (segmentNodes == null || segmentNodes.Length == 0) return null;
 
@@ -243,13 +243,30 @@ namespace Runner.LevelGeneration
             {
                 if (node.CurrentCooldown <= 0 && node.Segment != null)
                 {
+                    if (preferStartNodes && !node.IsStartNode)
+                    {
+                        continue;
+                    }
                     availableNodes.Add(node);
                 }
             }
 
             if (availableNodes.Count == 0)
             {
-                return segmentNodes[Random.Range(0, segmentNodes.Length)].Segment;
+                if (preferStartNodes)
+                {
+                    foreach (var node in segmentNodes)
+                    {
+                        if (node.IsStartNode && node.Segment != null)
+                        {
+                            availableNodes.Add(node);
+                        }
+                    }
+                }
+                if (availableNodes.Count == 0)
+                {
+                    return segmentNodes[Random.Range(0, segmentNodes.Length)].Segment;
+                }
             }
 
             float totalWeight = 0f;

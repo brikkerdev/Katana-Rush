@@ -10,7 +10,8 @@ namespace Runner.Collectibles
         SpeedBoost,
         Magnet,
         Multiplier,
-        DashRestore
+        DashRestore,
+        Diamond,
     }
 
     public abstract class Collectible : MonoBehaviour, IResettable

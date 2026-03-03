@@ -28,7 +28,7 @@ MonoBehaviour:
     segment: {fileID: 6844235478968440788, guid: 87c25e18268bd3746b2ce8cac83c17ee, type: 3}
     nodeName: Segment 1
     nodePosition: {x: 889, y: 392}
-    isStartNode: 0
+    isStartNode: 1
     isEndNode: 0
     connections: 
     weight: 1

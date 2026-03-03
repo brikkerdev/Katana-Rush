@@ -96,8 +96,11 @@ MonoBehaviour:
   speedBoostPrefab: {fileID: 0}
   magnetPrefab: {fileID: 2338999916597536679, guid: 02c5c1764bd643e489e902ae3b450eb8, type: 3}
   multiplierPrefab: {fileID: 7734474173464922827, guid: 95de016b2c0a8fc4d9588bd235433b7f, type: 3}
+  diamondPrefab: {fileID: 6289697328851377566, guid: 514555a5d9e887240a40bb9353eb3a3c, type: 3}
+  fragmentDatabase: {fileID: 11400000, guid: 4420466bdedcde547aefb89e554abb94, type: 2}
   coinPoolSize: 100
   powerUpPoolSize: 10
+  fragmentPoolSize: 5
   powerUpChance: 0.1
   showDebug: 0
 --- !u!114 &-9033759331572724238

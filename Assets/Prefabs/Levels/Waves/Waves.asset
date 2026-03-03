@@ -18,17 +18,17 @@ MonoBehaviour:
   - nodeIndex: 0
     segment: {fileID: 6844235478968440788, guid: 54bf153df453a3a4d9a4e3d156af6ab2, type: 3}
     nodeName: Segment 0
-    nodePosition: {x: 520, y: 441}
+    nodePosition: {x: 517.80225, y: 438.8022}
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
+    weight: 5
     cooldown: 2
   - nodeIndex: 1
     segment: {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
     nodeName: Segment 1
-    nodePosition: {x: 802, y: 439}
-    isStartNode: 0
+    nodePosition: {x: 799.8723, y: 437.93616}
+    isStartNode: 1
     isEndNode: 0
     connections: 
     weight: 1
@@ -36,14 +36,59 @@ MonoBehaviour:
   - nodeIndex: 2
     segment: {fileID: 6844235478968440788, guid: e4592fc1e81ba0b4fb36f9fd88227c23, type: 3}
     nodeName: Segment 2
-    nodePosition: {x: 1098.8351, y: 439.80582}
+    nodePosition: {x: 1096.6373, y: 434.3113}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 0300000006000000
+    weight: 1
+    cooldown: 20
+  - nodeIndex: 3
+    segment: {fileID: 6844235478968440788, guid: 32c96aed785d36e4893ba11e24e6c193, type: 3}
+    nodeName: Segment 3
+    nodePosition: {x: 958.7479, y: 298.68134}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 04000000
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 4
+    segment: {fileID: 6844235478968440788, guid: 73f332a8f62d3a545af16bf981b7b8e3, type: 3}
+    nodeName: Segment 4
+    nodePosition: {x: 949.44965, y: 176.70334}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 05000000
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 5
+    segment: {fileID: 6844235478968440788, guid: 458a956aa4f043b438f27e9cb2e7761d, type: 3}
+    nodeName: Segment 5
+    nodePosition: {x: 1085.4946, y: 31.716356}
     isStartNode: 0
     isEndNode: 0
     connections: 
     weight: 1
-    cooldown: 2
-  editorScrollPosition: {x: 0, y: 0}
-  editorZoom: 1
+    cooldown: 0
+  - nodeIndex: 6
+    segment: {fileID: 6844235478968440788, guid: 73f332a8f62d3a545af16bf981b7b8e3, type: 3}
+    nodeName: Segment 6
+    nodePosition: {x: 1261.0986, y: 296.48346}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 07000000
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 7
+    segment: {fileID: 6844235478968440788, guid: 32c96aed785d36e4893ba11e24e6c193, type: 3}
+    nodeName: Segment 7
+    nodePosition: {x: 1266.3733, y: 169.01108}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 05000000
+    weight: 1
+    cooldown: 0
+  editorScrollPosition: {x: -162.07184, y: 105.10242}
+  editorZoom: 0.9399995
   transitions:
   - targetBiome: {fileID: 11400000, guid: a7b40b39fec145e45804afe0c3288f71, type: 2}
     exitSegments:
