@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace Runner.Collectibles
 {
@@ -8,6 +9,7 @@ namespace Runner.Collectibles
         [SerializeField] private bool alwaysSpawn = false;
         [SerializeField, Range(0f, 1f)] private float spawnChance = 0.7f;
         [SerializeField] private CollectibleType collectibleType = CollectibleType.Coin;
+        [SerializeField] private string spawnPointUuid;
 
         [Header("Group Settings (for CoinGroup)")]
         [SerializeField] private int groupCount = 5;
@@ -24,6 +26,7 @@ namespace Runner.Collectibles
         public int GroupCount => groupCount;
         public float GroupSpacing => groupSpacing;
         public GroupPattern Pattern => groupPattern;
+        public string SpawnPointUuid => spawnPointUuid;
 
         public Vector3 Position
         {
@@ -105,6 +108,7 @@ namespace Runner.Collectibles
                 CollectibleType.SpeedBoost => Color.cyan,
                 CollectibleType.Magnet => Color.magenta,
                 CollectibleType.Multiplier => Color.blue,
+                CollectibleType.Fragment => Color.green,
                 _ => Color.white
             };
 

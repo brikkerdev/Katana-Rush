@@ -47,17 +47,9 @@ MonoBehaviour:
   alwaysSpawn: 1
   spawnChance: 1
   collectibleType: 7
-  useGroups: 0
+  spawnPointUuid: 
   groupCount: 5
   groupSpacing: 1.5
   groupPattern: 0
   useLocalOffset: 0
   localOffset: {x: 0, y: 0, z: 0}
-  useFragments: 0
-  fragmentType: 1
-  katanaId: 4bcb6a39-96b0-4b9b-825e-d2d583007a99
-  checkIfCollected: 0
-  alternativeType: 6
-  alternativeGroupCount: 5
-  alternativeGroupSpacing: 1.5
-  alternativeGroupPattern: 0

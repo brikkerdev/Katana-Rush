@@ -21,6 +21,8 @@ namespace Runner.Save
         public int currentKillStreak;
         public string equippedKatanaId;
         public List<string> ownedKatanaIds = new List<string>();
+        public int totalFragmentsCollected;
+        public List<string> collectedFragmentUuids = new List<string>();
     }
 
     public static class SaveManager
@@ -244,6 +246,8 @@ namespace Runner.Save
                     return Data.highScore;
                 case ChallengeType.LongestKillStreak:
                     return Data.longestKillStreak;
+                case ChallengeType.CollectedFragments:
+                    return Data.totalFragmentsCollected;
                 default:
                     return 0f;
             }
@@ -262,6 +266,29 @@ namespace Runner.Save
                 MarkDirty();
                 Save();
             }
+        }
+
+        public static bool IsFragmentCollected(string uuid)
+        {
+            if (string.IsNullOrEmpty(uuid)) return false;
+            return Data.collectedFragmentUuids.Contains(uuid);
+        }
+
+        public static void CollectFragment(string uuid)
+        {
+            if (string.IsNullOrEmpty(uuid)) return;
+            if (!Data.collectedFragmentUuids.Contains(uuid))
+            {
+                Data.collectedFragmentUuids.Add(uuid);
+                Data.totalFragmentsCollected++;
+                MarkDirty();
+                Save();
+            }
+        }
+
+        public static int GetTotalFragmentsCollected()
+        {
+            return Data.totalFragmentsCollected;
         }
 
         public static string GetEquippedKatanaId()
@@ -296,6 +323,7 @@ namespace Runner.Save
         JumpsPerformed,
         PlayTime,
         HighScore,
-        LongestKillStreak
+        LongestKillStreak,
+        CollectedFragments
     }
 }

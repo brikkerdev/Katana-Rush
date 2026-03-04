@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\UI\Screens\InventoryScreen.cs" />
     <Compile Include="Assets\Scripts\Enemy\RocketPool.cs" />
     <Compile Include="Assets\Scripts\Inventory\KatanaDatabase.cs" />
+    <Compile Include="Assets\Scripts\Collectible\KatanaFragmentCollectible.cs" />
     <Compile Include="Assets\Scripts\UI\Components\ChallengeProgressBar.cs" />
     <Compile Include="Assets\Scripts\Collectible\MagnetCollectible.cs" />
     <Compile Include="Assets\Scripts\Environment\ParticleController.cs" />

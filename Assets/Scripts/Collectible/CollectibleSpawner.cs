@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Runner.LevelGeneration;
+using Runner.Save;
 
 namespace Runner.Collectibles
 {
@@ -12,6 +13,7 @@ namespace Runner.Collectibles
         [SerializeField] private Collectible magnetPrefab;
         [SerializeField] private Collectible multiplierPrefab;
         [SerializeField] private Collectible diamondPrefab;
+        [SerializeField] private Collectible fragmentPrefab;
 
         [Header("Pool Settings")]
         [SerializeField] private int coinPoolSize = 100;
@@ -76,6 +78,9 @@ namespace Runner.Collectibles
             
             if (diamondPrefab != null)
                 CreatePool(CollectibleType.Diamond, diamondPrefab, powerUpPoolSize);
+
+            if (fragmentPrefab != null)
+                CreatePool(CollectibleType.Fragment, fragmentPrefab, powerUpPoolSize);
         }
 
         private void CreatePool(CollectibleType type, Collectible prefab, int size)
@@ -134,6 +139,17 @@ namespace Runner.Collectibles
             {
                 if (point == null) continue;
 
+                CollectibleType typeToSpawn = point.Type;
+
+                if (typeToSpawn == CollectibleType.Fragment)
+                {
+                    string uuid = point.SpawnPointUuid;
+                    if (!string.IsNullOrEmpty(uuid) && SaveManager.IsFragmentCollected(uuid))
+                    {
+                        continue;
+                    }
+                }
+
                 bool shouldSpawn = point.AlwaysSpawn || Random.value <= point.SpawnChance;
 
                 if (!shouldSpawn) continue;
@@ -179,9 +195,17 @@ namespace Runner.Collectibles
                 }
             }
 
-            collectible.Setup(point.Position);
-            activeCollectibles.Add(collectible);
+            if (point.Type == CollectibleType.Fragment)
+            {
+                string uuid = point.SpawnPointUuid;
+                collectible.Setup(point.Position, uuid);
+            }
+            else
+            {
+                collectible.Setup(point.Position);
+            }
 
+            activeCollectibles.Add(collectible);
             return true;
         }
 

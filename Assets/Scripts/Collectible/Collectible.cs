@@ -12,6 +12,7 @@ namespace Runner.Collectibles
         Multiplier,
         DashRestore,
         Diamond,
+        Fragment,
     }
 
     public abstract class Collectible : MonoBehaviour, IResettable
@@ -29,11 +30,13 @@ namespace Runner.Collectibles
         private bool isCollected;
         private Vector3 originalPosition;
         private float bobTimer;
+        private string spawnPointUuid;
 
         public abstract CollectibleType Type { get; }
         public int Value => value;
         public bool IsCollected => isCollected;
         public float EffectDuration => effectDuration;
+        public string SpawnPointUuid => spawnPointUuid;
 
         protected virtual void Awake()
         {
@@ -64,10 +67,16 @@ namespace Runner.Collectibles
 
         public void Setup(Vector3 position)
         {
+            Setup(position, null);
+        }
+
+        public void Setup(Vector3 position, string uuid)
+        {
             transform.position = position;
             originalPosition = visualRoot.transform.localPosition;
             isCollected = false;
             bobTimer = Random.value * Mathf.PI * 2f;
+            spawnPointUuid = uuid;
 
             if (visualRoot != null)
             {
