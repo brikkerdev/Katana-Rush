@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using Runner.LevelGeneration;
 
 namespace Runner.Environment
@@ -75,13 +73,13 @@ namespace Runner.Environment
             dayNightCycle = dayNight;
             biomeManager = biome;
 
-            // Enable Unity built-in fog
             RenderSettings.fog = fogEnabled;
             RenderSettings.fogMode = fogMode;
             RenderSettings.fogStartDistance = fogStartDistance;
             RenderSettings.fogEndDistance = fogEndDistance;
             RenderSettings.fogDensity = fogDensity;
 
+            // Subscribe to biome changes for fog updates
             if (biomeManager != null)
             {
                 biomeManager.OnBiomeChanged += OnBiomeChanged;
@@ -187,13 +185,26 @@ namespace Runner.Environment
             ApplyFogToRenderSettings();
         }
 
+        /// <summary>
+        /// Called by BiomeManager when the visual biome changes.
+        /// </summary>
         private void OnBiomeChanged(BiomeData biome)
         {
             if (biome == null) return;
+            ApplyBiomeOverride(biome);
+        }
+
+        /// <summary>
+        /// Public method for BiomeManager to directly apply fog settings for a biome.
+        /// </summary>
+        public void ApplyBiomeOverride(BiomeData biome)
+        {
+            if (biome == null) return;
+
             SetBaseFogFromBiome(biome);
 
             if (showDebug)
-                Debug.Log($"[FogController] Biome changed to {biome.BiomeName}");
+                Debug.Log($"[FogController] Applied fog override for {biome.BiomeName}");
         }
 
         private void SetBaseFogFromBiome(BiomeData biome)

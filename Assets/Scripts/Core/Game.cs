@@ -94,7 +94,6 @@ namespace Runner.Core
         private float lastDeathZ = 0f;
         private float startZ = 0f;
         private BiomeData deathBiome;
-        private BiomeData deathNextBiome;
 
         public float MultiplierTimeRemaining => multiplierTimer;
         public float MultiplierDuration => multiplierDuration;
@@ -529,11 +528,10 @@ namespace Runner.Core
             State = GameState.GameOver;
             lastDeathZ = Player != null ? Player.transform.position.z : 0f;
             
-            // Save the current biome state at death
+            // Save the current biome state at death - just remember which biome to start with
             if (BiomeManager != null)
             {
                 deathBiome = BiomeManager.CurrentBiome;
-                deathNextBiome = BiomeManager.NextBiome;
             }
             
             cameraManager?.SetState(CameraState.Death);
@@ -635,17 +633,17 @@ namespace Runner.Core
             Score = 0;
             lastMilestone = 0;
             lastScoredZ = 0f;
-            startZ = lastDeathZ;
+            startZ = 0f;
             ResetPowerups();
             SaveManager.ResetKillStreak();
 
             BulletPool?.ReturnAllBullets();
             Player?.Reset();
 
-            // Use the saved biome state from death, or fall back to starting biome
-            if (deathBiome != null && lastDeathZ > 0f)
+            // Use the saved biome to start fresh game, or fall back to starting biome
+            if (deathBiome != null)
             {
-                BiomeManager?.ResetAtDeath(deathBiome, lastDeathZ, deathNextBiome);
+                BiomeManager?.ResetAtDeath(deathBiome);
             }
             else
             {
@@ -653,19 +651,15 @@ namespace Runner.Core
                 BiomeManager?.Reset(startingBiome);
             }
 
-            LevelGenerator?.Reset(lastDeathZ);
+            // Reset level generator to start from 0
+            LevelGenerator?.Reset(0f);
             FogController?.Reset();
             SkyController?.Reset();
 
             if (Player != null)
             {
-                // If we have a valid death position, spawn there; otherwise use spawn point
-                if (lastDeathZ > 0f)
-                {
-                    Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.zero;
-                    Player.transform.position = new Vector3(spawnPos.x, spawnPos.y, lastDeathZ);
-                }
-                else if (playerSpawnPoint != null)
+                // Spawn at the spawn point (beginning)
+                if (playerSpawnPoint != null)
                 {
                     Player.transform.position = playerSpawnPoint.position;
                 }
@@ -674,7 +668,6 @@ namespace Runner.Core
             // Clear death state for next game
             lastDeathZ = 0f;
             deathBiome = null;
-            deathNextBiome = null;
 
             cameraManager?.SetState(CameraState.Menu);
             Sound?.SetMusicGameplay(false);

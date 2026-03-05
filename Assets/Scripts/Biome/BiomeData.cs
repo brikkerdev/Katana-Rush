@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 namespace Runner.LevelGeneration
 {
@@ -59,55 +58,21 @@ namespace Runner.LevelGeneration
         [SerializeField] private bool pauseCycleDuringOverride = true;
         [SerializeField] private float timeTransitionDuration = 2f;
 
-        public string BiomeName 
-        {
-            get => biomeName;
-            set => biomeName = value;
-        }
-        public Color DebugColor 
-        {
-            get => debugColor;
-            set => debugColor = value;
-        }
-        public SegmentNodeData[] SegmentNodes 
-        {
-            get => segmentNodes;
-            set => segmentNodes = value;
-        }
+        private HashSet<int> childNodeIndices;
+
+        public string BiomeName { get => biomeName; set => biomeName = value; }
+        public Color DebugColor { get => debugColor; set => debugColor = value; }
+        public SegmentNodeData[] SegmentNodes { get => segmentNodes; set => segmentNodes = value; }
         public BiomeTransition[] Transitions => transitions;
-        public GameObject EnvironmentPrefab 
-        {
-            get => environmentPrefab;
-            set => environmentPrefab = value;
-        }
+        public GameObject EnvironmentPrefab { get => environmentPrefab; set => environmentPrefab = value; }
         public Vector3 EnvironmentOffset => environmentOffset;
-        public GameObject BackgroundImagePrefab 
-        {
-            get => backgroundImagePrefab;
-            set => backgroundImagePrefab = value;
-        }
+        public GameObject BackgroundImagePrefab { get => backgroundImagePrefab; set => backgroundImagePrefab = value; }
         public Vector3 BackgroundImageOffset => backgroundImageOffset;
         public float BackgroundImageMoveSpeed => backgroundImageMoveSpeed;
-        public float MinLength 
-        {
-            get => minLength;
-            set => minLength = value;
-        }
-        public float MaxLength 
-        {
-            get => maxLength;
-            set => maxLength = value;
-        }
-        public float MinDifficulty 
-        {
-            get => minDifficulty;
-            set => minDifficulty = value;
-        }
-        public float MaxDifficulty 
-        {
-            get => maxDifficulty;
-            set => maxDifficulty = value;
-        }
+        public float MinLength { get => minLength; set => minLength = value; }
+        public float MaxLength { get => maxLength; set => maxLength = value; }
+        public float MinDifficulty { get => minDifficulty; set => minDifficulty = value; }
+        public float MaxDifficulty { get => maxDifficulty; set => maxDifficulty = value; }
         public float EnemySpawnMultiplier => enemySpawnMultiplier;
         public bool OverrideFog => overrideFog;
         public Color FogColor => fogColor;
@@ -122,35 +87,19 @@ namespace Runner.LevelGeneration
         public bool PauseCycleDuringOverride => pauseCycleDuringOverride;
         public float TimeTransitionDuration => timeTransitionDuration;
         public bool HasTimeOverride => timeOverride != TimeOverrideMode.None;
-
-        public Vector2 EditorScrollPosition
-        {
-            get => editorScrollPosition;
-            set => editorScrollPosition = value;
-        }
-
-        public float EditorZoom
-        {
-            get => editorZoom;
-            set => editorZoom = value;
-        }
+        public Vector2 EditorScrollPosition { get => editorScrollPosition; set => editorScrollPosition = value; }
+        public float EditorZoom { get => editorZoom; set => editorZoom = value; }
 
         public float GetForcedTimeValue()
         {
             switch (timeOverride)
             {
-                case TimeOverrideMode.ForceDay:
-                    return 0.5f;
-                case TimeOverrideMode.ForceNight:
-                    return 0.0f;
-                case TimeOverrideMode.ForceSunrise:
-                    return 0.25f;
-                case TimeOverrideMode.ForceSunset:
-                    return 0.75f;
-                case TimeOverrideMode.Custom:
-                    return forcedTime;
-                default:
-                    return -1f;
+                case TimeOverrideMode.ForceDay: return 0.5f;
+                case TimeOverrideMode.ForceNight: return 0.0f;
+                case TimeOverrideMode.ForceSunrise: return 0.25f;
+                case TimeOverrideMode.ForceSunset: return 0.75f;
+                case TimeOverrideMode.Custom: return forcedTime;
+                default: return -1f;
             }
         }
 
@@ -159,316 +108,333 @@ namespace Runner.LevelGeneration
             return Random.Range(minLength, maxLength);
         }
 
-        public LevelSegment GetNextSegment(int currentNodeIndex)
+        private void BuildChildNodeSet()
         {
-            if (segmentNodes == null || segmentNodes.Length == 0)
-            {
-                return null;
-            }
+            childNodeIndices = new HashSet<int>();
 
-            if (currentNodeIndex < 0 || currentNodeIndex >= segmentNodes.Length)
-            {
-                return GetRandomNodeWithCooldown(true);
-            }
+            if (segmentNodes == null) return;
 
-            var currentNode = segmentNodes[currentNodeIndex];
-            
             for (int i = 0; i < segmentNodes.Length; i++)
             {
-                if (segmentNodes[i].CurrentCooldown > 0)
+                var node = segmentNodes[i];
+                if (node == null || !node.HasConnections) continue;
+
+                foreach (int childIndex in node.Connections)
                 {
-                    segmentNodes[i].CurrentCooldown--;
-                }
-            }
-
-            if (currentNode.HasConnections)
-            {
-                return GetWeightedChildSegment(currentNode);
-            }
-            
-            return GetRandomNodeWithCooldown(true);
-        }
-
-        private LevelSegment GetWeightedChildSegment(SegmentNodeData parentNode)
-        {
-            if (parentNode.Connections == null || parentNode.Connections.Length == 0)
-            {
-                return parentNode.Segment;
-            }
-
-            float totalWeight = 0f;
-            foreach (int childIndex in parentNode.Connections)
-            {
-                if (childIndex >= 0 && childIndex < segmentNodes.Length)
-                {
-                    totalWeight += segmentNodes[childIndex].Weight;
-                }
-            }
-
-            if (totalWeight <= 0f)
-            {
-                int randomChild = parentNode.Connections[Random.Range(0, parentNode.Connections.Length)];
-                if (randomChild >= 0 && randomChild < segmentNodes.Length)
-                {
-                    return segmentNodes[randomChild].Segment;
-                }
-                return parentNode.Segment;
-            }
-
-            float randomValue = Random.Range(0f, totalWeight);
-            float cumulativeWeight = 0f;
-
-            foreach (int childIndex in parentNode.Connections)
-            {
-                if (childIndex < 0 || childIndex >= segmentNodes.Length) continue;
-
-                cumulativeWeight += segmentNodes[childIndex].Weight;
-                if (randomValue <= cumulativeWeight)
-                {
-                    segmentNodes[childIndex].CurrentCooldown = segmentNodes[childIndex].Cooldown;
-                    return segmentNodes[childIndex].Segment;
-                }
-            }
-
-            return parentNode.Segment;
-        }
-
-        private LevelSegment GetRandomNodeWithCooldown(bool preferStartNodes = false)
-        {
-            if (segmentNodes == null || segmentNodes.Length == 0) return null;
-
-            List<SegmentNodeData> availableNodes = new List<SegmentNodeData>();
-
-            foreach (var node in segmentNodes)
-            {
-                if (node.CurrentCooldown <= 0 && node.Segment != null)
-                {
-                    if (preferStartNodes && !node.IsStartNode)
+                    if (childIndex >= 0 && childIndex < segmentNodes.Length)
                     {
+                        childNodeIndices.Add(childIndex);
+                    }
+                }
+            }
+        }
+
+        private bool IsValidEntryPoint(int nodeIndex)
+        {
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length) return false;
+
+            var node = segmentNodes[nodeIndex];
+            if (node == null || node.Segment == null) return false;
+
+            if (childNodeIndices != null && childNodeIndices.Contains(nodeIndex))
+                return false;
+
+            return true;
+        }
+
+        public List<LevelSegment> GenerateSegmentOrder(int totalSlots)
+        {
+            List<LevelSegment> result = new List<LevelSegment>();
+
+            if (segmentNodes == null || segmentNodes.Length == 0)
+                return result;
+
+            BuildChildNodeSet();
+
+            ResetNodeCooldowns();
+
+            int safety = 500;
+
+            while (result.Count < totalSlots && safety > 0)
+            {
+                safety--;
+                int remaining = totalSlots - result.Count;
+
+                int entryIndex = PickEntryPointNode(remaining);
+
+                if (entryIndex < 0)
+                {
+                    entryIndex = PickEntryPointNodeIgnoringCooldown(remaining);
+
+                    if (entryIndex < 0)
+                    {
+                        Debug.LogWarning("[BiomeData] No entry point nodes available at all!");
+                        break;
+                    }
+                }
+
+                var entryNode = segmentNodes[entryIndex];
+
+                if (entryNode.HasConnections)
+                {
+                    int maxChain = GetMaxChainLength(entryIndex, new HashSet<int>());
+
+                    if (maxChain > remaining)
+                    {
+                        int standaloneIndex = PickStandaloneEntryPoint();
+
+                        if (standaloneIndex >= 0)
+                        {
+                            AddNodeToResult(result, standaloneIndex);
+                            TickCooldowns();
+                            continue;
+                        }
+
+                        AddNodeToResult(result, entryIndex);
+                        TickCooldowns();
                         continue;
                     }
-                    availableNodes.Add(node);
-                }
-            }
 
-            if (availableNodes.Count == 0)
-            {
-                if (preferStartNodes)
-                {
-                    foreach (var node in segmentNodes)
+                    int currentIndex = entryIndex;
+                    while (result.Count < totalSlots && currentIndex >= 0)
                     {
-                        if (node.IsStartNode && node.Segment != null)
-                        {
-                            availableNodes.Add(node);
-                        }
+                        AddNodeToResult(result, currentIndex);
+                        TickCooldowns();
+
+                        currentIndex = PickFromConnections(currentIndex);
                     }
                 }
-                if (availableNodes.Count == 0)
+                else
                 {
-                    return segmentNodes[Random.Range(0, segmentNodes.Length)].Segment;
+                    AddNodeToResult(result, entryIndex);
+                    TickCooldowns();
                 }
             }
+
+            if (result.Count < totalSlots)
+            {
+                Debug.LogWarning($"[BiomeData] Could only generate {result.Count}/{totalSlots} segments for {biomeName}");
+            }
+
+            return result;
+        }
+
+        private void AddNodeToResult(List<LevelSegment> result, int nodeIndex)
+        {
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length) return;
+
+            var node = segmentNodes[nodeIndex];
+            if (node.Segment == null) return;
+
+            result.Add(node.Segment);
+
+            node.CurrentCooldown = Mathf.Max(node.Cooldown, 1);
+        }
+
+        private void TickCooldowns()
+        {
+            if (segmentNodes == null) return;
+
+            for (int i = 0; i < segmentNodes.Length; i++)
+            {
+                if (segmentNodes[i] != null && segmentNodes[i].CurrentCooldown > 0)
+                    segmentNodes[i].CurrentCooldown--;
+            }
+        }
+
+        private int PickEntryPointNode(int remainingSlots)
+        {
+            List<int> candidates = new List<int>();
+            List<float> weights = new List<float>();
+
+            for (int i = 0; i < segmentNodes.Length; i++)
+            {
+                if (!IsValidEntryPoint(i)) continue;
+
+                var node = segmentNodes[i];
+                if (node.CurrentCooldown > 0) continue;
+
+                if (node.HasConnections)
+                {
+                    int maxChain = GetMaxChainLength(i, new HashSet<int>());
+                    if (maxChain > remainingSlots)
+                        continue;
+                }
+
+                candidates.Add(i);
+                weights.Add(node.Weight);
+            }
+
+            return WeightedRandomPick(candidates, weights);
+        }
+
+        private int PickEntryPointNodeIgnoringCooldown(int remainingSlots)
+        {
+            List<int> candidates = new List<int>();
+            List<float> weights = new List<float>();
+
+            for (int i = 0; i < segmentNodes.Length; i++)
+            {
+                if (!IsValidEntryPoint(i)) continue;
+
+                var node = segmentNodes[i];
+
+                if (node.HasConnections)
+                {
+                    int maxChain = GetMaxChainLength(i, new HashSet<int>());
+                    if (maxChain > remainingSlots)
+                        continue;
+                }
+
+                candidates.Add(i);
+                weights.Add(node.Weight);
+            }
+
+            return WeightedRandomPick(candidates, weights);
+        }
+
+        private int PickStandaloneEntryPoint()
+        {
+            List<int> candidates = new List<int>();
+            List<float> weights = new List<float>();
+
+            for (int i = 0; i < segmentNodes.Length; i++)
+            {
+                if (!IsValidEntryPoint(i)) continue;
+
+                var node = segmentNodes[i];
+                if (node.CurrentCooldown > 0) continue;
+                if (node.HasConnections) continue;
+
+                candidates.Add(i);
+                weights.Add(node.Weight);
+            }
+
+            return WeightedRandomPick(candidates, weights);
+        }
+
+        private int PickFromConnections(int nodeIndex)
+        {
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length) return -1;
+
+            var node = segmentNodes[nodeIndex];
+            if (!node.HasConnections) return -1;
+
+            List<int> candidates = new List<int>();
+            List<float> weights = new List<float>();
+
+            foreach (int childIndex in node.Connections)
+            {
+                if (childIndex < 0 || childIndex >= segmentNodes.Length) continue;
+                var child = segmentNodes[childIndex];
+                if (child == null || child.Segment == null) continue;
+                if (child.CurrentCooldown > 0) continue;
+
+                candidates.Add(childIndex);
+                weights.Add(child.Weight);
+            }
+
+            int picked = WeightedRandomPick(candidates, weights);
+            if (picked >= 0) return picked;
+
+            candidates.Clear();
+            weights.Clear();
+
+            foreach (int childIndex in node.Connections)
+            {
+                if (childIndex < 0 || childIndex >= segmentNodes.Length) continue;
+                var child = segmentNodes[childIndex];
+                if (child == null || child.Segment == null) continue;
+
+                candidates.Add(childIndex);
+                weights.Add(child.Weight);
+            }
+
+            return WeightedRandomPick(candidates, weights);
+        }
+
+        public int GetMaxChainLength(int nodeIndex, HashSet<int> visited)
+        {
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length) return 0;
+            if (visited.Contains(nodeIndex)) return 0;
+
+            var node = segmentNodes[nodeIndex];
+            if (node == null || node.Segment == null) return 0;
+
+            visited.Add(nodeIndex);
+
+            if (!node.HasConnections)
+            {
+                visited.Remove(nodeIndex);
+                return 1;
+            }
+
+            int maxChildChain = 0;
+            foreach (int childIndex in node.Connections)
+            {
+                int childChain = GetMaxChainLength(childIndex, visited);
+                if (childChain > maxChildChain)
+                    maxChildChain = childChain;
+            }
+
+            visited.Remove(nodeIndex);
+            return 1 + maxChildChain;
+        }
+
+        private int WeightedRandomPick(List<int> candidates, List<float> weights)
+        {
+            if (candidates.Count == 0) return -1;
+            if (candidates.Count == 1) return candidates[0];
 
             float totalWeight = 0f;
-            foreach (var node in availableNodes)
-            {
-                totalWeight += node.Weight;
-            }
+            for (int i = 0; i < weights.Count; i++)
+                totalWeight += weights[i];
 
             if (totalWeight <= 0f)
+                return candidates[Random.Range(0, candidates.Count)];
+
+            float roll = Random.Range(0f, totalWeight);
+            float cumulative = 0f;
+
+            for (int i = 0; i < candidates.Count; i++)
             {
-                var randomNode = availableNodes[Random.Range(0, availableNodes.Count)];
-                randomNode.CurrentCooldown = randomNode.Cooldown;
-                return randomNode.Segment;
+                cumulative += weights[i];
+                if (roll <= cumulative)
+                    return candidates[i];
             }
 
-            float randomValue = Random.Range(0f, totalWeight);
-            float cumulativeWeight = 0f;
-
-            foreach (var node in availableNodes)
-            {
-                cumulativeWeight += node.Weight;
-                if (randomValue <= cumulativeWeight)
-                {
-                    node.CurrentCooldown = node.Cooldown;
-                    return node.Segment;
-                }
-            }
-
-            return availableNodes[Random.Range(0, availableNodes.Count)].Segment;
+            return candidates[candidates.Count - 1];
         }
 
         public void ResetNodeCooldowns()
         {
             if (segmentNodes == null) return;
-
             foreach (var node in segmentNodes)
             {
                 if (node != null)
-                {
                     node.CurrentCooldown = 0;
-                }
             }
         }
 
-        public float GetMaxSequenceLengthFromNode(int nodeIndex)
+        public int FindNodeIndexForSegment(LevelSegment segment)
         {
-            if (segmentNodes == null || segmentNodes.Length == 0)
-                return 0f;
-
-            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
-                return 0f;
-
-            return GetMaxSequenceLengthRecursive(nodeIndex, new HashSet<int>());
-        }
-
-        private float GetMaxSequenceLengthRecursive(int nodeIndex, HashSet<int> visited)
-        {
-            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
-                return 0f;
-
-            if (visited.Contains(nodeIndex))
-                return 0f;
-
-            var node = segmentNodes[nodeIndex];
-            if (node == null || node.Segment == null)
-                return 0f;
-
-            visited.Add(nodeIndex);
-
-            float currentLength = node.Segment.Length;
-
-            if (!node.HasConnections)
-            {
-                visited.Remove(nodeIndex);
-                return currentLength;
-            }
-
-            float maxChildLength = 0f;
-            foreach (int childIndex in node.Connections)
-            {
-                float childLength = GetMaxSequenceLengthRecursive(childIndex, visited);
-                if (childLength > maxChildLength)
-                    maxChildLength = childLength;
-            }
-
-            visited.Remove(nodeIndex);
-            return currentLength + maxChildLength;
-        }
-
-        public float GetMinSequenceLengthFromNode(int nodeIndex)
-        {
-            if (segmentNodes == null || segmentNodes.Length == 0)
-                return float.MaxValue;
-
-            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
-                return float.MaxValue;
-
-            return GetMinSequenceLengthRecursive(nodeIndex, new HashSet<int>());
-        }
-
-        private float GetMinSequenceLengthRecursive(int nodeIndex, HashSet<int> visited)
-        {
-            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
-                return float.MaxValue;
-
-            if (visited.Contains(nodeIndex))
-                return 0f;
-
-            var node = segmentNodes[nodeIndex];
-            if (node == null || node.Segment == null)
-                return float.MaxValue;
-
-            visited.Add(nodeIndex);
-
-            float currentLength = node.Segment.Length;
-
-            if (!node.HasConnections)
-            {
-                visited.Remove(nodeIndex);
-                return currentLength;
-            }
-
-            float minChildLength = float.MaxValue;
-            foreach (int childIndex in node.Connections)
-            {
-                float childLength = GetMinSequenceLengthRecursive(childIndex, visited);
-                if (childLength < minChildLength)
-                    minChildLength = childLength;
-            }
-
-            visited.Remove(nodeIndex);
-            return currentLength + minChildLength;
-        }
-
-        public bool CanCompleteSequenceInDistance(int startNodeIndex, float maxDistance)
-        {
-            if (segmentNodes == null || segmentNodes.Length == 0)
-                return false;
-
-            if (startNodeIndex < 0 || startNodeIndex >= segmentNodes.Length)
-                return false;
-
-            var startNode = segmentNodes[startNodeIndex];
-            if (startNode == null || startNode.Segment == null)
-                return false;
-
-            float minLength = GetMinSequenceLengthFromNode(startNodeIndex);
-            return minLength <= maxDistance;
-        }
-
-        public int GetValidStartNodeIndexForDistance(float targetDistance)
-        {
-            if (segmentNodes == null || segmentNodes.Length == 0)
-                return -1;
-
-            List<int> validStartNodes = new List<int>();
-            List<int> startNodes = new List<int>();
-
+            if (segmentNodes == null || segment == null) return -1;
             for (int i = 0; i < segmentNodes.Length; i++)
             {
-                if (segmentNodes[i] != null && segmentNodes[i].IsStartNode && segmentNodes[i].Segment != null)
-                {
-                    startNodes.Add(i);
-                    if (CanCompleteSequenceInDistance(i, targetDistance))
-                    {
-                        validStartNodes.Add(i);
-                    }
-                }
+                if (segmentNodes[i] != null && segmentNodes[i].Segment == segment)
+                    return i;
             }
-
-            if (validStartNodes.Count > 0)
-                return validStartNodes[Random.Range(0, validStartNodes.Count)];
-
-            for (int i = 0; i < segmentNodes.Length; i++)
-            {
-                if (segmentNodes[i] != null && segmentNodes[i].Segment != null)
-                {
-                    if (CanCompleteSequenceInDistance(i, targetDistance))
-                    {
-                        validStartNodes.Add(i);
-                    }
-                }
-            }
-
-            if (validStartNodes.Count > 0)
-                return validStartNodes[Random.Range(0, validStartNodes.Count)];
-
             return -1;
         }
 
         public BiomeTransition GetTransitionTo(BiomeData targetBiome)
         {
             if (transitions == null) return null;
-
             foreach (var transition in transitions)
             {
                 if (transition.TargetBiome == targetBiome)
-                {
                     return transition;
-                }
             }
-
             return null;
         }
 
@@ -483,24 +449,36 @@ namespace Runner.LevelGeneration
             if (transitions == null || transitions.Length == 0) return null;
 
             List<BiomeData> validBiomes = new List<BiomeData>();
-
             foreach (var transition in transitions)
             {
                 if (transition.TargetBiome == null) continue;
-
                 var target = transition.TargetBiome;
                 if (currentDifficulty >= target.MinDifficulty && currentDifficulty <= target.MaxDifficulty)
-                {
                     validBiomes.Add(target);
-                }
             }
 
             if (validBiomes.Count == 0)
-            {
                 return transitions[Random.Range(0, transitions.Length)].TargetBiome;
-            }
 
             return validBiomes[Random.Range(0, validBiomes.Count)];
+        }
+
+        public bool IsNodeEndNode(int nodeIndex)
+        {
+            if (segmentNodes == null || nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
+                return false;
+            return segmentNodes[nodeIndex].IsEndNode;
+        }
+
+        public int GetEndNodeIndex()
+        {
+            if (segmentNodes == null || segmentNodes.Length == 0) return -1;
+            for (int i = 0; i < segmentNodes.Length; i++)
+            {
+                if (segmentNodes[i] != null && segmentNodes[i].IsEndNode)
+                    return i;
+            }
+            return -1;
         }
 
 #if UNITY_EDITOR
@@ -514,17 +492,12 @@ namespace Runner.LevelGeneration
         private void ValidateSegmentNodes()
         {
             if (segmentNodes == null) return;
-
             for (int i = 0; i < segmentNodes.Length; i++)
             {
                 if (segmentNodes[i] == null)
-                {
                     segmentNodes[i] = new SegmentNodeData(i);
-                }
                 else
-                {
                     segmentNodes[i].NodeIndex = i;
-                }
             }
         }
 #endif
@@ -555,65 +528,16 @@ namespace Runner.LevelGeneration
 
         private int currentCooldown;
 
-        public int NodeIndex
-        {
-            get => nodeIndex;
-            set => nodeIndex = value;
-        }
-
-        public LevelSegment Segment 
-        {
-            get => segment;
-            set => segment = value;
-        }
-
-        public string NodeName
-        {
-            get => nodeName;
-            set => nodeName = value;
-        }
-        public Vector2 NodePosition
-        {
-            get => nodePosition;
-            set => nodePosition = value;
-        }
-
-        public bool IsStartNode
-        {
-            get => isStartNode;
-            set => isStartNode = value;
-        }
-
-        public bool IsEndNode
-        {
-            get => isEndNode;
-            set => isEndNode = value;
-        }
-
-        public int[] Connections 
-        {
-            get => connections;
-            set => connections = value;
-        }
-
-        public float Weight
-        {
-            get => weight;
-            set => weight = value;
-        }
-
-        public int Cooldown
-        {
-            get => cooldown;
-            set => cooldown = value;
-        }
-
-        public int CurrentCooldown
-        {
-            get => currentCooldown;
-            set => currentCooldown = value;
-        }
-
+        public int NodeIndex { get => nodeIndex; set => nodeIndex = value; }
+        public LevelSegment Segment { get => segment; set => segment = value; }
+        public string NodeName { get => nodeName; set => nodeName = value; }
+        public Vector2 NodePosition { get => nodePosition; set => nodePosition = value; }
+        public bool IsStartNode { get => isStartNode; set => isStartNode = value; }
+        public bool IsEndNode { get => isEndNode; set => isEndNode = value; }
+        public int[] Connections { get => connections; set => connections = value; }
+        public float Weight { get => weight; set => weight = value; }
+        public int Cooldown { get => cooldown; set => cooldown = value; }
+        public int CurrentCooldown { get => currentCooldown; set => currentCooldown = value; }
         public bool HasConnections => connections != null && connections.Length > 0;
 
         public SegmentNodeData(int index)
@@ -625,24 +549,14 @@ namespace Runner.LevelGeneration
 
         public void AddConnection(int targetNodeIndex)
         {
-            if (connections == null)
-            {
-                connections = new int[0];
-            }
-
+            if (connections == null) connections = new int[0];
             for (int i = 0; i < connections.Length; i++)
             {
-                if (connections[i] == targetNodeIndex)
-                {
-                    return;
-                }
+                if (connections[i] == targetNodeIndex) return;
             }
-
             int[] newConnections = new int[connections.Length + 1];
             for (int i = 0; i < connections.Length; i++)
-            {
                 newConnections[i] = connections[i];
-            }
             newConnections[connections.Length] = targetNodeIndex;
             connections = newConnections;
         }
@@ -650,14 +564,11 @@ namespace Runner.LevelGeneration
         public void RemoveConnection(int targetNodeIndex)
         {
             if (connections == null || connections.Length == 0) return;
-
             List<int> newConnections = new List<int>();
             for (int i = 0; i < connections.Length; i++)
             {
                 if (connections[i] != targetNodeIndex)
-                {
                     newConnections.Add(connections[i]);
-                }
             }
             connections = newConnections.ToArray();
         }
@@ -665,13 +576,9 @@ namespace Runner.LevelGeneration
         public bool HasConnectionTo(int targetNodeIndex)
         {
             if (connections == null) return false;
-
             for (int i = 0; i < connections.Length; i++)
             {
-                if (connections[i] == targetNodeIndex)
-                {
-                    return true;
-                }
+                if (connections[i] == targetNodeIndex) return true;
             }
             return false;
         }

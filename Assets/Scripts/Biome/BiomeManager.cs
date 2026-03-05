@@ -23,11 +23,9 @@ namespace Runner.LevelGeneration
 
         private BiomeData currentBiome;
         private BiomeData nextBiome;
-        private float currentBiomeTargetLength;
-        private float spawnedLengthInCurrentBiome;
         private float currentBiomeStartZ;
         private float currentBiomeEndZ;
-        private bool transitionSegmentSpawned;
+        private float spawnedLengthInCurrentBiome;
         private bool environmentSpawnedForNextBiome;
 
         private BiomeData visualCurrentBiome;
@@ -41,8 +39,13 @@ namespace Runner.LevelGeneration
 
         private List<BiomeEnvironment> activeEnvironments = new List<BiomeEnvironment>();
 
-        [Header("Node-Based Generation")]
-        private int currentNodeIndex = 0;
+        private const int SEGMENTS_PER_BIOME = 16;
+        private const int REGULAR_SEGMENTS = 15;
+        private const float SEGMENT_LENGTH = 100f;
+        private const float BIOME_LENGTH = SEGMENTS_PER_BIOME * SEGMENT_LENGTH;
+
+        private List<LevelSegment> preGeneratedSegments = new List<LevelSegment>();
+        private int currentSegmentIndex = 0;
 
         public event Action<BiomeData> OnBiomeChanged;
         public event Action<BiomeData, BiomeData> OnBiomeTransitionStarted;
@@ -52,7 +55,8 @@ namespace Runner.LevelGeneration
         public BiomeData NextBiome => nextBiome;
         public float CurrentBiomeStartZ => currentBiomeStartZ;
         public float CurrentBiomeEndZ => currentBiomeEndZ;
-        public float RemainingBiomeLength => currentBiomeTargetLength - spawnedLengthInCurrentBiome;
+        public float RemainingBiomeLength => BIOME_LENGTH - spawnedLengthInCurrentBiome;
+        public int RemainingSegmentCount => SEGMENTS_PER_BIOME - currentSegmentIndex;
         public bool IsInitialized { get; private set; }
 
         private void Awake()
@@ -74,15 +78,14 @@ namespace Runner.LevelGeneration
                 Debug.LogError("[BiomeManager] Starting biome is null!");
                 return;
             }
-
             if (player == null)
             {
                 Debug.LogError("[BiomeManager] Player transform is null!");
                 return;
             }
 
+            PrepareNextBiomeFrom(startingBiome);
             SetupBiome(startingBiome, 0f);
-            PrepareNextBiome();
 
             visualCurrentBiome = startingBiome;
             visualNextBiome = null;
@@ -97,85 +100,106 @@ namespace Runner.LevelGeneration
                 backgroundController.SpawnBackgroundForBiome(currentBiome, 0f);
             }
 
-            if (DayNightCycle.Instance != null)
-            {
-                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
-            }
+            ApplyVisualOverrides(visualCurrentBiome);
 
             IsInitialized = true;
 
             if (showDebug)
-            {
                 Debug.Log($"[BiomeManager] Initialized with {currentBiome.BiomeName}");
-            }
         }
 
         private void SetupBiome(BiomeData biome, float startZ)
         {
             currentBiome = biome;
             currentBiomeStartZ = startZ;
-            currentBiomeTargetLength = biome.GetRandomLength();
-            currentBiomeEndZ = startZ + currentBiomeTargetLength;
+            currentBiomeEndZ = startZ + BIOME_LENGTH;
             spawnedLengthInCurrentBiome = 0f;
-            transitionSegmentSpawned = false;
             environmentSpawnedForNextBiome = false;
-            
-            currentNodeIndex = SelectValidStartNode();
+
+            PreGenerateBiomeSegments();
         }
 
-        private int SelectValidStartNode()
+        private void PreGenerateBiomeSegments()
         {
-            if (currentBiome == null || currentBiome.SegmentNodes == null)
-                return 0;
+            preGeneratedSegments.Clear();
+            currentSegmentIndex = 0;
 
-            int validNode = currentBiome.GetValidStartNodeIndexForDistance(currentBiomeTargetLength);
-            if (validNode >= 0)
+            if (currentBiome == null)
             {
                 if (showDebug)
-                {
-                    Debug.Log($"[BiomeManager] Selected valid start node {validNode} for biome length {currentBiomeTargetLength:F1}");
-                }
-                return validNode;
+                    Debug.LogWarning("[BiomeManager] Current biome is null during pre-generation");
+                return;
             }
+
+            // Use the biome's own generation logic to fill REGULAR_SEGMENTS slots
+            List<LevelSegment> generated = currentBiome.GenerateSegmentOrder(REGULAR_SEGMENTS);
+            preGeneratedSegments.AddRange(generated);
+
+            // Add transition segment as the 16th
+            AddTransitionSegment();
 
             if (showDebug)
             {
-                Debug.LogWarning($"[BiomeManager] Could not find valid start node for biome length {currentBiomeTargetLength:F1}. Using default.");
+                Debug.Log($"[BiomeManager] Pre-generated {preGeneratedSegments.Count} segments for {currentBiome.BiomeName}");
+                for (int i = 0; i < preGeneratedSegments.Count; i++)
+                {
+                    Debug.Log($"  [{i}] {(preGeneratedSegments[i] != null ? preGeneratedSegments[i].name : "NULL")}");
+                }
             }
-            return 0;
         }
 
-        private void PrepareNextBiome()
+        private void AddTransitionSegment()
         {
-            float difficulty = player != null ? player.position.z / 1000f : 0f;
-            BiomeData potentialNextBiome = currentBiome.GetRandomNextBiome(difficulty);
+            if (nextBiome == null)
+            {
+                // No next biome — add a regular segment if possible
+                if (preGeneratedSegments.Count > 0)
+                    preGeneratedSegments.Add(preGeneratedSegments[preGeneratedSegments.Count - 1]);
+                return;
+            }
 
-            // Check if we should repeat the current biome
+            var transition = currentBiome.GetTransitionTo(nextBiome);
+            if (transition != null)
+            {
+                LevelSegment exitSegment = transition.GetRandomExitSegment();
+                if (exitSegment != null)
+                {
+                    preGeneratedSegments.Add(exitSegment);
+                    return;
+                }
+            }
+
+            // Fallback: duplicate last segment
+            if (preGeneratedSegments.Count > 0)
+                preGeneratedSegments.Add(preGeneratedSegments[preGeneratedSegments.Count - 1]);
+        }
+
+        private void PrepareNextBiomeFrom(BiomeData fromBiome)
+        {
+            if (fromBiome == null) return;
+
+            float difficulty = player != null ? player.position.z / 1000f : 0f;
+            BiomeData potentialNextBiome = fromBiome.GetRandomNextBiome(difficulty);
+
             bool shouldRepeat = UnityEngine.Random.value < repeatProbability;
 
             if (shouldRepeat)
             {
-                // Repeat current biome - reduce probability by half
-                nextBiome = currentBiome;
+                nextBiome = fromBiome;
                 repeatProbability *= 0.5f;
                 consecutiveRepeats++;
 
                 if (showDebug)
-                {
-                    Debug.Log($"[BiomeManagerGen] Repeating biome: {currentBiome.BiomeName}, new probability: {repeatProbability}");
-                }
+                    Debug.Log($"[BiomeManager] Repeating biome: {fromBiome.BiomeName}, new probability: {repeatProbability}");
             }
             else
             {
-                // New biome - use the selected one and reset probability
-                nextBiome = potentialNextBiome;
+                nextBiome = potentialNextBiome ?? fromBiome;
                 repeatProbability = 0.5f;
                 consecutiveRepeats = 0;
 
                 if (showDebug && nextBiome != null)
-                {
-                    Debug.Log($"[BiomeManagerGen] Next biome prepared: {nextBiome.BiomeName}, probability reset to 50%");
-                }
+                    Debug.Log($"[BiomeManager] Next biome prepared: {nextBiome.BiomeName}");
             }
         }
 
@@ -190,19 +214,16 @@ namespace Runner.LevelGeneration
 
         private void CheckVisualTransition()
         {
-            if (!visualTransitionPending) return;
-            if (visualNextBiome == null) return;
+            if (!visualTransitionPending || visualNextBiome == null) return;
 
             if (player.position.z >= visualTransitionZ)
-            {
-                StartVisualTransition();
-            }
+                PerformVisualTransition();
         }
 
-        private void StartVisualTransition()
+        private void PerformVisualTransition()
         {
+            BiomeData previousVisual = visualCurrentBiome;
             visualCurrentBiome = visualNextBiome;
-
             visualTransitionPending = false;
             visualNextBiome = null;
 
@@ -212,17 +233,22 @@ namespace Runner.LevelGeneration
                 backgroundController.SpawnBackgroundForBiome(visualCurrentBiome, player.position.z, true);
             }
 
+            ApplyVisualOverrides(visualCurrentBiome);
             OnBiomeChanged?.Invoke(visualCurrentBiome);
 
-            if (DayNightCycle.Instance != null)
-            {
-                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
-            }
-
             if (showDebug)
-            {
-                Debug.Log($"[BiomeManager] Visual transition to {visualCurrentBiome.BiomeName} at Z={player.position.z}");
-            }
+                Debug.Log($"[BiomeManager] Visual transition: {previousVisual?.BiomeName} -> {visualCurrentBiome.BiomeName} at Z={player.position.z}");
+        }
+
+        private void ApplyVisualOverrides(BiomeData biome)
+        {
+            if (biome == null) return;
+
+            if (DayNightCycle.Instance != null)
+                DayNightCycle.Instance.ApplyBiomeTimeOverride(biome);
+
+            if (FogController.Instance != null)
+                FogController.Instance.ApplyBiomeOverride(biome);
         }
 
         private void CheckEnvironmentPreSpawn()
@@ -236,138 +262,29 @@ namespace Runner.LevelGeneration
 
         public LevelSegment GetNextSegment(LevelSegment lastSegment)
         {
-            if (transitionSegmentSpawned)
-            {
+            if (currentSegmentIndex >= SEGMENTS_PER_BIOME)
                 SwitchToNextBiome();
-            }
 
-            if (ShouldSpawnTransitionSegment())
-            {
-                return GetTransitionSegment(lastSegment);
-            }
-
-            return GetRegularSegment(lastSegment);
+            return GetNextPreGeneratedSegment();
         }
 
-        private bool ShouldSpawnTransitionSegment()
+        private LevelSegment GetNextPreGeneratedSegment()
         {
-            if (nextBiome == null) return false;
-            
-            float remainingDistance = RemainingBiomeLength;
-            
-            if (remainingDistance <= 0) return true;
-            
-            if (currentBiome != null && currentNodeIndex >= 0)
+            if (currentSegmentIndex >= preGeneratedSegments.Count)
             {
-                if (!currentBiome.CanCompleteSequenceInDistance(currentNodeIndex, remainingDistance))
-                {
-                    if (showDebug)
-                    {
-                        Debug.Log($"[BiomeManager] Current path cannot complete in remaining {remainingDistance:F1}. Triggering early transition.");
-                    }
-                    return true;
-                }
-            }
-            
-            return spawnedLengthInCurrentBiome >= currentBiomeTargetLength - 100;
-        }
-
-        private LevelSegment GetRegularSegment(LevelSegment lastSegment)
-        {
-            float remainingDistance = RemainingBiomeLength;
-            
-            LevelSegment segment = currentBiome.GetNextSegment(currentNodeIndex);
-
-            if (segment == null)
-            {
-                Debug.LogWarning($"[BiomeManager] No segments from node {currentNodeIndex} in {currentBiome.BiomeName}! Falling back to random.");
-                segment = currentBiome.GetNextSegment(-1);
-            }
-
-            if (segment == null)
-            {
-                Debug.LogError($"[BiomeManager] No segments available in {currentBiome.BiomeName}!");
+                if (showDebug)
+                    Debug.LogWarning("[BiomeManager] No more pre-generated segments!");
                 return null;
             }
 
-            if (currentBiome.SegmentNodes != null && remainingDistance > 0)
-            {
-                int newNodeIndex = currentNodeIndex;
-                for (int i = 0; i < currentBiome.SegmentNodes.Length; i++)
-                {
-                    if (currentBiome.SegmentNodes[i] != null && currentBiome.SegmentNodes[i].Segment == segment)
-                    {
-                        newNodeIndex = i;
-                        break;
-                    }
-                }
-
-                if (!currentBiome.CanCompleteSequenceInDistance(newNodeIndex, remainingDistance))
-                {
-                    if (showDebug)
-                    {
-                        Debug.LogWarning($"[BiomeManager] Current path cannot complete in remaining distance {remainingDistance:F1}. Finding valid path...");
-                    }
-
-                    int validNodeIndex = currentBiome.GetValidStartNodeIndexForDistance(remainingDistance);
-                    if (validNodeIndex >= 0)
-                    {
-                        newNodeIndex = validNodeIndex;
-                        if (currentBiome.SegmentNodes != null && newNodeIndex >= 0 && newNodeIndex < currentBiome.SegmentNodes.Length)
-                        {
-                            segment = currentBiome.SegmentNodes[newNodeIndex].Segment;
-                        }
-                    }
-                    else
-                    {
-                        if (showDebug)
-                        {
-                            Debug.LogWarning($"[BiomeManager] No valid path found for remaining distance {remainingDistance:F1}. Using current segment anyway.");
-                        }
-                    }
-                }
-
-                currentNodeIndex = newNodeIndex;
-            }
-
+            LevelSegment segment = preGeneratedSegments[currentSegmentIndex];
+            currentSegmentIndex++;
             spawnedLengthInCurrentBiome += segment.Length;
-            return segment;
-        }
-
-        private LevelSegment GetTransitionSegment(LevelSegment lastSegment)
-        {
-            var transition = currentBiome.GetTransitionTo(nextBiome);
-            transitionSegmentSpawned = true;
-
-            if (transition == null)
-            {
-                return GetRegularSegment(lastSegment);
-            }
-
-            LevelSegment exitSegment = transition.GetRandomExitSegment();
-
-            if (exitSegment == null)
-            {
-                return GetRegularSegment(lastSegment);
-            }
-
-            spawnedLengthInCurrentBiome += exitSegment.Length;
-
-            ScheduleVisualTransition(nextBiome, currentBiomeEndZ);
-
-            if (backgroundController != null)
-            {
-                backgroundController.TriggerMoveUp(currentBiomeEndZ);
-            }
-
-            OnBiomeTransitionStarted?.Invoke(currentBiome, nextBiome);
 
             if (showDebug)
-            {
-                Debug.Log($"[BiomeManager] Transition segment to {nextBiome.BiomeName}, visual at Z={currentBiomeEndZ}");
-            }
+                Debug.Log($"[BiomeManager] Segment {currentSegmentIndex}/{SEGMENTS_PER_BIOME}: {segment.name}");
 
-            return exitSegment;
+            return segment;
         }
 
         private void ScheduleVisualTransition(BiomeData toBiome, float atZ)
@@ -377,28 +294,31 @@ namespace Runner.LevelGeneration
             visualTransitionPending = true;
 
             if (showDebug)
-            {
                 Debug.Log($"[BiomeManager] Scheduled visual transition to {toBiome.BiomeName} at Z={atZ}");
-            }
         }
 
         private void SwitchToNextBiome()
         {
             if (nextBiome == null)
             {
-                Debug.LogError("[BiomeManagerGen] No next biome!");
+                Debug.LogError("[BiomeManager] No next biome!");
                 return;
             }
 
-            float newStartZ = currentBiomeStartZ + currentBiomeTargetLength;
+            float newStartZ = currentBiomeEndZ;
+            BiomeData switchingToBiome = nextBiome;
 
             if (showDebug)
-            {
-                Debug.Log($"[BiomeManagerGen] Segment generation switched to {nextBiome.BiomeName} at Z={newStartZ}");
-            }
+                Debug.Log($"[BiomeManager] Switching to {switchingToBiome.BiomeName} at Z={newStartZ}");
 
-            SetupBiome(nextBiome, newStartZ);
-            PrepareNextBiome();
+            OnBiomeTransitionStarted?.Invoke(currentBiome, switchingToBiome);
+            ScheduleVisualTransition(switchingToBiome, newStartZ);
+
+            if (backgroundController != null)
+                backgroundController.TriggerMoveUp(newStartZ);
+
+            PrepareNextBiomeFrom(switchingToBiome);
+            SetupBiome(switchingToBiome, newStartZ);
         }
 
         private void SpawnEnvironmentForBiome(BiomeData biome, float zPosition)
@@ -438,9 +358,7 @@ namespace Runner.LevelGeneration
 
             EnvironmentReveal reveal = go.GetComponent<EnvironmentReveal>();
             if (reveal != null)
-            {
                 reveal.PlayReveal(0.1f);
-            }
 
             if (showDebug)
                 Debug.Log($"[BiomeManager] Spawned {biome.BiomeName} environment at Z={zPosition}");
@@ -461,9 +379,7 @@ namespace Runner.LevelGeneration
                 if (player.position.z - environment.SpawnZ > environmentDespawnDistance)
                 {
                     if (showDebug)
-                    {
                         Debug.Log($"[BiomeManager] Despawned environment at Z={environment.SpawnZ}");
-                    }
 
                     Destroy(environment.gameObject);
                     activeEnvironments.RemoveAt(i);
@@ -478,14 +394,7 @@ namespace Runner.LevelGeneration
 
         public void Reset(BiomeData startingBiome, float startZ)
         {
-            for (int i = activeEnvironments.Count - 1; i >= 0; i--)
-            {
-                if (activeEnvironments[i] != null)
-                {
-                    Destroy(activeEnvironments[i].gameObject);
-                }
-            }
-            activeEnvironments.Clear();
+            CleanupAllEnvironments();
 
             if (startingBiome == null)
             {
@@ -493,16 +402,16 @@ namespace Runner.LevelGeneration
                 return;
             }
 
+            repeatProbability = 0.5f;
+            consecutiveRepeats = 0;
+
+            PrepareNextBiomeFrom(startingBiome);
             SetupBiome(startingBiome, startZ);
-            PrepareNextBiome();
 
             visualCurrentBiome = startingBiome;
             visualNextBiome = null;
             visualTransitionZ = startZ;
             visualTransitionPending = false;
-
-            repeatProbability = 0.5f;
-            consecutiveRepeats = 0;
 
             SpawnEnvironmentForBiome(currentBiome, startZ);
 
@@ -512,71 +421,57 @@ namespace Runner.LevelGeneration
                 backgroundController.SpawnBackgroundForBiome(startingBiome, startZ);
             }
 
-            if (DayNightCycle.Instance != null)
-            {
-                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
-            }
-
+            ApplyVisualOverrides(visualCurrentBiome);
             OnBiomeChanged?.Invoke(visualCurrentBiome);
 
             if (showDebug)
-            {
                 Debug.Log($"[BiomeManager] Reset complete at Z={startZ}");
-            }
         }
 
-        public void ResetAtDeath(BiomeData currentBiomeAtDeath, float deathZ, BiomeData nextBiomeAtDeath)
+        public void ResetAtDeath(BiomeData biomeToStartWith)
         {
-            for (int i = activeEnvironments.Count - 1; i >= 0; i--)
-            {
-                if (activeEnvironments[i] != null)
-                {
-                    Destroy(activeEnvironments[i].gameObject);
-                }
-            }
-            activeEnvironments.Clear();
+            CleanupAllEnvironments();
 
-            if (currentBiomeAtDeath == null)
+            if (biomeToStartWith == null)
             {
-                Debug.LogError("[BiomeManager] ResetAtDeath called with null currentBiomeAtDeath!");
+                Debug.LogError("[BiomeManager] ResetAtDeath called with null biome!");
                 return;
             }
-
-            SetupBiome(currentBiomeAtDeath, deathZ);
-            
-            // Don't call PrepareNextBiome() - we want to continue from the next biome that was active at death
-            if (nextBiomeAtDeath != null)
-            {
-                nextBiome = nextBiomeAtDeath;
-            }
-
-            visualCurrentBiome = currentBiomeAtDeath;
-            visualNextBiome = nextBiomeAtDeath;
-            visualTransitionZ = deathZ;
-            visualTransitionPending = false;
 
             repeatProbability = 0.5f;
             consecutiveRepeats = 0;
 
-            SpawnEnvironmentForBiome(currentBiome, deathZ);
+            PrepareNextBiomeFrom(biomeToStartWith);
+            SetupBiome(biomeToStartWith, 0f);
+
+            visualCurrentBiome = biomeToStartWith;
+            visualNextBiome = null;
+            visualTransitionZ = 0f;
+            visualTransitionPending = false;
+
+            SpawnEnvironmentForBiome(currentBiome, 0f);
 
             if (backgroundController != null)
             {
                 backgroundController.ResetBackground();
-                backgroundController.SpawnBackgroundForBiome(currentBiomeAtDeath, deathZ);
+                backgroundController.SpawnBackgroundForBiome(biomeToStartWith, 0f);
             }
 
-            if (DayNightCycle.Instance != null)
-            {
-                DayNightCycle.Instance.ApplyBiomeTimeOverride(visualCurrentBiome);
-            }
-
+            ApplyVisualOverrides(visualCurrentBiome);
             OnBiomeChanged?.Invoke(visualCurrentBiome);
 
             if (showDebug)
+                Debug.Log($"[BiomeManager] ResetAtDeath complete - starting with {biomeToStartWith.BiomeName}");
+        }
+
+        private void CleanupAllEnvironments()
+        {
+            for (int i = activeEnvironments.Count - 1; i >= 0; i--)
             {
-                Debug.Log($"[BiomeManager] ResetAtDeath complete at Z={deathZ}, biome={currentBiomeAtDeath.BiomeName}");
+                if (activeEnvironments[i] != null)
+                    Destroy(activeEnvironments[i].gameObject);
             }
+            activeEnvironments.Clear();
         }
 
         private void OnDestroy()
@@ -610,9 +505,7 @@ namespace Runner.LevelGeneration
             foreach (var env in activeEnvironments)
             {
                 if (env != null)
-                {
                     Gizmos.DrawWireCube(env.transform.position, Vector3.one * 5f);
-                }
             }
         }
 #endif

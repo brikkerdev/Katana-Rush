@@ -22,7 +22,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 1
     segment: {fileID: 6844235478968440788, guid: cd5916c8b201fad4e98d29bb05a9e508, type: 3}
@@ -31,7 +31,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 2
     segment: {fileID: 6844235478968440788, guid: e4592fc1e81ba0b4fb36f9fd88227c23, type: 3}
@@ -94,7 +94,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 9
     segment: {fileID: 6844235478968440788, guid: df71c6619ee0c9546a34dba77a745832, type: 3}
@@ -103,7 +103,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 10
     segment: {fileID: 6844235478968440788, guid: 819d139522db1b541ac458b7dc2dff64, type: 3}
@@ -112,7 +112,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 11
     segment: {fileID: 6844235478968440788, guid: 86f3d8cb134e8e64690634533ee98ab2, type: 3}
@@ -121,7 +121,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 12
     segment: {fileID: 6844235478968440788, guid: 95e49bd15a972e24790514b5b9260974, type: 3}
@@ -130,7 +130,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 13
     segment: {fileID: 6844235478968440788, guid: 16402170d42792f408afa6aca580557e, type: 3}
@@ -139,7 +139,7 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
   - nodeIndex: 14
     segment: {fileID: 6844235478968440788, guid: 978cf9e56f1cf6f4b909b9c954b02e0c, type: 3}
@@ -148,10 +148,10 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 5
+    weight: 2
     cooldown: 3
-  editorScrollPosition: {x: -107.9444, y: -75.48706}
-  editorZoom: 0.9999994
+  editorScrollPosition: {x: 18.078552, y: -13.479767}
+  editorZoom: 0.7899996
   transitions:
   - targetBiome: {fileID: 11400000, guid: a7b40b39fec145e45804afe0c3288f71, type: 2}
     exitSegments:
