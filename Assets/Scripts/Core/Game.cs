@@ -10,6 +10,7 @@ using Runner.Player.Data;
 using Runner.Save;
 using Runner.UI;
 using System;
+using System.Collections.Generic;
 using Magnet;
 using UnityEngine;
 
@@ -337,7 +338,7 @@ namespace Runner.Core
 
             BiomeManager.name = "BiomeManager";
 
-            BiomeData startingBiome = sceneSetup?.StartingBiome;
+            BiomeData startingBiome = GetStartingBiome();
             if (startingBiome == null)
             {
                 Debug.LogError("[Game] No starting biome in SceneSetup!");
@@ -345,6 +346,19 @@ namespace Runner.Core
             }
 
             BiomeManager.Initialize(Player.transform, startingBiome);
+        }
+
+        private BiomeData GetStartingBiome()
+        {
+            List<BiomeData> biomes = sceneSetup?.AvailableBiomes;
+            if (biomes == null || biomes.Count == 0)
+            {
+                return sceneSetup?.StartingBiome;
+            }
+
+            int dayOfYear = System.DateTime.Now.DayOfYear;
+            int index = (dayOfYear ^ 0xFFFF) % biomes.Count;
+            return biomes[index];
         }
 
         private void CreateLevelGenerator()
