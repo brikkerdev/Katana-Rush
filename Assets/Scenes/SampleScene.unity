@@ -10136,6 +10136,7 @@ MonoBehaviour:
   soundControllerPrefab: {fileID: 6014441948232181048, guid: f3c709ec80a54244cb7d9ae120de57c7, type: 3}
   dayNightUIControllerPrefab: {fileID: 978160268854356110, guid: d2b8fc355d615d245a88a52c0000ca1f, type: 3}
   magnetControllerPrefab: {fileID: 4477273042286929276, guid: ee2b4ab08e01d71468b49b419f243ad6, type: 3}
+  obstacleSpawnerPrefab: {fileID: 0}
   playerSpawnPoint: {fileID: 1748236326}
   cameraManager: {fileID: 1415522946}
   cameraEffects: {fileID: 189794314}
@@ -13241,7 +13242,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.15
+  m_fontSize: 56.5
   m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -13641,6 +13642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1415522945}
   - component: {fileID: 1415522946}
+  - component: {fileID: 1415522947}
   m_Layer: 0
   m_Name: CameraRig
   m_TagString: Untagged
@@ -13696,6 +13698,33 @@ MonoBehaviour:
   lookAheadSmoothSpeed: 3
   clampHorizontal: 0
   horizontalClampRange: 0.5
+  useCeilingCollision: 1
+  ceilingLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  ceilingCheckDistance: 10
+  minCameraHeight: 2
+--- !u!135 &1415522947
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415522944}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1441007440
 GameObject:
   m_ObjectHideFlags: 0
@@ -18132,7 +18161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf24daa26c4f4b4b99a2d4cbb804549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.SceneSetup
-  startingBiome: {fileID: 11400000, guid: 78bb5eb3b8728784889bb9e49474c655, type: 2}
+  startingBiome: {fileID: 11400000, guid: 3bfb43a40c035694f89a37a997a852e4, type: 2}
   sunLight: {fileID: 410087040}
   moonLight: {fileID: 122156966}
 --- !u!4 &2093762285

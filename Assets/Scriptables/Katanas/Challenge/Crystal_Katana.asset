@@ -25,5 +25,5 @@ MonoBehaviour:
   ability: {fileID: 0}
   challengeRequirement:
     type: 11
-    targetValue: 6
+    targetValue: 3
     descriptionKey: challenge_fragments_collected_crystal

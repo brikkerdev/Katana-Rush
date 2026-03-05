@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f11f3a04076d5498fedd05e95bd23f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.LevelGenerator
-  viewDistance: 200
+  viewDistance: 300
   despawnDistance: 30
   initialSegmentCount: 3
   enableRevealAnimation: 1

@@ -146,7 +146,7 @@ namespace Runner.Collectibles
                     string uuid = point.SpawnPointUuid;
                     if (!string.IsNullOrEmpty(uuid) && SaveManager.IsFragmentCollected(uuid))
                     {
-                        continue;
+                        typeToSpawn = point.FallbackType;
                     }
                 }
 
@@ -160,7 +160,7 @@ namespace Runner.Collectibles
                 }
                 else
                 {
-                    if (SpawnCollectibleAtPoint(point))
+                    if (SpawnCollectibleAtPoint(point, typeToSpawn))
                     {
                         spawned++;
                     }
@@ -173,14 +173,14 @@ namespace Runner.Collectibles
             }
         }
 
-        private bool SpawnCollectibleAtPoint(CollectibleSpawnPoint point)
+        private bool SpawnCollectibleAtPoint(CollectibleSpawnPoint point, CollectibleType typeToSpawn)
         {
-            Collectible collectible = GetCollectibleFromPool(point.Type);
+            Collectible collectible = GetCollectibleFromPool(typeToSpawn);
 
             if (collectible == null)
             {
                 // Fallback to coin if specific type unavailable
-                if (point.Type != CollectibleType.Coin)
+                if (typeToSpawn != CollectibleType.Coin)
                 {
                     collectible = GetCollectibleFromPool(CollectibleType.Coin);
                 }
@@ -189,13 +189,13 @@ namespace Runner.Collectibles
                 {
                     if (showDebug)
                     {
-                        Debug.LogWarning($"[CollectibleSpawner] No collectible available for type {point.Type}");
+                        Debug.LogWarning($"[CollectibleSpawner] No collectible available for type {typeToSpawn}");
                     }
                     return false;
                 }
             }
 
-            if (point.Type == CollectibleType.Fragment)
+            if (typeToSpawn == CollectibleType.Fragment)
             {
                 string uuid = point.SpawnPointUuid;
                 collectible.Setup(point.Position, uuid);

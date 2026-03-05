@@ -73,6 +73,7 @@ MonoBehaviour:
   rotationSpeed: 90
   bobSpeed: 2
   bobHeight: 0.2
+  collectibleType: 6
 --- !u!1001 &2020235939897705008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -124,7 +125,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: c2beae3b91a0737478497c2b94031479, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: a24c42970cff320448c68a7fac159005, type: 2}
+      objectReference: {fileID: 2100000, guid: 5a8b4b68d4393d2499131ab8db6b6f4e, type: 2}
     - target: {fileID: 919132149155446097, guid: c2beae3b91a0737478497c2b94031479, type: 3}
       propertyPath: m_Name
       value: model

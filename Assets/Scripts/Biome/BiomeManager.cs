@@ -52,6 +52,7 @@ namespace Runner.LevelGeneration
         public BiomeData NextBiome => nextBiome;
         public float CurrentBiomeStartZ => currentBiomeStartZ;
         public float CurrentBiomeEndZ => currentBiomeEndZ;
+        public float RemainingBiomeLength => currentBiomeTargetLength - spawnedLengthInCurrentBiome;
         public bool IsInitialized { get; private set; }
 
         private void Awake()
@@ -118,7 +119,30 @@ namespace Runner.LevelGeneration
             spawnedLengthInCurrentBiome = 0f;
             transitionSegmentSpawned = false;
             environmentSpawnedForNextBiome = false;
-            currentNodeIndex = 0;
+            
+            currentNodeIndex = SelectValidStartNode();
+        }
+
+        private int SelectValidStartNode()
+        {
+            if (currentBiome == null || currentBiome.SegmentNodes == null)
+                return 0;
+
+            int validNode = currentBiome.GetValidStartNodeIndexForDistance(currentBiomeTargetLength);
+            if (validNode >= 0)
+            {
+                if (showDebug)
+                {
+                    Debug.Log($"[BiomeManager] Selected valid start node {validNode} for biome length {currentBiomeTargetLength:F1}");
+                }
+                return validNode;
+            }
+
+            if (showDebug)
+            {
+                Debug.LogWarning($"[BiomeManager] Could not find valid start node for biome length {currentBiomeTargetLength:F1}. Using default.");
+            }
+            return 0;
         }
 
         private void PrepareNextBiome()
@@ -228,11 +252,30 @@ namespace Runner.LevelGeneration
         private bool ShouldSpawnTransitionSegment()
         {
             if (nextBiome == null) return false;
+            
+            float remainingDistance = RemainingBiomeLength;
+            
+            if (remainingDistance <= 0) return true;
+            
+            if (currentBiome != null && currentNodeIndex >= 0)
+            {
+                if (!currentBiome.CanCompleteSequenceInDistance(currentNodeIndex, remainingDistance))
+                {
+                    if (showDebug)
+                    {
+                        Debug.Log($"[BiomeManager] Current path cannot complete in remaining {remainingDistance:F1}. Triggering early transition.");
+                    }
+                    return true;
+                }
+            }
+            
             return spawnedLengthInCurrentBiome >= currentBiomeTargetLength - 100;
         }
 
         private LevelSegment GetRegularSegment(LevelSegment lastSegment)
         {
+            float remainingDistance = RemainingBiomeLength;
+            
             LevelSegment segment = currentBiome.GetNextSegment(currentNodeIndex);
 
             if (segment == null)
@@ -247,16 +290,44 @@ namespace Runner.LevelGeneration
                 return null;
             }
 
-            if (currentBiome.SegmentNodes != null)
+            if (currentBiome.SegmentNodes != null && remainingDistance > 0)
             {
+                int newNodeIndex = currentNodeIndex;
                 for (int i = 0; i < currentBiome.SegmentNodes.Length; i++)
                 {
                     if (currentBiome.SegmentNodes[i] != null && currentBiome.SegmentNodes[i].Segment == segment)
                     {
-                        currentNodeIndex = i;
+                        newNodeIndex = i;
                         break;
                     }
                 }
+
+                if (!currentBiome.CanCompleteSequenceInDistance(newNodeIndex, remainingDistance))
+                {
+                    if (showDebug)
+                    {
+                        Debug.LogWarning($"[BiomeManager] Current path cannot complete in remaining distance {remainingDistance:F1}. Finding valid path...");
+                    }
+
+                    int validNodeIndex = currentBiome.GetValidStartNodeIndexForDistance(remainingDistance);
+                    if (validNodeIndex >= 0)
+                    {
+                        newNodeIndex = validNodeIndex;
+                        if (currentBiome.SegmentNodes != null && newNodeIndex >= 0 && newNodeIndex < currentBiome.SegmentNodes.Length)
+                        {
+                            segment = currentBiome.SegmentNodes[newNodeIndex].Segment;
+                        }
+                    }
+                    else
+                    {
+                        if (showDebug)
+                        {
+                            Debug.LogWarning($"[BiomeManager] No valid path found for remaining distance {remainingDistance:F1}. Using current segment anyway.");
+                        }
+                    }
+                }
+
+                currentNodeIndex = newNodeIndex;
             }
 
             spawnedLengthInCurrentBiome += segment.Length;

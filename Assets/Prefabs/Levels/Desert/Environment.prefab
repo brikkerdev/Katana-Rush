@@ -174,14 +174,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.EnvironmentReveal
   revealDuration: 0
   dropDistance: 0
-  revealEase: 0
+  revealEase: 2
   animateTarget: {fileID: 990439703226177419}
-  revealGroups:
-  - groupRoot: {fileID: 990439703226177419}
-    delay: 0
-    duration: 1
-    dropDistance: 15
-    ease: 6
+  revealGroups: []
 --- !u!1001 &7290728602621293693
 PrefabInstance:
   m_ObjectHideFlags: 0

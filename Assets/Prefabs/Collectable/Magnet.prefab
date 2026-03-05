@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.MagnetCollectible
   value: 5
-  effectDuration: 20
+  effectDuration: 10
   visualRoot: {fileID: 8277207615332068855}
   rotationSpeed: 90
   bobSpeed: 2

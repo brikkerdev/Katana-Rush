@@ -22,8 +22,8 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
-    cooldown: 0
+    weight: 5
+    cooldown: 3
   - nodeIndex: 1
     segment: {fileID: 6844235478968440788, guid: 9732ae13032b00348852cb29546d94e1, type: 3}
     nodeName: Segment 1
@@ -31,8 +31,8 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
-    cooldown: 0
+    weight: 5
+    cooldown: 3
   - nodeIndex: 2
     segment: {fileID: 6844235478968440788, guid: a4402747a229c9e4c8bd9569bd658a32, type: 3}
     nodeName: Segment 2
@@ -40,8 +40,8 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
-    cooldown: 0
+    weight: 5
+    cooldown: 3
   - nodeIndex: 3
     segment: {fileID: 6844235478968440788, guid: 3d15a505e7013a44c8119a809b8874da, type: 3}
     nodeName: Segment 3
@@ -49,8 +49,8 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
-    cooldown: 0
+    weight: 5
+    cooldown: 3
   - nodeIndex: 4
     segment: {fileID: 6844235478968440788, guid: cbf715db6c875874086d6751056844a5, type: 3}
     nodeName: Segment 4
@@ -58,8 +58,8 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
-    cooldown: 0
+    weight: 5
+    cooldown: 3
   - nodeIndex: 5
     segment: {fileID: 6844235478968440788, guid: 4a96c0862af117244a3f9d7f19395ef0, type: 3}
     nodeName: Segment 5
@@ -67,8 +67,8 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
-    cooldown: 0
+    weight: 5
+    cooldown: 3
   - nodeIndex: 6
     segment: {fileID: 6844235478968440788, guid: 192b671066640fb42a8a917022e671a7, type: 3}
     nodeName: Segment 6
@@ -76,8 +76,8 @@ MonoBehaviour:
     isStartNode: 1
     isEndNode: 0
     connections: 
-    weight: 1
-    cooldown: 0
+    weight: 5
+    cooldown: 3
   - nodeIndex: 7
     segment: {fileID: 6844235478968440788, guid: f14f603e08fd51848b80cfd855263e15, type: 3}
     nodeName: Segment 7
@@ -85,10 +85,64 @@ MonoBehaviour:
     isStartNode: 0
     isEndNode: 1
     connections: 
+    weight: 5
+    cooldown: 3
+  - nodeIndex: 8
+    segment: {fileID: 6844235478968440788, guid: 8466afbef731f8c4d96fc71ba83eecf7, type: 3}
+    nodeName: Segment 8
+    nodePosition: {x: 230.57327, y: 444.07645}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 090000000d000000
+    weight: 1
+    cooldown: 20
+  - nodeIndex: 9
+    segment: {fileID: 6844235478968440788, guid: 05eef937827e32d4e86e4e5f1fc77ffc, type: 3}
+    nodeName: Segment 9
+    nodePosition: {x: 100.96451, y: 584.2857}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 0a000000
     weight: 1
     cooldown: 0
-  editorScrollPosition: {x: 0, y: 0}
-  editorZoom: 1
+  - nodeIndex: 10
+    segment: {fileID: 6844235478968440788, guid: eaf21a0680048714d9d2533db2f67086, type: 3}
+    nodeName: Segment 10
+    nodePosition: {x: 96.13715, y: 713.0118}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 0b000000
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 11
+    segment: {fileID: 6844235478968440788, guid: fd8f5e1768a91824387ed9bff9f71b81, type: 3}
+    nodeName: Segment 11
+    nodePosition: {x: 231.55687, y: 867.49243}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 12
+    segment: {fileID: 6844235478968440788, guid: 05eef937827e32d4e86e4e5f1fc77ffc, type: 3}
+    nodeName: Segment 9 (Copy)
+    nodePosition: {x: 361.95874, y: 714.5414}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 0b000000
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 13
+    segment: {fileID: 6844235478968440788, guid: eaf21a0680048714d9d2533db2f67086, type: 3}
+    nodeName: Segment 10 (Copy)
+    nodePosition: {x: 361.79895, y: 595.88556}
+    isStartNode: 0
+    isEndNode: 0
+    connections: 0c000000
+    weight: 1
+    cooldown: 0
+  editorScrollPosition: {x: 169.06201, y: -296.43646}
+  editorZoom: 1.2699996
   transitions:
   - targetBiome: {fileID: 11400000, guid: e9091e869e1446a43ab30c849176efa8, type: 2}
     exitSegments:

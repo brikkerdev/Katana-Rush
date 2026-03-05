@@ -47,8 +47,10 @@ MonoBehaviour:
   alwaysSpawn: 0
   spawnChance: 0.7
   collectibleType: 6
+  spawnPointUuid: 
   groupCount: 5
   groupSpacing: 1.5
   groupPattern: 0
   useLocalOffset: 0
   localOffset: {x: 0, y: 0, z: 0}
+  fallbackType: 8

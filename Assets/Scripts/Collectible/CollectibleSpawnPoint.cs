@@ -20,9 +20,13 @@ namespace Runner.Collectibles
         [SerializeField] private bool useLocalOffset = false;
         [SerializeField] private Vector3 localOffset = Vector3.zero;
 
+        [Header("Fragment Fallback")]
+        [SerializeField] private CollectibleType fallbackType = CollectibleType.Coin;
+
         public bool AlwaysSpawn => alwaysSpawn;
         public float SpawnChance => spawnChance;
         public CollectibleType Type => collectibleType;
+        public CollectibleType FallbackType => fallbackType;
         public int GroupCount => groupCount;
         public float GroupSpacing => groupSpacing;
         public GroupPattern Pattern => groupPattern;

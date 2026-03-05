@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.LevelSegment
   segmentLength: 100
   difficultyWeight: 0
-  allowConsecutive: 1
+  allowConsecutive: 0
   enemySpawnPoints:
   - {fileID: 6254362550495838647}
   - {fileID: 3082389450633821926}

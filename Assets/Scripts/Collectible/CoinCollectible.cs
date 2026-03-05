@@ -8,7 +8,9 @@ namespace Runner.Collectibles
 {
     public class CoinCollectible : Collectible
     {
-        public override CollectibleType Type => CollectibleType.Coin;
+        [SerializeField] private CollectibleType collectibleType;
+        
+        public override CollectibleType Type => collectibleType;
 
         private Tweener magnetTween;
         private bool isBeingAttracted;

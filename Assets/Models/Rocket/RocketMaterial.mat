@@ -15,7 +15,7 @@ Material:
   - _OUTLINE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -71,7 +71,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _EmissionStrength: 0.5
+    - _EmissionStrength: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -79,15 +79,15 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OutlineEnabled: 1
-    - _OutlineWidth: 0.15
+    - _OutlineWidth: 0.798
     - _Parallax: 0.02
-    - _RimStep: 0.613
-    - _RimStepSmooth: 0.622
-    - _ShadowStep: 0.5
+    - _RimStep: 0.487
+    - _RimStepSmooth: 0.647
+    - _ShadowStep: 0.479
     - _ShadowStepSmooth: 0.04
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SpecularStep: 0.137
+    - _SpecularStep: 0.269
     - _SpecularStepSmooth: 0.076
     - _SrcBlend: 1
     - _SurfaceType: 0
@@ -97,7 +97,7 @@ Material:
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 1, g: 0.09197852, b: 0, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

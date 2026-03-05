@@ -311,6 +311,152 @@ namespace Runner.LevelGeneration
             }
         }
 
+        public float GetMaxSequenceLengthFromNode(int nodeIndex)
+        {
+            if (segmentNodes == null || segmentNodes.Length == 0)
+                return 0f;
+
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
+                return 0f;
+
+            return GetMaxSequenceLengthRecursive(nodeIndex, new HashSet<int>());
+        }
+
+        private float GetMaxSequenceLengthRecursive(int nodeIndex, HashSet<int> visited)
+        {
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
+                return 0f;
+
+            if (visited.Contains(nodeIndex))
+                return 0f;
+
+            var node = segmentNodes[nodeIndex];
+            if (node == null || node.Segment == null)
+                return 0f;
+
+            visited.Add(nodeIndex);
+
+            float currentLength = node.Segment.Length;
+
+            if (!node.HasConnections)
+            {
+                visited.Remove(nodeIndex);
+                return currentLength;
+            }
+
+            float maxChildLength = 0f;
+            foreach (int childIndex in node.Connections)
+            {
+                float childLength = GetMaxSequenceLengthRecursive(childIndex, visited);
+                if (childLength > maxChildLength)
+                    maxChildLength = childLength;
+            }
+
+            visited.Remove(nodeIndex);
+            return currentLength + maxChildLength;
+        }
+
+        public float GetMinSequenceLengthFromNode(int nodeIndex)
+        {
+            if (segmentNodes == null || segmentNodes.Length == 0)
+                return float.MaxValue;
+
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
+                return float.MaxValue;
+
+            return GetMinSequenceLengthRecursive(nodeIndex, new HashSet<int>());
+        }
+
+        private float GetMinSequenceLengthRecursive(int nodeIndex, HashSet<int> visited)
+        {
+            if (nodeIndex < 0 || nodeIndex >= segmentNodes.Length)
+                return float.MaxValue;
+
+            if (visited.Contains(nodeIndex))
+                return 0f;
+
+            var node = segmentNodes[nodeIndex];
+            if (node == null || node.Segment == null)
+                return float.MaxValue;
+
+            visited.Add(nodeIndex);
+
+            float currentLength = node.Segment.Length;
+
+            if (!node.HasConnections)
+            {
+                visited.Remove(nodeIndex);
+                return currentLength;
+            }
+
+            float minChildLength = float.MaxValue;
+            foreach (int childIndex in node.Connections)
+            {
+                float childLength = GetMinSequenceLengthRecursive(childIndex, visited);
+                if (childLength < minChildLength)
+                    minChildLength = childLength;
+            }
+
+            visited.Remove(nodeIndex);
+            return currentLength + minChildLength;
+        }
+
+        public bool CanCompleteSequenceInDistance(int startNodeIndex, float maxDistance)
+        {
+            if (segmentNodes == null || segmentNodes.Length == 0)
+                return false;
+
+            if (startNodeIndex < 0 || startNodeIndex >= segmentNodes.Length)
+                return false;
+
+            var startNode = segmentNodes[startNodeIndex];
+            if (startNode == null || startNode.Segment == null)
+                return false;
+
+            float minLength = GetMinSequenceLengthFromNode(startNodeIndex);
+            return minLength <= maxDistance;
+        }
+
+        public int GetValidStartNodeIndexForDistance(float targetDistance)
+        {
+            if (segmentNodes == null || segmentNodes.Length == 0)
+                return -1;
+
+            List<int> validStartNodes = new List<int>();
+            List<int> startNodes = new List<int>();
+
+            for (int i = 0; i < segmentNodes.Length; i++)
+            {
+                if (segmentNodes[i] != null && segmentNodes[i].IsStartNode && segmentNodes[i].Segment != null)
+                {
+                    startNodes.Add(i);
+                    if (CanCompleteSequenceInDistance(i, targetDistance))
+                    {
+                        validStartNodes.Add(i);
+                    }
+                }
+            }
+
+            if (validStartNodes.Count > 0)
+                return validStartNodes[Random.Range(0, validStartNodes.Count)];
+
+            for (int i = 0; i < segmentNodes.Length; i++)
+            {
+                if (segmentNodes[i] != null && segmentNodes[i].Segment != null)
+                {
+                    if (CanCompleteSequenceInDistance(i, targetDistance))
+                    {
+                        validStartNodes.Add(i);
+                    }
+                }
+            }
+
+            if (validStartNodes.Count > 0)
+                return validStartNodes[Random.Range(0, validStartNodes.Count)];
+
+            return -1;
+        }
+
         public BiomeTransition GetTransitionTo(BiomeData targetBiome)
         {
             if (transitions == null) return null;

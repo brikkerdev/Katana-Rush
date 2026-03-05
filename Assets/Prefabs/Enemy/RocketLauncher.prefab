@@ -55,15 +55,15 @@ MonoBehaviour:
   collisionRadius: 1
   canShoot: 0
   firePoint: {fileID: 0}
-  fireRange: 60
+  fireRange: 100
   fireRate: 1
   fireDelay: 0.1
   bulletSpeed: 80
   shootsLethalBullets: 0
   canFireRockets: 1
-  rocketSpeed: 15
-  rocketFireRate: 0.5
-  rocketExplosionRadius: 3
+  rocketSpeed: 30
+  rocketFireRate: 0.25
+  rocketExplosionRadius: 2
   rocketsAreLethal: 1
   usePrediction: 0
   predictionSettings:

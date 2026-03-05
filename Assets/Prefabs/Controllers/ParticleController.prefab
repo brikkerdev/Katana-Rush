@@ -60,7 +60,13 @@ MonoBehaviour:
     prefab: {fileID: 6820590955023660389, guid: f7e129406ccd8bc4fbc3e31e6a03a362, type: 3}
     prewarm: 0
   - type: 9
-    prefab: {fileID: 6820590955023660389, guid: f7e129406ccd8bc4fbc3e31e6a03a362, type: 3}
+    prefab: {fileID: 5966267488362805842, guid: 500c1d6ddd48f2c4092af85e4e941eb2, type: 3}
+    prewarm: 0
+  - type: 2
+    prefab: {fileID: -4376908739578371581, guid: bfd016bff164dfc4aac33a0563922772, type: 3}
+    prewarm: 0
+  - type: 1
+    prefab: {fileID: -4376908739578371581, guid: bfd016bff164dfc4aac33a0563922772, type: 3}
     prewarm: 0
   prefabPoolsToPrewarm:
   - prefab: {fileID: -5850168064015035106, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}

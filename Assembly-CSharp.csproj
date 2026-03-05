@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\Player\Core\Player.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\RagdollHead.cs" />
     <Compile Include="Assets\Scripts\Collectible\CollectibleSpawner.cs" />
+    <Compile Include="Assets\AssetPacks\VFXPACK_IMPACT_WALLCOEUR_FreeVersion\Scripts\DropdownController.cs" />
     <Compile Include="Assets\Scripts\Ragdoll\SimpleEnemyRagdoll.cs" />
     <Compile Include="Assets\Scripts\Enemy\BulletPool.cs" />
     <Compile Include="Assets\Scripts\UI\Components\RarityTab.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Assets\Scripts\Player\Core\PlayerAnimator.cs" />
     <Compile Include="Assets\Scripts\UI\Screens\GameOverScreen.cs" />
     <Compile Include="Assets\Scripts\Ability\Abilities\TargetedDeflectAbility.cs" />
+    <Compile Include="Assets\AssetPacks\VFXPACK_IMPACT_WALLCOEUR_FreeVersion\Scripts\VfxController.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\Magnet\MagnetController.cs" />
     <Compile Include="Assets\Scripts\Environment\DayNightCycle.cs" />

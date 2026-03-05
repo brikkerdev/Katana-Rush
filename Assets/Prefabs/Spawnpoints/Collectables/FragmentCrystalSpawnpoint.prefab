@@ -53,3 +53,4 @@ MonoBehaviour:
   groupPattern: 0
   useLocalOffset: 0
   localOffset: {x: 0, y: 0, z: 0}
+  fallbackType: 6

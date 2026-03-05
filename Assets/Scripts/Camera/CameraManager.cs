@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Runner.CameraSystem
 {
@@ -23,6 +24,12 @@ namespace Runner.CameraSystem
         [Header("Boundaries")]
         [SerializeField] private bool clampHorizontal = true;
         [SerializeField] private float horizontalClampRange = 0.5f;
+
+        [Header("Collision Settings")]
+        [SerializeField] private bool useCeilingCollision = true;
+        [SerializeField] private LayerMask ceilingLayer;
+        [SerializeField] private float ceilingCheckDistance = 10f;
+        [SerializeField] private float minCameraHeight = 2f;
 
         private Transform target;
         private CameraState currentState = CameraState.Menu;
@@ -177,12 +184,35 @@ namespace Runner.CameraSystem
 
             Vector3 targetPosition = basePosition + currentOffset + lookAheadOffset;
 
+            // Apply ceiling collision
+            if (useCeilingCollision)
+            {
+                targetPosition.y = ApplyCeilingCollision(targetPosition);
+            }
+
             transform.position = Vector3.SmoothDamp(
                 transform.position,
                 targetPosition,
                 ref velocity,
                 1f / positionSmoothSpeed
             );
+        }
+
+        private float ApplyCeilingCollision(Vector3 targetPos)
+        {
+            if (ceilingLayer.value == 0) return targetPos.y;
+
+            RaycastHit hit;
+            Vector3 rayOrigin = new Vector3(targetPos.x, targetPos.y + 0.5f, targetPos.z);
+            Vector3 rayDirection = Vector3.up;
+
+            if (Physics.Raycast(rayOrigin, rayDirection, out hit, ceilingCheckDistance, ceilingLayer))
+            {
+                float maxAllowedHeight = hit.point.y - 0.5f;
+                return Mathf.Min(targetPos.y, maxAllowedHeight);
+            }
+
+            return Mathf.Max(targetPos.y, minCameraHeight);
         }
 
         private void UpdateRotation()

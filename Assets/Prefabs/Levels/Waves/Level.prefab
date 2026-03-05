@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runner.LevelGeneration.LevelSegment
   segmentLength: 100
   difficultyWeight: 0
-  allowConsecutive: 1
+  allowConsecutive: 0
   enemySpawnPoints:
   - {fileID: 5488233979360072411}
   - {fileID: 8120851841576587385}
@@ -126,6 +126,7 @@ MonoBehaviour:
   - {fileID: 3188349108586747942}
   - {fileID: 9168665515657695244}
   - {fileID: 2261253137497891813}
+  obstacleSpawnPoints: []
 --- !u!114 &-6106389875762990493
 MonoBehaviour:
   m_ObjectHideFlags: 0

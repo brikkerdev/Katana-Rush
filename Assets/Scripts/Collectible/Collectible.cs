@@ -13,6 +13,7 @@ namespace Runner.Collectibles
         DashRestore,
         Diamond,
         Fragment,
+        None
     }
 
     public abstract class Collectible : MonoBehaviour, IResettable
@@ -72,6 +73,12 @@ namespace Runner.Collectibles
 
         public void Setup(Vector3 position, string uuid)
         {
+            Setup(position, uuid, value);
+        }
+
+        public void Setup(Vector3 position, string uuid, int overrideValue)
+        {
+            value = overrideValue;
             transform.position = position;
             originalPosition = visualRoot.transform.localPosition;
             isCollected = false;
@@ -114,6 +121,7 @@ namespace Runner.Collectibles
 
             if (visualRoot != null)
             {
+                visualRoot.transform.localPosition = originalPosition;
                 visualRoot.SetActive(true);
             }
 
