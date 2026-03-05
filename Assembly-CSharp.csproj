@@ -160,6 +160,7 @@
     <Compile Include="Assets\Scripts\Save\PlayerSaveData.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\AssetPacks\Lowpoly Forest Pack Winter\Lowpoly Forest Pack READ ME - Copy.txt" />
+    <None Include="Assets\Resources\PerformanceTestRunInfo.json" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\AssetPacks\Pine Forest_LowPoly\Shaders\Ground_Simple.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
@@ -170,6 +171,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\Shaders\Shaders\CircularStaminaBar\CircularStaminaBar.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\Resources\PerformanceTestRunSettings.json" />
     <None Include="Assets\Shaders\Shaders\Biome\SynthwaveEdgeGlow.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\AssetPacks\Free Slash VFX\Model\Katana\Katana License.txt" />
