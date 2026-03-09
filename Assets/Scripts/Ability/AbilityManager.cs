@@ -15,18 +15,51 @@ namespace Runner.Inventory
         private DoubleCoinAbility cachedDoubleCoin;
         private ExtendedDashAbility cachedExtendedDash;
         private MagnetAuraAbility cachedMagnetAura;
+        private DashDamageBoostAbility cachedDashDamageBoost;
+        private SlowFallAbility cachedSlowFall;
+        private ScoreMultiplierAbility cachedScoreMultiplier;
+        private DashChainAbility cachedDashChain;
+        private ShieldAbility cachedShield;
+        private SpeedSurgeAbility cachedSpeedSurge;
+        private LaneSwitchDashAbility cachedLaneSwitchDash;
+        private ExplosiveDashAbility cachedExplosiveDash;
+        private CoinStreakAbility cachedCoinStreak;
+        private GhostStepAbility cachedGhostStep;
+        private DashResetOnKillAbility cachedDashResetOnKill;
 
         public bool HasTargetedDeflect => cachedDeflect != null;
         public bool HasKillReward => cachedKillReward != null;
         public bool HasDoubleCoin => cachedDoubleCoin != null;
         public bool HasExtendedDash => cachedExtendedDash != null;
         public bool HasMagnetAura => cachedMagnetAura != null;
+        public bool HasDashDamageBoost => cachedDashDamageBoost != null;
+        public bool HasSlowFall => cachedSlowFall != null;
+        public bool HasScoreMultiplier => cachedScoreMultiplier != null;
+        public bool HasDashChain => cachedDashChain != null;
+        public bool HasShield => cachedShield != null;
+        public bool HasSpeedSurge => cachedSpeedSurge != null;
+        public bool HasLaneSwitchDash => cachedLaneSwitchDash != null;
+        public bool HasExplosiveDash => cachedExplosiveDash != null;
+        public bool HasCoinStreak => cachedCoinStreak != null;
+        public bool HasGhostStep => cachedGhostStep != null;
+        public bool HasDashResetOnKill => cachedDashResetOnKill != null;
 
         public TargetedDeflectAbility TargetedDeflect => cachedDeflect;
         public EnemyKillRewardAbility KillReward => cachedKillReward;
         public DoubleCoinAbility DoubleCoin => cachedDoubleCoin;
         public ExtendedDashAbility ExtendedDash => cachedExtendedDash;
         public MagnetAuraAbility MagnetAura => cachedMagnetAura;
+        public DashDamageBoostAbility DashDamageBoost => cachedDashDamageBoost;
+        public SlowFallAbility SlowFall => cachedSlowFall;
+        public ScoreMultiplierAbility ScoreMultiplier => cachedScoreMultiplier;
+        public DashChainAbility DashChain => cachedDashChain;
+        public ShieldAbility Shield => cachedShield;
+        public SpeedSurgeAbility SpeedSurge => cachedSpeedSurge;
+        public LaneSwitchDashAbility LaneSwitchDash => cachedLaneSwitchDash;
+        public ExplosiveDashAbility ExplosiveDash => cachedExplosiveDash;
+        public CoinStreakAbility CoinStreak => cachedCoinStreak;
+        public GhostStepAbility GhostStep => cachedGhostStep;
+        public DashResetOnKillAbility DashResetOnKill => cachedDashResetOnKill;
 
         private void Awake()
         {
@@ -65,6 +98,17 @@ namespace Runner.Inventory
             cachedDoubleCoin = null;
             cachedExtendedDash = null;
             cachedMagnetAura = null;
+            cachedDashDamageBoost = null;
+            cachedSlowFall = null;
+            cachedScoreMultiplier = null;
+            cachedDashChain = null;
+            cachedShield = null;
+            cachedSpeedSurge = null;
+            cachedLaneSwitchDash = null;
+            cachedExplosiveDash = null;
+            cachedCoinStreak = null;
+            cachedGhostStep = null;
+            cachedDashResetOnKill = null;
         }
 
         private void CacheAbility(KatanaAbility ability)
@@ -79,6 +123,28 @@ namespace Runner.Inventory
                 cachedExtendedDash = extendedDash;
             else if (ability is MagnetAuraAbility magnetAura)
                 cachedMagnetAura = magnetAura;
+            else if (ability is DashDamageBoostAbility dashDmg)
+                cachedDashDamageBoost = dashDmg;
+            else if (ability is SlowFallAbility slowFall)
+                cachedSlowFall = slowFall;
+            else if (ability is ScoreMultiplierAbility scoreMult)
+                cachedScoreMultiplier = scoreMult;
+            else if (ability is DashChainAbility dashChain)
+                cachedDashChain = dashChain;
+            else if (ability is ShieldAbility shield)
+                cachedShield = shield;
+            else if (ability is SpeedSurgeAbility speedSurge)
+                cachedSpeedSurge = speedSurge;
+            else if (ability is LaneSwitchDashAbility laneDash)
+                cachedLaneSwitchDash = laneDash;
+            else if (ability is ExplosiveDashAbility explosive)
+                cachedExplosiveDash = explosive;
+            else if (ability is CoinStreakAbility coinStreak)
+                cachedCoinStreak = coinStreak;
+            else if (ability is GhostStepAbility ghostStep)
+                cachedGhostStep = ghostStep;
+            else if (ability is DashResetOnKillAbility dashReset)
+                cachedDashResetOnKill = dashReset;
         }
 
         private void UncacheAbility(KatanaAbility ability)
@@ -93,6 +159,28 @@ namespace Runner.Inventory
                 cachedExtendedDash = null;
             else if (ability is MagnetAuraAbility && cachedMagnetAura == ability)
                 cachedMagnetAura = null;
+            else if (ability is DashDamageBoostAbility && cachedDashDamageBoost == ability)
+                cachedDashDamageBoost = null;
+            else if (ability is SlowFallAbility && cachedSlowFall == ability)
+                cachedSlowFall = null;
+            else if (ability is ScoreMultiplierAbility && cachedScoreMultiplier == ability)
+                cachedScoreMultiplier = null;
+            else if (ability is DashChainAbility && cachedDashChain == ability)
+                cachedDashChain = null;
+            else if (ability is ShieldAbility && cachedShield == ability)
+                cachedShield = null;
+            else if (ability is SpeedSurgeAbility && cachedSpeedSurge == ability)
+                cachedSpeedSurge = null;
+            else if (ability is LaneSwitchDashAbility && cachedLaneSwitchDash == ability)
+                cachedLaneSwitchDash = null;
+            else if (ability is ExplosiveDashAbility && cachedExplosiveDash == ability)
+                cachedExplosiveDash = null;
+            else if (ability is CoinStreakAbility && cachedCoinStreak == ability)
+                cachedCoinStreak = null;
+            else if (ability is GhostStepAbility && cachedGhostStep == ability)
+                cachedGhostStep = null;
+            else if (ability is DashResetOnKillAbility && cachedDashResetOnKill == ability)
+                cachedDashResetOnKill = null;
         }
 
         public bool HasAbility<T>() where T : KatanaAbility
@@ -127,6 +215,20 @@ namespace Runner.Inventory
             if (cachedMagnetAura != null)
                 return cachedMagnetAura.MagnetRadius;
             return 0f;
+        }
+
+        public float GetDashDamageMultiplier()
+        {
+            if (cachedDashDamageBoost != null)
+                return cachedDashDamageBoost.DamageMultiplier;
+            return 1f;
+        }
+
+        public float GetScoreMultiplier()
+        {
+            if (cachedScoreMultiplier != null)
+                return cachedScoreMultiplier.ScoreMultiplier;
+            return 1f;
         }
 
         private void OnDestroy()

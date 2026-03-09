@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Shinobi_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: b43c1492-96d6-45c4-b13c-b3d86970a05c
+  nameKey: katana_name_shinobi
+  descriptionKey: katana_description_shinobi
+  icon: {fileID: 0}
+  rarity: 4
+  playerPreset: {fileID: 11400000, guid: bc170200b45bc2b489fa9f3606799df8, type: 2}
+  modelPrefab: {fileID: 0}
+  bladeMaterial: {fileID: 0}
+  slashEffectPrefab: {fileID: 0}
+  trailEffectPrefab: {fileID: 0}
+  ability: {fileID: 0}
+  challengeRequirement:
+    type: 2
+    targetValue: 5000
+    descriptionKey: challenge_5k_enemies_killed

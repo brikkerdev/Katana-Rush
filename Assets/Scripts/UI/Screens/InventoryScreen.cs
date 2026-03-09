@@ -193,7 +193,10 @@ namespace Runner.UI
             }
 
             InputReader.Instance?.EnableGameplayInput();
+
+            StopAllCoroutines();
             rouletteAnimator?.Cancel();
+            isProcessing = false;
 
             if (selectedSlot != null)
             {
@@ -621,19 +624,13 @@ namespace Runner.UI
             if (isProcessing) return;
             if (selectedKatana == null) return;
             if (InventoryManager.Instance == null) return;
-            if (selectedKatana.IsChallenge) return;
-            if (InventoryManager.Instance.IsKatanaOwned(selectedKatana)) return;
 
-            int rarityPrice = InventoryManager.Instance.Database != null ? InventoryManager.Instance.Database.GetRarityPrice(selectedKatana.Rarity) : 0;
-            int specificPrice = rarityPrice * 2;
-
-            if (!SaveManager.SpendCoins(specificPrice))
+            if (!InventoryManager.Instance.TryPurchaseDirect(selectedKatana))
             {
                 Game.Instance?.Sound?.PlayPurchaseFail();
                 return;
             }
 
-            InventoryManager.Instance.UnlockKatana(selectedKatana);
             Game.Instance?.Sound?.PlayPurchaseSuccess();
             Game.Instance?.Sound?.PlayUnlock();
 
@@ -642,8 +639,8 @@ namespace Runner.UI
             if (selectedSlot != null && !selectedSlot.IsEmpty && selectedSlot.Katana == selectedKatana)
                 selectedSlot.SetOwned(true);
 
-            UpdateButtons();
             DisplayKatana(selectedKatana);
+            UpdateButtons();
         }
 
         private List<KatanaSlot> GetKatanaSlotsOnly(KatanaRarity rarity)
@@ -666,19 +663,29 @@ namespace Runner.UI
         {
             yield return new WaitForSecondsRealtime(0.5f);
 
-            var slots = slotsByRarity[currentRarity];
+            KatanaSlot resultSlot = null;
+            var slots = slotsByRarity.ContainsKey(result.Rarity) ? slotsByRarity[result.Rarity] : slotsByRarity[currentRarity];
+
             foreach (var slot in slots)
             {
                 if (slot != null && !slot.IsEmpty && slot.Katana == result)
                 {
-                    slot.SetOwned(true);
-                    slot.ClearHighlight();
-                    SelectSlot(slot);
+                    resultSlot = slot;
                     break;
                 }
             }
 
+            if (resultSlot != null)
+            {
+                resultSlot.SetOwned(true);
+                resultSlot.ClearHighlight();
+                SelectSlot(resultSlot);
+            }
+
+            DisplayKatana(result);
+
             isProcessing = false;
+            UpdateCoinDisplay();
             UpdateButtons();
         }
 

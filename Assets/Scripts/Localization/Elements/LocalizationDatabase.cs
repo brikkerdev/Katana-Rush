@@ -32,6 +32,26 @@ public class LocalizationDatabase : ScriptableObject
 
     public void RebuildCache() => _byKey = BuildKeyMap();
 
+    public bool HasKey(string key)
+    {
+        if (string.IsNullOrEmpty(key)) return false;
+        _byKey ??= BuildKeyMap();
+        return _byKey.ContainsKey(key);
+    }
+
+    public void AddEntry(string key, params (string languageCode, string text)[] translations)
+    {
+        if (string.IsNullOrEmpty(key)) return;
+
+        var entry = new Entry { key = key };
+        foreach (var (langCode, text) in translations)
+            entry.translations.Add(new Translation { languageCode = langCode, text = text });
+
+        entries.Add(entry);
+        _byKey ??= BuildKeyMap();
+        _byKey[key] = entry;
+    }
+
     private Dictionary<string, Entry> BuildKeyMap()
     {
         var map = new Dictionary<string, Entry>(StringComparer.Ordinal);

@@ -17,7 +17,7 @@ MonoBehaviour:
   descriptionKey: katana_description_crystal
   icon: {fileID: 1694131108, guid: d17054aee81bcda49b3ed6117119ff89, type: 3}
   rarity: 4
-  playerPreset: {fileID: 11400000, guid: 9a0e07b7337ce8e40b64d994ebd21bb7, type: 2}
+  playerPreset: {fileID: 11400000, guid: 3a7e86433fb7384469dd08be5e112b28, type: 2}
   modelPrefab: {fileID: 2894049052721084243, guid: 11aab0ab7f5182d479c90cf5de114b39, type: 3}
   bladeMaterial: {fileID: 2100000, guid: d3b446ef0aeeaf544adfcdd526e5360a, type: 2}
   slashEffectPrefab: {fileID: 174940048960636371, guid: a7c5179f5d6f652459bc5b20deeacd69, type: 3}

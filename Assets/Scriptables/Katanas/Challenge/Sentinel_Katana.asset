@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df38cc72570b3441b458b9944633ddb, type: 3}
+  m_Name: Sentinel_Katana
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Katana
+  id: 4d0c9f94-9fe8-4f96-a6f1-17b9de8726cf
+  nameKey: katana_name_sentinel
+  descriptionKey: katana_description_sentinel
+  icon: {fileID: 0}
+  rarity: 4
+  playerPreset: {fileID: 11400000, guid: 67070871e08ea06439a539536c5ecc3c, type: 2}
+  modelPrefab: {fileID: 0}
+  bladeMaterial: {fileID: 0}
+  slashEffectPrefab: {fileID: 0}
+  trailEffectPrefab: {fileID: 0}
+  ability: {fileID: 0}
+  challengeRequirement:
+    type: 6
+    targetValue: 5000
+    descriptionKey: challenge_5k_bullets_deflected

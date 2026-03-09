@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\ComponentPrefabSelectorDrawer.cs" />
+    <Compile Include="Assets\Editor\KatanaFactory.cs" />
     <Compile Include="Assets\Editor\ComponentPrefabSelectorWindow.cs" />
     <Compile Include="Assets\Editor\LocalizationDatabaseEditor.cs" />
     <Compile Include="Assets\Editor\RagdollSetupHelper.cs" />

@@ -30,6 +30,34 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aecc361c90ef11742818aefbfe0b7fea, type: 2}
   - {fileID: 11400000, guid: f071641cc90c427499ffc364dc490083, type: 2}
   - {fileID: 11400000, guid: 417374e545e0c634f9c724038ddc7b51, type: 2}
+  - {fileID: 11400000, guid: b195d91cbbc52e540b1bb425f2d4233b, type: 2}
+  - {fileID: 11400000, guid: 73b3584d0b555964798eb2f707c5ed12, type: 2}
+  - {fileID: 11400000, guid: 94bfdacea10c0f945a9c6e30eb7b4e2b, type: 2}
+  - {fileID: 11400000, guid: 9335fed92207d8e419ecb31020dd77fa, type: 2}
+  - {fileID: 11400000, guid: 1b6f049b09b055f479ee6dbd0d57b8e7, type: 2}
+  - {fileID: 11400000, guid: 317126efaa0672e4fac7d2ed6085db01, type: 2}
+  - {fileID: 11400000, guid: 5c74c0d688426184f9894c1879365158, type: 2}
+  - {fileID: 11400000, guid: 97e620e5386fd594e82e8e985315237c, type: 2}
+  - {fileID: 11400000, guid: b26562cf21988d2448c77e4623c94224, type: 2}
+  - {fileID: 11400000, guid: 2fec1ce65a9b33b4eb91924679d07323, type: 2}
+  - {fileID: 11400000, guid: cd9719fd12377f04ca5a4ff8e459ed5e, type: 2}
+  - {fileID: 11400000, guid: 31cab384e2b848b4784ede84e28eda87, type: 2}
+  - {fileID: 11400000, guid: adb1221ed5235d042a00faacc8cc0424, type: 2}
+  - {fileID: 11400000, guid: fd92f8fb00040054fb028980e762509f, type: 2}
+  - {fileID: 11400000, guid: dab5882e15aefa94cbed111fdda15536, type: 2}
+  - {fileID: 11400000, guid: decba1ea6ef73b843b2e95f927d1b774, type: 2}
+  - {fileID: 11400000, guid: e266c9c996867074eb23bcf7938c6630, type: 2}
+  - {fileID: 11400000, guid: c176b7a8d7c75744eb2a56ccc3355b60, type: 2}
+  - {fileID: 11400000, guid: 350866c12e41e9b4e87699bcd97a3f6c, type: 2}
+  - {fileID: 11400000, guid: 86937b2dbe4fbac409dbcb290d0124a7, type: 2}
+  - {fileID: 11400000, guid: f91bfa9988932e24e8b1e6a2869f2d7c, type: 2}
+  - {fileID: 11400000, guid: e35683a9eb0d24e40825806d80ebdc11, type: 2}
+  - {fileID: 11400000, guid: 0e110a0e5f7985c4b9a5fb57fbb14569, type: 2}
+  - {fileID: 11400000, guid: 5bd9708f3b63a2a49a6ca1e88e7832b3, type: 2}
+  - {fileID: 11400000, guid: c41d2115b0ddac0449fbcd140b160826, type: 2}
+  - {fileID: 11400000, guid: d0e793a5a2a09914284a2aef8998b7cc, type: 2}
+  - {fileID: 11400000, guid: 25706ac38fe12cb4f834b217c63f4e95, type: 2}
+  - {fileID: 11400000, guid: fc81e067881591947919de5d05869468, type: 2}
   commonPrice: 250
   rarePrice: 500
   epicPrice: 1000
