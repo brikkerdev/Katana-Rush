@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2375bad0e1b95dc499484ef5c765cff0, type: 3}
+  m_Name: DashResetOnKill_HF
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Abilities.DashResetOnKillAbility
+  abilityId: 
+  dashesRestoredPerKill: 1

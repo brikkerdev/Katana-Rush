@@ -33,6 +33,24 @@ MonoBehaviour:
     connections: 
     weight: 1
     cooldown: 0
+  - nodeIndex: 2
+    segment: {fileID: 41491866103310753, guid: efbb6a1d475f81e44b0c666acf1717d2, type: 3}
+    nodeName: Segment 2
+    nodePosition: {x: 660, y: 100}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
+  - nodeIndex: 3
+    segment: {fileID: 7709906566034357200, guid: 912a0ee06f67a5c4ca1e07655be200b9, type: 3}
+    nodeName: Segment 3
+    nodePosition: {x: 940, y: 100}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
   editorScrollPosition: {x: 316, y: 143}
   editorZoom: 1
   transitions:

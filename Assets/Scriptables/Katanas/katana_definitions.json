@@ -29,7 +29,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/SpeedSurge_Bamboo.asset",
     "challenge": null
   },
   {
@@ -62,7 +62,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/DashDamageBoost_Rusty.asset",
     "challenge": null
   },
   {
@@ -95,7 +95,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ScoreMultiplier_Jade.asset",
     "challenge": null
   },
   {
@@ -128,7 +128,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ExtendedDash_Iron.asset",
     "challenge": null
   },
   {
@@ -161,7 +161,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/DashChain_Copper.asset",
     "challenge": null
   },
   {
@@ -194,7 +194,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/GhostStep_Obsidian.asset",
     "challenge": null
   },
   {
@@ -227,7 +227,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/SlowFall_Tempest.asset",
     "challenge": null
   },
   {
@@ -260,7 +260,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/DashDamageBoost_Venom.asset",
     "challenge": null
   },
   {
@@ -293,7 +293,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ExtendedDash_Crimson.asset",
     "challenge": null
   },
   {
@@ -326,7 +326,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/MagnetAura_Sakura.asset",
     "challenge": null
   },
   {
@@ -359,7 +359,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ScoreMultiplier_Titanium.asset",
     "challenge": null
   },
   {
@@ -392,7 +392,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/GhostStep_Phantom.asset",
     "challenge": null
   },
   {
@@ -425,7 +425,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ExplosiveDash_Stormbreaker.asset",
     "challenge": null
   },
   {
@@ -458,7 +458,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/SpeedSurge_Ronin.asset",
     "challenge": null
   },
   {
@@ -491,7 +491,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/LaneSwitchDash_Serpent.asset",
     "challenge": null
   },
   {
@@ -524,7 +524,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/Shield_Aegis.asset",
     "challenge": null
   },
   {
@@ -557,7 +557,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/DashChain_Eclipse.asset",
     "challenge": null
   },
   {
@@ -590,7 +590,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ExplosiveDash_Dragonfire.asset",
     "challenge": null
   },
   {
@@ -623,7 +623,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/DashResetOnKill_Void.asset",
     "challenge": null
   },
   {
@@ -656,7 +656,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ScoreMultiplier_Celestial.asset",
     "challenge": null
   },
   {
@@ -689,7 +689,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/Shield_Oni.asset",
     "challenge": null
   },
   {
@@ -722,7 +722,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/CoinStreak_Aurora.asset",
     "challenge": null
   },
   {
@@ -755,7 +755,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/GhostStep_Shinobi.asset",
     "challenge": {
       "type": 2,
       "targetValue": 5000,
@@ -794,7 +794,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/DashResetOnKill_Berserker.asset",
     "challenge": {
       "type": 10,
       "targetValue": 50,
@@ -833,7 +833,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/ScoreMultiplier_Marathon.asset",
     "challenge": {
       "type": 9,
       "targetValue": 10000,
@@ -872,7 +872,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/DoubleCoin_Midas.asset",
     "challenge": {
       "type": 5,
       "targetValue": 50000,
@@ -911,7 +911,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/SlowFall_Windwalker.asset",
     "challenge": {
       "type": 7,
       "targetValue": 50000,
@@ -950,7 +950,7 @@
     "bladeMaterialPath": "",
     "slashEffectPath": "",
     "trailEffectPath": "",
-    "abilityPath": "",
+    "abilityPath": "Assets/Scriptables/Abilities/Shield_Sentinel.asset",
     "challenge": {
       "type": 6,
       "targetValue": 5000,

@@ -3,6 +3,7 @@ using Runner.Core;
 using Runner.Player.Core;
 using Runner.Collectibles;
 using Runner.Inventory;
+using Runner.Inventory.Abilities;
 using Runner.Save;
 using Runner.Environment;
 
@@ -25,6 +26,10 @@ namespace Runner.Player
         private PlayerController controller;
         private Collider[] hitBuffer = new Collider[16];
 
+        private int shieldHitsRemaining;
+        private float shieldCooldownTimer;
+        private bool shieldOnCooldown;
+
         /// <summary>
         /// Gets the player's current velocity for physics calculations.
         /// Used for determining impact force on obstacles.
@@ -42,6 +47,18 @@ namespace Runner.Player
         {
             player = playerRef;
             controller = player.Controller;
+            controller.SetCollisionRef(this);
+            ResetShield();
+        }
+
+        public void ResetShield()
+        {
+            if (AbilityManager.Instance != null && AbilityManager.Instance.HasShield)
+            {
+                shieldHitsRemaining = AbilityManager.Instance.Shield.ShieldHits;
+                shieldOnCooldown = false;
+                shieldCooldownTimer = 0f;
+            }
         }
 
         private void FixedUpdate()
@@ -49,7 +66,30 @@ namespace Runner.Player
             if (player == null) return;
             if (!player.IsRunning) return;
 
+            if (shieldOnCooldown)
+            {
+                shieldCooldownTimer -= Time.fixedDeltaTime;
+                if (shieldCooldownTimer <= 0f)
+                {
+                    ResetShield();
+                }
+            }
+
             CheckCollisions();
+        }
+
+        public bool TryAbsorbWithShield()
+        {
+            if (shieldOnCooldown || shieldHitsRemaining <= 0) return false;
+            if (AbilityManager.Instance == null || !AbilityManager.Instance.HasShield) return false;
+
+            shieldHitsRemaining--;
+            if (shieldHitsRemaining <= 0)
+            {
+                shieldOnCooldown = true;
+                shieldCooldownTimer = AbilityManager.Instance.Shield.ShieldCooldown;
+            }
+            return true;
         }
 
         private void CheckCollisions()
@@ -94,16 +134,14 @@ namespace Runner.Player
             
             if (controller.IsDashing)
             {
-                // Pass player velocity for physics-based destruction effects
                 destructible.OnDashHit(PlayerVelocity);
                 return;
             }
             
-            // Not dashing - game over
-            if (!controller.IsInvincible)
-            {
-                Game.Instance?.GameOver();
-            }
+            if (controller.IsInvincible) return;
+            if (TryAbsorbWithShield()) return;
+
+            Game.Instance?.GameOver();
         }
 
         private void HandleEnemyCollision(GameObject enemyObject)
@@ -126,28 +164,47 @@ namespace Runner.Player
                     damage = controller.CurrentPreset.DashDamage;
                 }
 
+                if (AbilityManager.Instance != null && AbilityManager.Instance.HasDashDamageBoost)
+                {
+                    damage *= AbilityManager.Instance.DashDamageBoost.DamageMultiplier;
+                }
+
                 enemy.TakeDamage(damage);
                 Game.Instance?.Sound?.PlayDash();
                 Game.Instance?.AddScore(100);
 
                 SaveManager.AddEnemyKill();
 
-                if (AbilityManager.Instance != null && AbilityManager.Instance.HasKillReward)
+                if (AbilityManager.Instance != null)
                 {
-                    var reward = AbilityManager.Instance.KillReward;
-                    if (reward.CoinsPerKill > 0)
+                    if (AbilityManager.Instance.HasKillReward)
                     {
-                        int coins = reward.CoinsPerKill;
-                        if (AbilityManager.Instance.HasDoubleCoin)
+                        var reward = AbilityManager.Instance.KillReward;
+                        if (reward.CoinsPerKill > 0)
                         {
-                            coins *= AbilityManager.Instance.GetCoinMultiplier();
+                            int coins = reward.CoinsPerKill;
+                            if (AbilityManager.Instance.HasDoubleCoin)
+                            {
+                                coins *= AbilityManager.Instance.GetCoinMultiplier();
+                            }
+                            SaveManager.AddCoins(coins);
+                            UI.UIManager.Instance?.NotifyCoinsCollected(coins);
                         }
-                        SaveManager.AddCoins(coins);
-                        UI.UIManager.Instance?.NotifyCoinsCollected(coins);
+                        if (reward.ScorePerKill > 0)
+                        {
+                            Game.Instance?.AddScore(reward.ScorePerKill);
+                        }
                     }
-                    if (reward.ScorePerKill > 0)
+
+                    if (AbilityManager.Instance.HasDashResetOnKill)
                     {
-                        Game.Instance?.AddScore(reward.ScorePerKill);
+                        controller.RestoreDash(AbilityManager.Instance.DashResetOnKill.DashesRestoredPerKill);
+                    }
+
+                    if (AbilityManager.Instance.HasSpeedSurge)
+                    {
+                        var surge = AbilityManager.Instance.SpeedSurge;
+                        controller.ApplySpeedSurge(surge.SpeedBoost, surge.SurgeDuration);
                     }
                 }
 
@@ -155,6 +212,8 @@ namespace Runner.Player
             }
 
             if (controller.IsInvincible) return;
+
+            if (TryAbsorbWithShield()) return;
 
             Game.Instance?.GameOver();
         }
@@ -166,16 +225,15 @@ namespace Runner.Player
 
             if (hit.gameObject.CompareTag(obstacleTag))
             {
-                // Check if it's a destructible obstacle that can be destroyed by dash
                 DestructibleObstacle destructible = hit.gameObject.GetComponent<DestructibleObstacle>();
                 if (destructible != null && controller.IsDashing)
                 {
-                    // Pass player velocity for physics-based destruction effects
                     destructible.OnDashHit(PlayerVelocity);
                     return;
                 }
                 
                 if (controller.IsInvincible) return;
+                if (TryAbsorbWithShield()) return;
                 Game.Instance?.GameOver();
             }
             

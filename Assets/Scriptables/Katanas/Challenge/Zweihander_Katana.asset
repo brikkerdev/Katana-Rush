@@ -22,6 +22,7 @@ MonoBehaviour:
   bladeMaterial: {fileID: 2100000, guid: e80498b83c4ac394e95b647789132133, type: 2}
   slashEffectPrefab: {fileID: 5942177893964023165, guid: 438c0b7b02dcafa4996592b62d22671f, type: 3}
   trailEffectPrefab: {fileID: 0}
+  ability: {fileID: 11400000, guid: da1fc90d8ec485f42a78bc1e05c56a9f, type: 2}
   challengeRequirement:
     type: 3
     targetValue: 10000

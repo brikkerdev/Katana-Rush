@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddc41b6813c5c4548b4083f98a2f871e, type: 3}
+  m_Name: ExplosiveDash_Dragonfire
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Inventory.Abilities.ExplosiveDashAbility
+  abilityId: 40b5d3ef-9931-4967-853b-450a8a08c1cb
+  explosionRadius: 4
+  explosionDamage: 3

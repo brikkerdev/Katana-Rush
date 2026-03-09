@@ -692,7 +692,10 @@ namespace Runner.Core
 
         public void AddScore(int amount)
         {
-            int multipliedAmount = amount * ScoreMultiplier;
+            float abilityMult = AbilityManager.Instance != null
+                ? AbilityManager.Instance.GetScoreMultiplier()
+                : 1f;
+            int multipliedAmount = Mathf.RoundToInt(amount * ScoreMultiplier * abilityMult);
             Score += multipliedAmount;
 
             OnScoreChanged?.Invoke(Score);

@@ -33,6 +33,15 @@ MonoBehaviour:
     connections: 
     weight: 1
     cooldown: 0
+  - nodeIndex: 2
+    segment: {fileID: 5926719777936751640, guid: acdd00d37725a5947918018b763614d8, type: 3}
+    nodeName: Segment 2
+    nodePosition: {x: 660, y: 100}
+    isStartNode: 1
+    isEndNode: 0
+    connections: 
+    weight: 1
+    cooldown: 0
   editorScrollPosition: {x: -885.5, y: -363}
   editorZoom: 2
   transitions:

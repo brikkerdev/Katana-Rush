@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using Runner.Inventory;
+using Runner.Inventory.Abilities;
 using Runner.Player.Data;
 using Runner.Save;
 
@@ -23,6 +25,19 @@ namespace Runner.Player.Movement
         private float regenTimer;
         private float delayTimer;
         private bool isRegenerating;
+
+        private float chainTimer;
+        private int chainStacks;
+
+        public float ChainMultiplier
+        {
+            get
+            {
+                if (chainStacks <= 0 || AbilityManager.Instance == null || !AbilityManager.Instance.HasDashChain)
+                    return 1f;
+                return 1f + chainStacks * AbilityManager.Instance.DashChain.ChainSpeedBonus;
+            }
+        }
 
         public int DashesRemaining => dashesRemaining;
         public int MaxDashes => maxDashes;
@@ -75,6 +90,16 @@ namespace Runner.Player.Movement
             dashTimer = 0f;
             dashProgress = 0f;
 
+            if (AbilityManager.Instance != null && AbilityManager.Instance.HasDashChain)
+            {
+                var chain = AbilityManager.Instance.DashChain;
+                if (chainTimer > 0f && chainStacks < chain.MaxChainStacks)
+                    chainStacks++;
+                else if (chainTimer <= 0f)
+                    chainStacks = 0;
+                chainTimer = chain.ChainWindow;
+            }
+
             SaveManager.AddDashUsed();
 
             OnDashCountChanged?.Invoke(dashesRemaining, maxDashes);
@@ -102,6 +127,13 @@ namespace Runner.Player.Movement
             }
 
             UpdateRegen(deltaTime);
+
+            if (chainTimer > 0f)
+            {
+                chainTimer -= deltaTime;
+                if (chainTimer <= 0f)
+                    chainStacks = 0;
+            }
 
             return speedMultiplier;
         }
@@ -185,6 +217,14 @@ namespace Runner.Player.Movement
 
             OnDashCountChanged?.Invoke(dashesRemaining, maxDashes);
             OnRegenProgressChanged?.Invoke(0f);
+        }
+
+        public void RestoreDash(int count = 1)
+        {
+            int prev = dashesRemaining;
+            dashesRemaining = Mathf.Min(dashesRemaining + count, maxDashes);
+            if (dashesRemaining != prev)
+                OnDashCountChanged?.Invoke(dashesRemaining, maxDashes);
         }
 
         public void Reset()

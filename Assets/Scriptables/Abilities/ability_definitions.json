@@ -1,0 +1,358 @@
+[
+  {
+    "assetName": "DashDamageBoost_Venom",
+    "abilityType": "DashDamageBoostAbility",
+    "fields": {
+      "damageMultiplier": 2.0
+    },
+    "assignToKatanas": ["Venom"]
+  },
+  {
+    "assetName": "SlowFall_Tempest",
+    "abilityType": "SlowFallAbility",
+    "fields": {
+      "gravityReduction": 0.4
+    },
+    "assignToKatanas": ["Tempest"]
+  },
+  {
+    "assetName": "SlowFall_Windwalker",
+    "abilityType": "SlowFallAbility",
+    "fields": {
+      "gravityReduction": 0.5
+    },
+    "assignToKatanas": ["Windwalker"]
+  },
+  {
+    "assetName": "ExtendedDash_Crimson",
+    "abilityType": "ExtendedDashAbility",
+    "fields": {
+      "invincibilityExtension": 0.2
+    },
+    "assignToKatanas": ["Crimson"]
+  },
+  {
+    "assetName": "ScoreMultiplier_Titanium",
+    "abilityType": "ScoreMultiplierAbility",
+    "fields": {
+      "scoreMultiplier": 1.25
+    },
+    "assignToKatanas": ["Titanium"]
+  },
+  {
+    "assetName": "ScoreMultiplier_Celestial",
+    "abilityType": "ScoreMultiplierAbility",
+    "fields": {
+      "scoreMultiplier": 1.5
+    },
+    "assignToKatanas": ["Celestial"]
+  },
+  {
+    "assetName": "ScoreMultiplier_Marathon",
+    "abilityType": "ScoreMultiplierAbility",
+    "fields": {
+      "scoreMultiplier": 2.0
+    },
+    "assignToKatanas": ["Marathon"]
+  },
+  {
+    "assetName": "GhostStep_Phantom",
+    "abilityType": "GhostStepAbility",
+    "fields": {
+      "invincibilityOnLand": 0.3
+    },
+    "assignToKatanas": ["Phantom"]
+  },
+  {
+    "assetName": "GhostStep_Shinobi",
+    "abilityType": "GhostStepAbility",
+    "fields": {
+      "invincibilityOnLand": 0.4
+    },
+    "assignToKatanas": ["Shinobi"]
+  },
+  {
+    "assetName": "ExplosiveDash_Stormbreaker",
+    "abilityType": "ExplosiveDashAbility",
+    "fields": {
+      "explosionRadius": 3.0,
+      "explosionDamage": 2.0
+    },
+    "assignToKatanas": ["Stormbreaker"]
+  },
+  {
+    "assetName": "ExplosiveDash_Dragonfire",
+    "abilityType": "ExplosiveDashAbility",
+    "fields": {
+      "explosionRadius": 4.0,
+      "explosionDamage": 3.0
+    },
+    "assignToKatanas": ["Dragonfire"]
+  },
+  {
+    "assetName": "SpeedSurge_Ronin",
+    "abilityType": "SpeedSurgeAbility",
+    "fields": {
+      "speedBoost": 5.0,
+      "surgeDuration": 3.0
+    },
+    "assignToKatanas": ["Ronin"]
+  },
+  {
+    "assetName": "LaneSwitchDash_Serpent",
+    "abilityType": "LaneSwitchDashAbility",
+    "fields": {
+      "invincibilityDuration": 0.25,
+      "laneSwitchDamage": 0.5
+    },
+    "assignToKatanas": ["Serpent"]
+  },
+  {
+    "assetName": "Shield_Aegis",
+    "abilityType": "ShieldAbility",
+    "fields": {
+      "shieldHits": 1,
+      "shieldCooldown": 30.0
+    },
+    "assignToKatanas": ["Aegis"]
+  },
+  {
+    "assetName": "Shield_Oni",
+    "abilityType": "ShieldAbility",
+    "fields": {
+      "shieldHits": 1,
+      "shieldCooldown": 25.0
+    },
+    "assignToKatanas": ["Oni"]
+  },
+  {
+    "assetName": "Shield_Sentinel",
+    "abilityType": "ShieldAbility",
+    "fields": {
+      "shieldHits": 2,
+      "shieldCooldown": 20.0
+    },
+    "assignToKatanas": ["Sentinel"]
+  },
+  {
+    "assetName": "DashChain_Eclipse",
+    "abilityType": "DashChainAbility",
+    "fields": {
+      "chainWindow": 0.8,
+      "chainSpeedBonus": 0.5,
+      "maxChainStacks": 3
+    },
+    "assignToKatanas": ["Eclipse"]
+  },
+  {
+    "assetName": "DashResetOnKill_Void",
+    "abilityType": "DashResetOnKillAbility",
+    "fields": {
+      "dashesRestoredPerKill": 1
+    },
+    "assignToKatanas": ["Void"]
+  },
+  {
+    "assetName": "DashResetOnKill_Berserker",
+    "abilityType": "DashResetOnKillAbility",
+    "fields": {
+      "dashesRestoredPerKill": 1
+    },
+    "assignToKatanas": ["Berserker"]
+  },
+  {
+    "assetName": "CoinStreak_Aurora",
+    "abilityType": "CoinStreakAbility",
+    "fields": {
+      "maxStreakMultiplier": 5,
+      "streakWindow": 2.0
+    },
+    "assignToKatanas": ["Aurora"]
+  },
+  {
+    "assetName": "DoubleCoin_Midas",
+    "abilityType": "DoubleCoinAbility",
+    "fields": {
+      "coinMultiplier": 3
+    },
+    "assignToKatanas": ["Midas"]
+  },
+  {
+    "assetName": "MagnetAura_Sakura",
+    "abilityType": "MagnetAuraAbility",
+    "fields": {
+      "magnetRadius": 5.0
+    },
+    "assignToKatanas": ["Sakura"]
+  },
+  {
+    "assetName": "SpeedSurge_Bamboo",
+    "abilityType": "SpeedSurgeAbility",
+    "fields": {
+      "speedBoost": 3.0,
+      "surgeDuration": 2.0
+    },
+    "assignToKatanas": ["Bamboo"]
+  },
+  {
+    "assetName": "DashDamageBoost_Rusty",
+    "abilityType": "DashDamageBoostAbility",
+    "fields": {
+      "damageMultiplier": 1.5
+    },
+    "assignToKatanas": ["Rusty"]
+  },
+  {
+    "assetName": "ScoreMultiplier_Jade",
+    "abilityType": "ScoreMultiplierAbility",
+    "fields": {
+      "scoreMultiplier": 1.1
+    },
+    "assignToKatanas": ["Jade"]
+  },
+  {
+    "assetName": "ExtendedDash_Iron",
+    "abilityType": "ExtendedDashAbility",
+    "fields": {
+      "invincibilityExtension": 0.1
+    },
+    "assignToKatanas": ["Iron"]
+  },
+  {
+    "assetName": "DashChain_Copper",
+    "abilityType": "DashChainAbility",
+    "fields": {
+      "chainWindow": 0.6,
+      "chainSpeedBonus": 0.3,
+      "maxChainStacks": 2
+    },
+    "assignToKatanas": ["Copper"]
+  },
+  {
+    "assetName": "GhostStep_Obsidian",
+    "abilityType": "GhostStepAbility",
+    "fields": {
+      "invincibilityOnLand": 0.2
+    },
+    "assignToKatanas": ["Obsidian"]
+  },
+  {
+    "assetName": "ScoreMultiplier_Starter",
+    "abilityType": "ScoreMultiplierAbility",
+    "fields": {
+      "scoreMultiplier": 1.05
+    },
+    "assignToKatanas": ["Starter"]
+  },
+  {
+    "assetName": "ExtendedDash_Steel",
+    "abilityType": "ExtendedDashAbility",
+    "fields": {
+      "invincibilityExtension": 0.1
+    },
+    "assignToKatanas": ["Steel"]
+  },
+  {
+    "assetName": "DashDamageBoost_HfProt",
+    "abilityType": "DashDamageBoostAbility",
+    "fields": {
+      "damageMultiplier": 1.3
+    },
+    "assignToKatanas": ["HfProt"]
+  },
+  {
+    "assetName": "SpeedSurge_Overian",
+    "abilityType": "SpeedSurgeAbility",
+    "fields": {
+      "speedBoost": 4.0,
+      "surgeDuration": 2.5
+    },
+    "assignToKatanas": ["Overian"]
+  },
+  {
+    "assetName": "ExtendedDash_Naginata",
+    "abilityType": "ExtendedDashAbility",
+    "fields": {
+      "invincibilityExtension": 0.15
+    },
+    "assignToKatanas": ["Naginata"]
+  },
+  {
+    "assetName": "CoinStreak_Pixel",
+    "abilityType": "CoinStreakAbility",
+    "fields": {
+      "maxStreakMultiplier": 3,
+      "streakWindow": 1.5
+    },
+    "assignToKatanas": ["Pixel"]
+  },
+  {
+    "assetName": "GhostStep_Fulgur",
+    "abilityType": "GhostStepAbility",
+    "fields": {
+      "invincibilityOnLand": 0.25
+    },
+    "assignToKatanas": ["Fulgur"]
+  },
+  {
+    "assetName": "DashResetOnKill_HF",
+    "abilityType": "DashResetOnKillAbility",
+    "fields": {
+      "dashesRestoredPerKill": 1
+    },
+    "assignToKatanas": ["HF"]
+  },
+  {
+    "assetName": "DashChain_Daishe",
+    "abilityType": "DashChainAbility",
+    "fields": {
+      "chainWindow": 0.7,
+      "chainSpeedBonus": 0.4,
+      "maxChainStacks": 3
+    },
+    "assignToKatanas": ["Daishe"]
+  },
+  {
+    "assetName": "LaneSwitchDash_Thermal",
+    "abilityType": "LaneSwitchDashAbility",
+    "fields": {
+      "invincibilityDuration": 0.3,
+      "laneSwitchDamage": 1.0
+    },
+    "assignToKatanas": ["Thermal"]
+  },
+  {
+    "assetName": "ExplosiveDash_Murasama",
+    "abilityType": "ExplosiveDashAbility",
+    "fields": {
+      "explosionRadius": 5.0,
+      "explosionDamage": 3.0
+    },
+    "assignToKatanas": ["Murasama"]
+  },
+  {
+    "assetName": "EnemyKillReward_Wooden",
+    "abilityType": "EnemyKillRewardAbility",
+    "fields": {
+      "coinsPerKill": 15,
+      "scorePerKill": 75
+    },
+    "assignToKatanas": ["Wooden"]
+  },
+  {
+    "assetName": "DashDamageBoost_Zweihander",
+    "abilityType": "DashDamageBoostAbility",
+    "fields": {
+      "damageMultiplier": 3.0
+    },
+    "assignToKatanas": ["Zweihander"]
+  },
+  {
+    "assetName": "ExtendedDash_Crystal",
+    "abilityType": "ExtendedDashAbility",
+    "fields": {
+      "invincibilityExtension": 0.3
+    },
+    "assignToKatanas": ["Crystal"]
+  }
+]

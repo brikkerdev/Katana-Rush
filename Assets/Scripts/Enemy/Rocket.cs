@@ -201,8 +201,15 @@ namespace Runner.Enemy
                         {
                             if (isLethal)
                             {
-                                Core.Game.Instance?.Sound?.PlayRocketExplosion(explosionPosition, true);
-                                Core.Game.Instance?.GameOver();
+                                if (controller.TryAbsorbHit())
+                                {
+                                    Core.Game.Instance?.Sound?.PlayRocketExplosion(explosionPosition, false);
+                                }
+                                else
+                                {
+                                    Core.Game.Instance?.Sound?.PlayRocketExplosion(explosionPosition, true);
+                                    Core.Game.Instance?.GameOver();
+                                }
                             }
                             else
                             {

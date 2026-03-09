@@ -169,6 +169,7 @@
     <Compile Include="Assets\Scripts\Enemy\EnemyAimPredictor.cs" />
     <Compile Include="Assets\Scripts\Localization\Elements\LocalizationUIText.cs" />
     <Compile Include="Assets\Scripts\Save\PlayerSaveData.cs" />
+    <None Include="Assets\Scriptables\Abilities\ability_definitions.json" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\AssetPacks\Lowpoly Forest Pack Winter\Lowpoly Forest Pack READ ME - Copy.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
@@ -198,6 +199,7 @@
     <None Include="Assets\Shaders\Shaders\Biome\SythwaveSun.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Packages\com.katana.scenearchitect\package.json" />
     <None Include="Assets\Scriptables\Katanas\katana_definitions.json" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
@@ -1141,6 +1143,10 @@
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{abb03afc-6efc-bf2b-37df-e33a4019d372}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="com.katana.scenearchitect.Editor.csproj">
+      <Project>{7ad911ee-7e51-a351-410f-311f2b9b2364}</Project>
+      <Name>com.katana.scenearchitect.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

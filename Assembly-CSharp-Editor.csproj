@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="Assets\Editor\ComponentPrefabSelectorDrawer.cs" />
     <Compile Include="Assets\Editor\KatanaFactory.cs" />
+    <Compile Include="Assets\Editor\AbilityFactory.cs" />
+    <Compile Include="Assets\Editor\LevelSegmentFactory.cs" />
     <Compile Include="Assets\Editor\ComponentPrefabSelectorWindow.cs" />
     <Compile Include="Assets\Editor\LocalizationDatabaseEditor.cs" />
     <Compile Include="Assets\Editor\RagdollSetupHelper.cs" />
@@ -1052,6 +1054,10 @@
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{3300dfd4-4ed2-5977-4694-ba8a778a2553}</Project>
       <Name>Assembly-CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="com.katana.scenearchitect.Editor.csproj">
+      <Project>{7ad911ee-7e51-a351-410f-311f2b9b2364}</Project>
+      <Name>com.katana.scenearchitect.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

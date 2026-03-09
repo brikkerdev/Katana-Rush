@@ -3,6 +3,7 @@ using System;
 using Runner.Input;
 using Runner.Core;
 using Runner.Inventory;
+using Runner.Inventory.Abilities;
 using Runner.Player.Data;
 using Runner.Player.Movement;
 using Runner.Player.Visual;
@@ -20,6 +21,9 @@ namespace Runner.Player.Core
 
         [Header("Debug")]
         [SerializeField] private bool showDebug = false;
+
+        [Header("Ability")]
+        [SerializeField] private LayerMask enemyLayerMask = -1;
 
         private Player player;
         private PlayerMotor motor;
@@ -40,6 +44,10 @@ namespace Runner.Player.Core
 
         private Katana equippedKatana;
 
+        private float abilityInvincibilityTimer;
+        private float speedSurgeTimer;
+        private float speedSurgeBonus;
+
         public event Action<int, int> OnDashCountChanged;
         public event Action<float> OnDashRegenProgress;
         public event Action OnBlockPerformed;
@@ -50,7 +58,7 @@ namespace Runner.Player.Core
         public float RunDistance => runDistance;
         public bool IsGrounded => motor != null && motor.IsGrounded;
         public bool IsDashing => dashHandler != null && dashHandler.IsDashing;
-        public bool IsInvincible => dashHandler != null && dashHandler.IsInvincible;
+        public bool IsInvincible => (dashHandler != null && dashHandler.IsInvincible) || abilityInvincibilityTimer > 0f;
         public int CurrentLane => laneHandler != null ? laneHandler.CurrentLane : 0;
         public int JumpsRemaining => jumpHandler != null ? jumpHandler.JumpsRemaining : 0;
         public int MaxJumps => jumpHandler != null ? jumpHandler.MaxJumps : 0;
@@ -104,6 +112,8 @@ namespace Runner.Player.Core
             dashHandler.OnRegenProgressChanged += (progress) => OnDashRegenProgress?.Invoke(progress);
             dashHandler.OnDashStarted += OnDashStarted;
             dashHandler.OnDashEnded += OnDashEnded;
+
+            laneHandler.OnLaneSwitched += OnLaneSwitched;
 
             InventoryManager.Instance.OnKatanaEquipped += OnKatanaEquiped;
         }
@@ -226,15 +236,36 @@ namespace Runner.Player.Core
         {
             laneHandler.Update(dt);
             jumpHandler.Update(dt, motor.IsGrounded);
-            motor.ApplyGravity(currentPreset.Gravity, movementSettings.fallMultiplier, dt);
+
+            float gravity = currentPreset.Gravity;
+            if (!motor.IsGrounded && AbilityManager.Instance != null && AbilityManager.Instance.HasSlowFall)
+            {
+                gravity *= (1f - AbilityManager.Instance.SlowFall.GravityReduction);
+            }
+            motor.ApplyGravity(gravity, movementSettings.fallMultiplier, dt);
+
+            if (abilityInvincibilityTimer > 0f)
+                abilityInvincibilityTimer -= dt;
+
+            if (speedSurgeTimer > 0f)
+            {
+                speedSurgeTimer -= dt;
+                if (speedSurgeTimer <= 0f)
+                    speedSurgeBonus = 0f;
+            }
         }
 
         private void UpdateMovement(float dt)
         {
-            float speed = currentSpeed;
+            float speed = currentSpeed + speedSurgeBonus;
 
             float dashMultiplier = dashHandler.Update(dt, currentSpeed);
             speed *= dashMultiplier;
+
+            if (dashHandler.IsDashing && AbilityManager.Instance != null && AbilityManager.Instance.HasDashChain)
+            {
+                speed *= dashHandler.ChainMultiplier;
+            }
 
             float gameSpeed = Game.Instance != null ? Game.Instance.GameSpeed : 1f;
             speed *= gameSpeed;
@@ -262,6 +293,11 @@ namespace Runner.Player.Core
             {
                 visual?.PlayLandSquash();
                 Game.Instance?.Sound?.PlayLand();
+
+                if (AbilityManager.Instance != null && AbilityManager.Instance.HasGhostStep)
+                {
+                    abilityInvincibilityTimer = AbilityManager.Instance.GhostStep.InvincibilityOnLand;
+                }
             }
         }
 
@@ -363,11 +399,62 @@ namespace Runner.Player.Core
 
         private void OnDashEnded()
         {
+            if (AbilityManager.Instance != null && AbilityManager.Instance.HasExplosiveDash)
+            {
+                var explosive = AbilityManager.Instance.ExplosiveDash;
+                var hits = Physics.OverlapSphere(transform.position, explosive.ExplosionRadius, enemyLayerMask);
+                foreach (var hit in hits)
+                {
+                    var enemy = hit.GetComponent<Runner.Enemy.Enemy>() ?? hit.GetComponentInParent<Runner.Enemy.Enemy>();
+                    if (enemy != null && !enemy.IsDead)
+                    {
+                        enemy.TakeDamage(explosive.ExplosionDamage);
+                        Game.Instance?.AddScore(100);
+                        SaveManager.AddEnemyKill();
+                    }
+                }
+            }
+
+            if (AbilityManager.Instance != null && AbilityManager.Instance.HasExtendedDash)
+            {
+                abilityInvincibilityTimer = AbilityManager.Instance.ExtendedDash.InvincibilityExtension;
+            }
+        }
+
+        private void OnLaneSwitched()
+        {
+            if (AbilityManager.Instance != null && AbilityManager.Instance.HasLaneSwitchDash)
+            {
+                abilityInvincibilityTimer = AbilityManager.Instance.LaneSwitchDash.InvincibilityDuration;
+            }
         }
 
         public void RestoreDashes()
         {
             dashHandler?.RestoreAllDashes();
+        }
+
+        public void RestoreDash(int count = 1)
+        {
+            dashHandler?.RestoreDash(count);
+        }
+
+        public void ApplySpeedSurge(float bonus, float duration)
+        {
+            speedSurgeBonus = bonus;
+            speedSurgeTimer = duration;
+        }
+
+        private PlayerCollision playerCollision;
+
+        public void SetCollisionRef(PlayerCollision collision)
+        {
+            playerCollision = collision;
+        }
+
+        public bool TryAbsorbHit()
+        {
+            return playerCollision != null && playerCollision.TryAbsorbWithShield();
         }
 
         public void ResetController()

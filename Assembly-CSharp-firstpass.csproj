@@ -984,6 +984,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="com.katana.scenearchitect.Editor.csproj">
+      <Project>{7ad911ee-7e51-a351-410f-311f2b9b2364}</Project>
+      <Name>com.katana.scenearchitect.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

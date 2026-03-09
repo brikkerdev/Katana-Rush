@@ -213,6 +213,14 @@ namespace Runner.Enemy
 
             if (isLethal)
             {
+                if (controller.TryAbsorbHit())
+                {
+                    SpawnHitEffect(false);
+                    Core.Game.Instance?.Sound?.PlayBulletImpact(cachedTransform.position, false);
+                    Deactivate();
+                    return;
+                }
+
                 SpawnHitEffect(true);
                 Core.Game.Instance?.Sound?.PlayBulletImpact(cachedTransform.position, true);
                 Core.Game.Instance?.GameOver();

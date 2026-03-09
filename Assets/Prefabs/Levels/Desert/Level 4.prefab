@@ -121,7 +121,10 @@ MonoBehaviour:
   collectibleSpawnPoints:
   - {fileID: 3343237052470729810}
   - {fileID: 1941239365052836154}
+  - {fileID: 8446856482196927336}
+  - {fileID: 2224485536653636151}
   - {fileID: 4299718247077188714}
+  obstacleSpawnPoints: []
 --- !u!114 &-6946502225762734233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +327,43 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &6702922829878045692
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 364999141101391666}
+  m_Layer: 0
+  m_Name: Level
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &364999141101391666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6702922829878045692}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7861203732726140951}
+  - {fileID: 7329521682750656569}
+  - {fileID: 4075082799644227795}
+  - {fileID: 4019083874490893982}
+  - {fileID: 6320036180463215404}
+  - {fileID: 9090304740409332112}
+  m_Father: {fileID: 8089072778848887209}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9216921218429115717
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,12 +393,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7861203732726140951}
-  - {fileID: 7329521682750656569}
-  - {fileID: 4075082799644227795}
-  - {fileID: 4019083874490893982}
-  - {fileID: 6320036180463215404}
-  - {fileID: 9090304740409332112}
   - {fileID: 3278976066072285298}
   - {fileID: 1311857168166941409}
   - {fileID: 2709887419498842447}
@@ -378,6 +412,7 @@ Transform:
   - {fileID: 2295121372431137031}
   - {fileID: 5401070491288026079}
   - {fileID: 6289107988329178780}
+  - {fileID: 364999141101391666}
   m_Father: {fileID: 8145581671520240927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &22196076688230813
@@ -679,6 +714,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7833230362916203074, guid: 3203f6bd787f39b42b1b6ab7afcb7608, type: 3}
   m_PrefabInstance: {fileID: 963177634755370006}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8446856482196927336 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8675243239210250110, guid: 3203f6bd787f39b42b1b6ab7afcb7608, type: 3}
+  m_PrefabInstance: {fileID: 963177634755370006}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002d4765c9026e94c84bb15e18f22e07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawnPoint
 --- !u!1001 &1534503661779131970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1042,7 +1088,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8089072778848887209}
+    m_TransformParent: {fileID: 364999141101391666}
     m_Modifications:
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1108,7 +1154,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8089072778848887209}
+    m_TransformParent: {fileID: 364999141101391666}
     m_Modifications:
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1775,7 +1821,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8089072778848887209}
+    m_TransformParent: {fileID: 364999141101391666}
     m_Modifications:
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2152,7 +2198,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8089072778848887209}
+    m_TransformParent: {fileID: 364999141101391666}
     m_Modifications:
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2290,6 +2336,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7833230362916203074, guid: 3203f6bd787f39b42b1b6ab7afcb7608, type: 3}
   m_PrefabInstance: {fileID: 7402319150926241097}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2224485536653636151 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8675243239210250110, guid: 3203f6bd787f39b42b1b6ab7afcb7608, type: 3}
+  m_PrefabInstance: {fileID: 7402319150926241097}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002d4765c9026e94c84bb15e18f22e07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runner.Collectibles.CollectibleSpawnPoint
 --- !u!1001 &7568427959231031280
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2370,7 +2427,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8089072778848887209}
+    m_TransformParent: {fileID: 364999141101391666}
     m_Modifications:
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2572,7 +2629,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8089072778848887209}
+    m_TransformParent: {fileID: 364999141101391666}
     m_Modifications:
     - target: {fileID: 54793731218905528, guid: cedd1059cb1efdc46a6cbf1b7666dbab, type: 3}
       propertyPath: m_LocalPosition.x

@@ -8,10 +8,6 @@ namespace Runner.Enemy
     public enum EnemyType
     {
         Static,
-        Patrol,
-        Chase,
-        Shooter,
-        Sniper,
         RocketLauncher
     }
 
@@ -96,18 +92,11 @@ namespace Runner.Enemy
             if (predictionSettings == null)
                 predictionSettings = new AimPredictionSettings();
 
-            if (enemyType == EnemyType.Shooter || enemyType == EnemyType.Sniper)
+            if (enemyType == EnemyType.Static)
                 canShoot = true;
 
             if (enemyType == EnemyType.RocketLauncher)
                 canFireRockets = true;
-
-            if (enemyType == EnemyType.Sniper)
-            {
-                shootsLethalBullets = true;
-                predictionSettings.predictionAccuracy = 0.95f;
-                predictionSettings.randomSpread = 0.05f;
-            }
         }
 
         private void Start()
@@ -197,10 +186,7 @@ namespace Runner.Enemy
             if (ParticleController.Instance != null && firePoint != null)
                 ParticleController.Instance.SpawnMuzzleFlash(firePoint, direction);
 
-            if (enemyType == EnemyType.Sniper)
-                Game.Instance?.Sound?.PlaySniperFire(cachedFirePosition);
-            else
-                Game.Instance?.Sound?.PlayBulletFire(cachedFirePosition, shootsLethalBullets);
+            Game.Instance?.Sound?.PlayBulletFire(cachedFirePosition, shootsLethalBullets);
 
             enemyAnimator?.PlayFireAnimation();
         }

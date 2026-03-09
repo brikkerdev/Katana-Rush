@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using Runner.Core;
 using Runner.Inventory;
+using Runner.Inventory.Abilities;
 using Runner.Save;
 
 namespace Runner.Collectibles
@@ -15,15 +16,43 @@ namespace Runner.Collectibles
         private Tweener magnetTween;
         private bool isBeingAttracted;
 
+        private static int coinStreakCount;
+        private static float coinStreakTimer;
+
         protected override void ApplyCollectEffect()
         {
             int coinAmount = Value;
             if (AbilityManager.Instance != null)
             {
                 coinAmount *= AbilityManager.Instance.GetCoinMultiplier();
+
+                if (AbilityManager.Instance.HasCoinStreak)
+                {
+                    var streak = AbilityManager.Instance.CoinStreak;
+                    if (coinStreakTimer > 0f)
+                    {
+                        coinStreakCount = Mathf.Min(coinStreakCount + 1, streak.MaxStreakMultiplier);
+                    }
+                    else
+                    {
+                        coinStreakCount = 1;
+                    }
+                    coinStreakTimer = streak.StreakWindow;
+                    coinAmount *= coinStreakCount;
+                }
             }
             SaveManager.AddCoins(coinAmount);
             UI.UIManager.Instance?.NotifyCoinsCollected(coinAmount);
+        }
+
+        private void Update()
+        {
+            if (coinStreakTimer > 0f)
+            {
+                coinStreakTimer -= Time.deltaTime;
+                if (coinStreakTimer <= 0f)
+                    coinStreakCount = 0;
+            }
         }
 
         protected override void PlayCollectSound()
