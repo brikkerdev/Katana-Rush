@@ -1,0 +1,516 @@
+{
+  "entries": [
+    {
+      "key": "challenge_100k_total_distance",
+      "value": "Run 100km in total"
+    },
+    {
+      "key": "challenge_10k_highscore",
+      "value": "Achieve a highscore of 10000"
+    },
+    {
+      "key": "challenge_10k_total_dashes",
+      "value": "Dash 10k times in total"
+    },
+    {
+      "key": "challenge_50_kill_streak",
+      "value": "Achieve a 50 kill streak"
+    },
+    {
+      "key": "challenge_50k_coins_collected",
+      "value": "Collect 50000 coins in total"
+    },
+    {
+      "key": "challenge_50k_jumps",
+      "value": "Perform 50000 jumps in total"
+    },
+    {
+      "key": "challenge_5k_bullets_deflected",
+      "value": "Deflect 5000 bullets in total"
+    },
+    {
+      "key": "challenge_5k_enemies_killed",
+      "value": "Defeat 5000 enemies in total"
+    },
+    {
+      "key": "challenge_fragments_collected_crystal",
+      "value": "Collect 3 crystals"
+    },
+    {
+      "key": "katana_description_aegis",
+      "value": "Absorbs one fatal hit"
+    },
+    {
+      "key": "katana_description_aurora",
+      "value": "Coin streak multiplier up to 5x"
+    },
+    {
+      "key": "katana_description_bamboo",
+      "value": "Slightly faster lane switching"
+    },
+    {
+      "key": "katana_description_berserker",
+      "value": "Dash resets on kill, speed surge on kill"
+    },
+    {
+      "key": "katana_description_celestial",
+      "value": "Double jump, slow fall, score 1.5x"
+    },
+    {
+      "key": "katana_description_copper",
+      "value": "Fast acceleration"
+    },
+    {
+      "key": "katana_description_crimson",
+      "value": "Extended dash invincibility"
+    },
+    {
+      "key": "katana_description_crystal",
+      "value": "Double jump"
+    },
+    {
+      "key": "katana_description_daishe",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_dragonfire",
+      "value": "Explosive dash and 2x dash damage"
+    },
+    {
+      "key": "katana_description_eclipse",
+      "value": "Chained dashes grow stronger"
+    },
+    {
+      "key": "katana_description_fulgur",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_gold",
+      "value": "Doubles collected money"
+    },
+    {
+      "key": "katana_description_gray_fox",
+      "value": "Gives money per enemy defeat"
+    },
+    {
+      "key": "katana_description_hf",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_hf_prot",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_iron",
+      "value": "Quick dash recovery"
+    },
+    {
+      "key": "katana_description_jade",
+      "value": "Balanced and reliable"
+    },
+    {
+      "key": "katana_description_lightsaber",
+      "value": "Deflect enemy bullets direct into them"
+    },
+    {
+      "key": "katana_description_marathon",
+      "value": "Score multiplier 2x, extreme speed"
+    },
+    {
+      "key": "katana_description_midas",
+      "value": "Triple coins, coin streak, magnet"
+    },
+    {
+      "key": "katana_description_murasama",
+      "value": "Double jump"
+    },
+    {
+      "key": "katana_description_naginata",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_obsidian",
+      "value": "High base speed, lower max"
+    },
+    {
+      "key": "katana_description_oni",
+      "value": "Shield absorbs one hit, massive dash damage"
+    },
+    {
+      "key": "katana_description_overian",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_phantom",
+      "value": "Invincibility after landing"
+    },
+    {
+      "key": "katana_description_pixel",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_ronin",
+      "value": "Speed surge after killing enemies"
+    },
+    {
+      "key": "katana_description_rusty",
+      "value": "Slow but powerful dashes"
+    },
+    {
+      "key": "katana_description_sakura",
+      "value": "Coin magnet aura"
+    },
+    {
+      "key": "katana_description_sentinel",
+      "value": "Shield, deflect bullets, tanky build"
+    },
+    {
+      "key": "katana_description_serpent",
+      "value": "Lane switches grant brief invincibility"
+    },
+    {
+      "key": "katana_description_shinobi",
+      "value": "Ghost step on landing, extreme agility"
+    },
+    {
+      "key": "katana_description_starter",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_steel_blade",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_stormbreaker",
+      "value": "Explosive dash ending damages nearby enemies"
+    },
+    {
+      "key": "katana_description_tempest",
+      "value": "Slow fall while airborne"
+    },
+    {
+      "key": "katana_description_thermal",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_titanium",
+      "value": "Score multiplier 1.25x"
+    },
+    {
+      "key": "katana_description_venom",
+      "value": "Increased dash damage"
+    },
+    {
+      "key": "katana_description_void",
+      "value": "Killing enemies restores dashes"
+    },
+    {
+      "key": "katana_description_windwalker",
+      "value": "Double jump, slow fall, extreme mobility"
+    },
+    {
+      "key": "katana_description_wooden",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_zweihander",
+      "value": "-"
+    },
+    {
+      "key": "katana_name_aegis",
+      "value": "Aegis"
+    },
+    {
+      "key": "katana_name_aurora",
+      "value": "Aurora"
+    },
+    {
+      "key": "katana_name_bamboo",
+      "value": "Bamboo Blade"
+    },
+    {
+      "key": "katana_name_berserker",
+      "value": "Berserker"
+    },
+    {
+      "key": "katana_name_celestial",
+      "value": "Celestial"
+    },
+    {
+      "key": "katana_name_copper",
+      "value": "Copper Edge"
+    },
+    {
+      "key": "katana_name_crimson",
+      "value": "Crimson Tide"
+    },
+    {
+      "key": "katana_name_crystal",
+      "value": "Crystal"
+    },
+    {
+      "key": "katana_name_daishe",
+      "value": "Daishe"
+    },
+    {
+      "key": "katana_name_dragonfire",
+      "value": "Dragonfire"
+    },
+    {
+      "key": "katana_name_eclipse",
+      "value": "Eclipse"
+    },
+    {
+      "key": "katana_name_fulgur",
+      "value": "Fulgur"
+    },
+    {
+      "key": "katana_name_gold",
+      "value": "The Golden"
+    },
+    {
+      "key": "katana_name_gray_fox",
+      "value": "Gray fox"
+    },
+    {
+      "key": "katana_name_hf",
+      "value": "HF Blade"
+    },
+    {
+      "key": "katana_name_hf_prot",
+      "value": "HF Prototype"
+    },
+    {
+      "key": "katana_name_iron",
+      "value": "Iron Tanto"
+    },
+    {
+      "key": "katana_name_jade",
+      "value": "Jade Cutter"
+    },
+    {
+      "key": "katana_name_lightsaber",
+      "value": "Light katana"
+    },
+    {
+      "key": "katana_name_marathon",
+      "value": "Marathon"
+    },
+    {
+      "key": "katana_name_midas",
+      "value": "Midas Touch"
+    },
+    {
+      "key": "katana_name_murasama",
+      "value": "Murasama"
+    },
+    {
+      "key": "katana_name_naginata",
+      "value": "Naginata"
+    },
+    {
+      "key": "katana_name_obsidian",
+      "value": "Obsidian Shard"
+    },
+    {
+      "key": "katana_name_oni",
+      "value": "Oni Cleaver"
+    },
+    {
+      "key": "katana_name_overian",
+      "value": "Overian"
+    },
+    {
+      "key": "katana_name_phantom",
+      "value": "Phantom Blade"
+    },
+    {
+      "key": "katana_name_pixel",
+      "value": "Pixel"
+    },
+    {
+      "key": "katana_name_ronin",
+      "value": "Ronin's Edge"
+    },
+    {
+      "key": "katana_name_rusty",
+      "value": "Rusty Katana"
+    },
+    {
+      "key": "katana_name_sakura",
+      "value": "Sakura"
+    },
+    {
+      "key": "katana_name_sentinel",
+      "value": "Sentinel"
+    },
+    {
+      "key": "katana_name_serpent",
+      "value": "Serpent Fang"
+    },
+    {
+      "key": "katana_name_shinobi",
+      "value": "Shinobi"
+    },
+    {
+      "key": "katana_name_starter",
+      "value": "Starter"
+    },
+    {
+      "key": "katana_name_steel_blade",
+      "value": "Steel Blade"
+    },
+    {
+      "key": "katana_name_stormbreaker",
+      "value": "Stormbreaker"
+    },
+    {
+      "key": "katana_name_tempest",
+      "value": "Tempest"
+    },
+    {
+      "key": "katana_name_thermal",
+      "value": "Thermal Katana"
+    },
+    {
+      "key": "katana_name_titanium",
+      "value": "Titanium Edge"
+    },
+    {
+      "key": "katana_name_venom",
+      "value": "Venom Fang"
+    },
+    {
+      "key": "katana_name_void",
+      "value": "Void Reaver"
+    },
+    {
+      "key": "katana_name_windwalker",
+      "value": "Windwalker"
+    },
+    {
+      "key": "katana_name_wooden",
+      "value": "Wooden katana"
+    },
+    {
+      "key": "katana_name_zweihander",
+      "value": "Zweihander"
+    },
+    {
+      "key": "rarity_challenge",
+      "value": "Challenge"
+    },
+    {
+      "key": "rarity_common",
+      "value": "Common"
+    },
+    {
+      "key": "rarity_epic",
+      "value": "Epic"
+    },
+    {
+      "key": "rarity_legendary",
+      "value": "Legendary"
+    },
+    {
+      "key": "rarity_rare",
+      "value": "Rare"
+    },
+    {
+      "key": "tip_1",
+      "value": "Dash through enemies to defeat them!"
+    },
+    {
+      "key": "tip_2",
+      "value": "Samurai block enemy bullets automatically!"
+    },
+    {
+      "key": "tip_3",
+      "value": "Change lanes to avoid obstacles!"
+    },
+    {
+      "key": "tip_4",
+      "value": "You can find double jump on some katanas!"
+    },
+    {
+      "key": "tip_5",
+      "value": "Collect coins to unlock new katanas!"
+    },
+    {
+      "key": "ui_back",
+      "value": "< back"
+    },
+    {
+      "key": "ui_enabled",
+      "value": "Enabled"
+    },
+    {
+      "key": "ui_go",
+      "value": "GO!"
+    },
+    {
+      "key": "ui_highscore",
+      "value": "highscore"
+    },
+    {
+      "key": "ui_inventory",
+      "value": "Inventory"
+    },
+    {
+      "key": "ui_inventory_buy_now",
+      "value": "Buy now"
+    },
+    {
+      "key": "ui_inventory_buy_random",
+      "value": "Buy random"
+    },
+    {
+      "key": "ui_language",
+      "value": "Language"
+    },
+    {
+      "key": "ui_main_menu",
+      "value": "End run"
+    },
+    {
+      "key": "ui_music",
+      "value": "Music"
+    },
+    {
+      "key": "ui_quality",
+      "value": "Quality"
+    },
+    {
+      "key": "ui_resume",
+      "value": "Resume"
+    },
+    {
+      "key": "ui_settings",
+      "value": "Settings"
+    },
+    {
+      "key": "ui_settings_quality_high",
+      "value": "High"
+    },
+    {
+      "key": "ui_settings_quality_low",
+      "value": "Low"
+    },
+    {
+      "key": "ui_settings_quality_medium",
+      "value": "Medium"
+    },
+    {
+      "key": "ui_sfx",
+      "value": "SFX"
+    },
+    {
+      "key": "ui_tap_to_start",
+      "value": "tap to start"
+    },
+    {
+      "key": "ui_vibration",
+      "value": "Vibration"
+    }
+  ]
+}

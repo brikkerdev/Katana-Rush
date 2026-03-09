@@ -6,7 +6,10 @@ public class LocalizationController : MonoBehaviour
 {
     public static LocalizationController Singleton;
 
-    public LocalizationDatabase database;
+    [SerializeField] private LocalizationConfig config;
+    private LocalizationDatabase database;
+
+    public LocalizationDatabase Database => database;
 
     [SerializeField] private string defaultLanguageCode = "en";
     [SerializeField] private bool autoDetectLanguage = true;
@@ -36,6 +39,12 @@ public class LocalizationController : MonoBehaviour
 
     private void Initialize()
     {
+        database = new LocalizationDatabase();
+        if (config != null && !string.IsNullOrEmpty(config.jsonFolderPath))
+        {
+            database.LoadFromPath(config.jsonFolderPath);
+        }
+
         bool isFirstLaunch = PlayerPrefs.GetInt(FirstLaunchKey, 1) == 1;
 
         if (isFirstLaunch && autoDetectLanguage)
@@ -55,13 +64,21 @@ public class LocalizationController : MonoBehaviour
 
     private void ValidateLanguageCode()
     {
-        if (database == null || database.languages == null) return;
+        if (database == null || database.Languages == null) return;
 
-        bool exists = database.languages.Exists(l => l != null && l.code == currentLanguageCode);
-
-        if (!exists && database.languages.Count > 0 && database.languages[0] != null)
+        bool exists = false;
+        foreach (var l in database.Languages)
         {
-            currentLanguageCode = database.languages[0].code;
+            if (l != null && l.code == currentLanguageCode)
+            {
+                exists = true;
+                break;
+            }
+        }
+
+        if (!exists && database.Languages.Count > 0 && database.Languages[0] != null)
+        {
+            currentLanguageCode = database.Languages[0].code;
             PlayerPrefs.SetString(PrefKey, currentLanguageCode);
             PlayerPrefs.Save();
         }
@@ -69,14 +86,14 @@ public class LocalizationController : MonoBehaviour
 
     private string DetectSystemLanguage()
     {
-        if (database == null || database.languages == null)
+        if (database == null || database.Languages == null)
         {
             return defaultLanguageCode;
         }
 
         string systemCode = GetSystemLanguageCode();
 
-        foreach (var language in database.languages)
+        foreach (var language in database.Languages)
         {
             if (language != null && language.code == systemCode)
             {
@@ -186,9 +203,9 @@ public class LocalizationController : MonoBehaviour
     {
         List<string> codes = new List<string>();
 
-        if (database != null && database.languages != null)
+        if (database != null && database.Languages != null)
         {
-            foreach (var language in database.languages)
+            foreach (var language in database.Languages)
             {
                 if (language != null)
                 {
@@ -202,13 +219,13 @@ public class LocalizationController : MonoBehaviour
 
     public string GetLanguageDisplayName(string code)
     {
-        if (database == null || database.languages == null) return code;
+        if (database == null || database.Languages == null) return code;
 
-        foreach (var language in database.languages)
+        foreach (var language in database.Languages)
         {
             if (language != null && language.code == code)
             {
-                return language.displayName;
+                return language.displayName ?? code;
             }
         }
 

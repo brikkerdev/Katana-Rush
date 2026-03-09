@@ -13825,7 +13825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a75fdecd2129c546bd9cdb31808abf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocalizationController
-  database: {fileID: 11400000, guid: 5d27c865bf91e5046b142d49b4d5acd5, type: 2}
+  config: {fileID: 11400000, guid: b2c3d4e5f6a7890123456789abcdef02, type: 2}
   defaultLanguageCode: en
   autoDetectLanguage: 1
 --- !u!4 &1491589626

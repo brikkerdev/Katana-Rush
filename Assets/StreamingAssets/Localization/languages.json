@@ -1,0 +1,12 @@
+{
+  "languages": [
+    {
+      "code": "en",
+      "displayName": "English"
+    },
+    {
+      "code": "ru",
+      "displayName": "Русский"
+    }
+  ]
+}

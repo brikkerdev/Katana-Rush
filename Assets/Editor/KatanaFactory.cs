@@ -19,7 +19,7 @@ namespace Runner.Editor
         private string _statusMessage;
         private MessageType _statusType;
         private KatanaDatabase _katanaDatabase;
-        private LocalizationDatabase _localizationDatabase;
+        private LocalizationConfig _localizationConfig;
 
         [MenuItem("Tools/Katana Factory/Import from JSON")]
         public static void ShowWindow()
@@ -39,9 +39,9 @@ namespace Runner.Editor
             if (guids.Length > 0)
                 _katanaDatabase = AssetDatabase.LoadAssetAtPath<KatanaDatabase>(AssetDatabase.GUIDToAssetPath(guids[0]));
 
-            guids = AssetDatabase.FindAssets("t:LocalizationDatabase");
+            guids = AssetDatabase.FindAssets("t:LocalizationConfig");
             if (guids.Length > 0)
-                _localizationDatabase = AssetDatabase.LoadAssetAtPath<LocalizationDatabase>(AssetDatabase.GUIDToAssetPath(guids[0]));
+                _localizationConfig = AssetDatabase.LoadAssetAtPath<LocalizationConfig>(AssetDatabase.GUIDToAssetPath(guids[0]));
         }
 
         private void LoadDefinitions()
@@ -82,8 +82,8 @@ namespace Runner.Editor
 
             _katanaDatabase = (KatanaDatabase)EditorGUILayout.ObjectField(
                 "Katana Database", _katanaDatabase, typeof(KatanaDatabase), false);
-            _localizationDatabase = (LocalizationDatabase)EditorGUILayout.ObjectField(
-                "Localization Database", _localizationDatabase, typeof(LocalizationDatabase), false);
+            _localizationConfig = (LocalizationConfig)EditorGUILayout.ObjectField(
+                "Localization Config", _localizationConfig, typeof(LocalizationConfig), false);
 
             EditorGUILayout.Space(4);
 
@@ -351,37 +351,63 @@ namespace Runner.Editor
 
         private void AddLocalizationEntries(KatanaDefinition def)
         {
-            if (_localizationDatabase == null) return;
+            if (_localizationConfig == null || string.IsNullOrEmpty(_localizationConfig.jsonFolderPath)) return;
+
+            string basePath = LocalizationDatabase.GetLocalizationBasePath(_localizationConfig.jsonFolderPath);
+            if (!Directory.Exists(basePath)) return;
 
             string nameKey = $"katana_name_{def.name.ToLowerInvariant()}";
             string descKey = $"katana_description_{def.name.ToLowerInvariant()}";
 
-            if (!_localizationDatabase.HasKey(nameKey))
+            foreach (string langCode in new[] { "en", "ru" })
             {
-                _localizationDatabase.AddEntry(nameKey,
-                    ("en", def.name_en ?? def.name),
-                    ("ru", def.name_ru ?? def.name));
-            }
-
-            if (!_localizationDatabase.HasKey(descKey))
-            {
-                _localizationDatabase.AddEntry(descKey,
-                    ("en", def.description_en ?? "-"),
-                    ("ru", def.description_ru ?? "-"));
-            }
-
-            if (def.challenge != null && !string.IsNullOrEmpty(def.challenge.descriptionKey))
-            {
-                if (!_localizationDatabase.HasKey(def.challenge.descriptionKey))
+                string path = Path.Combine(basePath, $"{langCode}.json");
+                var dict = LoadTranslationDict(path);
+                bool changed = false;
+                if (!dict.ContainsKey(nameKey))
                 {
-                    _localizationDatabase.AddEntry(def.challenge.descriptionKey,
-                        ("en", def.challenge.description_en ?? ""),
-                        ("ru", def.challenge.description_ru ?? ""));
+                    dict[nameKey] = langCode == "en" ? (def.name_en ?? def.name) : (def.name_ru ?? def.name);
+                    changed = true;
                 }
+                if (!dict.ContainsKey(descKey))
+                {
+                    dict[descKey] = langCode == "en" ? (def.description_en ?? "-") : (def.description_ru ?? "-");
+                    changed = true;
+                }
+                if (def.challenge != null && !string.IsNullOrEmpty(def.challenge.descriptionKey) && !dict.ContainsKey(def.challenge.descriptionKey))
+                {
+                    dict[def.challenge.descriptionKey] = langCode == "en" ? (def.challenge.description_en ?? "") : (def.challenge.description_ru ?? "");
+                    changed = true;
+                }
+                if (changed)
+                    File.WriteAllText(path, LocalizationDatabase.SerializeTranslations(dict));
             }
 
-            EditorUtility.SetDirty(_localizationDatabase);
+            AssetDatabase.Refresh();
         }
+
+        private static Dictionary<string, string> LoadTranslationDict(string path)
+        {
+            var dict = new Dictionary<string, string>(StringComparer.Ordinal);
+            if (!File.Exists(path)) return dict;
+            try
+            {
+                string json = File.ReadAllText(path);
+                var wrapped = json.TrimStart().StartsWith("{") && json.Contains("\"entries\"") ? json : "{\"entries\":[]}";
+                var sd = JsonUtility.FromJson<StringDictWrapper>(wrapped);
+                if (sd?.entries != null)
+                    foreach (var e in sd.entries)
+                        if (e != null && !string.IsNullOrEmpty(e.key))
+                            dict[e.key] = e.value ?? "";
+            }
+            catch { }
+            return dict;
+        }
+
+        [Serializable]
+        private class StringDictWrapper { public List<KeyVal> entries; }
+        [Serializable]
+        private class KeyVal { public string key; public string value; }
 
         #region Helpers
 

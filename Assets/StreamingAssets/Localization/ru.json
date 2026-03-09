@@ -1,0 +1,516 @@
+{
+  "entries": [
+    {
+      "key": "challenge_100k_total_distance",
+      "value": "Пробегите в общей сложности 100км"
+    },
+    {
+      "key": "challenge_10k_highscore",
+      "value": "Достигните рекорда в 10000 очков"
+    },
+    {
+      "key": "challenge_10k_total_dashes",
+      "value": "Сделайте рывок в общей сложности 10 тысяч раз"
+    },
+    {
+      "key": "challenge_50_kill_streak",
+      "value": "Достигните серии из 50 убийств"
+    },
+    {
+      "key": "challenge_50k_coins_collected",
+      "value": "Соберите 50000 монет"
+    },
+    {
+      "key": "challenge_50k_jumps",
+      "value": "Совершите 50000 прыжков"
+    },
+    {
+      "key": "challenge_5k_bullets_deflected",
+      "value": "Отразите 5000 пуль"
+    },
+    {
+      "key": "challenge_5k_enemies_killed",
+      "value": "Победите 5000 врагов"
+    },
+    {
+      "key": "challenge_fragments_collected_crystal",
+      "value": "Соберите 3 осколка во время забегов"
+    },
+    {
+      "key": "katana_description_aegis",
+      "value": "Поглощает один смертельный удар"
+    },
+    {
+      "key": "katana_description_aurora",
+      "value": "Множитель серии монет до 5x"
+    },
+    {
+      "key": "katana_description_bamboo",
+      "value": "Немного быстрее смена полос"
+    },
+    {
+      "key": "katana_description_berserker",
+      "value": "Рывок сбрасывается при убийстве"
+    },
+    {
+      "key": "katana_description_celestial",
+      "value": "Двойной прыжок, медленное падение, очки 1.5x"
+    },
+    {
+      "key": "katana_description_copper",
+      "value": "Быстрое ускорение"
+    },
+    {
+      "key": "katana_description_crimson",
+      "value": "Продлённая неуязвимость рывка"
+    },
+    {
+      "key": "katana_description_crystal",
+      "value": "Двойной прыжок"
+    },
+    {
+      "key": "katana_description_daishe",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_dragonfire",
+      "value": "Взрывной рывок и 2x урон рывка"
+    },
+    {
+      "key": "katana_description_eclipse",
+      "value": "Цепные рывки становятся сильнее"
+    },
+    {
+      "key": "katana_description_fulgur",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_gold",
+      "value": "Удваивает собранные деньги"
+    },
+    {
+      "key": "katana_description_gray_fox",
+      "value": "Даёт деньги за побежденных врагов"
+    },
+    {
+      "key": "katana_description_hf",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_hf_prot",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_iron",
+      "value": "Быстрое восстановление рывков"
+    },
+    {
+      "key": "katana_description_jade",
+      "value": "Сбалансированная и надёжная"
+    },
+    {
+      "key": "katana_description_lightsaber",
+      "value": "Отражает пули врагов прямо в них"
+    },
+    {
+      "key": "katana_description_marathon",
+      "value": "Множитель очков 2x, экстремальная скорость"
+    },
+    {
+      "key": "katana_description_midas",
+      "value": "Тройные монеты, серия монет, магнит"
+    },
+    {
+      "key": "katana_description_murasama",
+      "value": "Двойной прыжок"
+    },
+    {
+      "key": "katana_description_naginata",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_obsidian",
+      "value": "Высокая начальная скорость"
+    },
+    {
+      "key": "katana_description_oni",
+      "value": "Щит поглощает один удар, огромный урон рывка"
+    },
+    {
+      "key": "katana_description_overian",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_phantom",
+      "value": "Неуязвимость после приземления"
+    },
+    {
+      "key": "katana_description_pixel",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_ronin",
+      "value": "Ускорение после убийства врагов"
+    },
+    {
+      "key": "katana_description_rusty",
+      "value": "Медленная, но мощные рывки"
+    },
+    {
+      "key": "katana_description_sakura",
+      "value": "Магнит для монет"
+    },
+    {
+      "key": "katana_description_sentinel",
+      "value": "Щит, отражение пуль, танковая сборка"
+    },
+    {
+      "key": "katana_description_serpent",
+      "value": "Смена полосы даёт краткую неуязвимость"
+    },
+    {
+      "key": "katana_description_shinobi",
+      "value": "Призрачный шаг при приземлении"
+    },
+    {
+      "key": "katana_description_starter",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_steel_blade",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_stormbreaker",
+      "value": "Взрыв в конце рывка наносит урон врагам"
+    },
+    {
+      "key": "katana_description_tempest",
+      "value": "Замедленное падение в воздухе"
+    },
+    {
+      "key": "katana_description_thermal",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_titanium",
+      "value": "Множитель очков 1.25x"
+    },
+    {
+      "key": "katana_description_venom",
+      "value": "Увеличенный урон рывка"
+    },
+    {
+      "key": "katana_description_void",
+      "value": "Убийство врагов восстанавливает рывки"
+    },
+    {
+      "key": "katana_description_windwalker",
+      "value": "Двойной прыжок, медленное падение"
+    },
+    {
+      "key": "katana_description_wooden",
+      "value": "-"
+    },
+    {
+      "key": "katana_description_zweihander",
+      "value": "-"
+    },
+    {
+      "key": "katana_name_aegis",
+      "value": "Эгида"
+    },
+    {
+      "key": "katana_name_aurora",
+      "value": "Аврора"
+    },
+    {
+      "key": "katana_name_bamboo",
+      "value": "Бамбуковый клинок"
+    },
+    {
+      "key": "katana_name_berserker",
+      "value": "Берсерк"
+    },
+    {
+      "key": "katana_name_celestial",
+      "value": "Небесная"
+    },
+    {
+      "key": "katana_name_copper",
+      "value": "Медное лезвие"
+    },
+    {
+      "key": "katana_name_crimson",
+      "value": "Багровый прилив"
+    },
+    {
+      "key": "katana_name_crystal",
+      "value": "Кристальная"
+    },
+    {
+      "key": "katana_name_daishe",
+      "value": "Дайсё"
+    },
+    {
+      "key": "katana_name_dragonfire",
+      "value": "Драконье пламя"
+    },
+    {
+      "key": "katana_name_eclipse",
+      "value": "Затмение"
+    },
+    {
+      "key": "katana_name_fulgur",
+      "value": "Фульгур"
+    },
+    {
+      "key": "katana_name_gold",
+      "value": "Золото"
+    },
+    {
+      "key": "katana_name_gray_fox",
+      "value": "Грей Фокс"
+    },
+    {
+      "key": "katana_name_hf",
+      "value": "ВЧ-клинок"
+    },
+    {
+      "key": "katana_name_hf_prot",
+      "value": "ВЧ-прототип"
+    },
+    {
+      "key": "katana_name_iron",
+      "value": "Железный танто"
+    },
+    {
+      "key": "katana_name_jade",
+      "value": "Нефритовый резец"
+    },
+    {
+      "key": "katana_name_lightsaber",
+      "value": "Световая катана"
+    },
+    {
+      "key": "katana_name_marathon",
+      "value": "Марафон"
+    },
+    {
+      "key": "katana_name_midas",
+      "value": "Прикосновение Мидаса"
+    },
+    {
+      "key": "katana_name_murasama",
+      "value": "Мурасама"
+    },
+    {
+      "key": "katana_name_naginata",
+      "value": "Нагината"
+    },
+    {
+      "key": "katana_name_obsidian",
+      "value": "Обсидиановый осколок"
+    },
+    {
+      "key": "katana_name_oni",
+      "value": "Секира Они"
+    },
+    {
+      "key": "katana_name_overian",
+      "value": "Оверианец"
+    },
+    {
+      "key": "katana_name_phantom",
+      "value": "Призрачный клинок"
+    },
+    {
+      "key": "katana_name_pixel",
+      "value": "Пиксель"
+    },
+    {
+      "key": "katana_name_ronin",
+      "value": "Клинок ронина"
+    },
+    {
+      "key": "katana_name_rusty",
+      "value": "Ржавая катана"
+    },
+    {
+      "key": "katana_name_sakura",
+      "value": "Сакура"
+    },
+    {
+      "key": "katana_name_sentinel",
+      "value": "Страж"
+    },
+    {
+      "key": "katana_name_serpent",
+      "value": "Змеиный клык"
+    },
+    {
+      "key": "katana_name_shinobi",
+      "value": "Синоби"
+    },
+    {
+      "key": "katana_name_starter",
+      "value": "Стартовая"
+    },
+    {
+      "key": "katana_name_steel_blade",
+      "value": "Стальной клинок"
+    },
+    {
+      "key": "katana_name_stormbreaker",
+      "value": "Гроза"
+    },
+    {
+      "key": "katana_name_tempest",
+      "value": "Буря"
+    },
+    {
+      "key": "katana_name_thermal",
+      "value": "Термальная катана"
+    },
+    {
+      "key": "katana_name_titanium",
+      "value": "Титановый клинок"
+    },
+    {
+      "key": "katana_name_venom",
+      "value": "Ядовитый клык"
+    },
+    {
+      "key": "katana_name_void",
+      "value": "Рассекатель пустоты"
+    },
+    {
+      "key": "katana_name_windwalker",
+      "value": "Странник ветра"
+    },
+    {
+      "key": "katana_name_wooden",
+      "value": "Деревянная катана"
+    },
+    {
+      "key": "katana_name_zweihander",
+      "value": "Цвайхендер"
+    },
+    {
+      "key": "rarity_challenge",
+      "value": "Испытания"
+    },
+    {
+      "key": "rarity_common",
+      "value": "Обычный"
+    },
+    {
+      "key": "rarity_epic",
+      "value": "Эпический"
+    },
+    {
+      "key": "rarity_legendary",
+      "value": "Легендарный"
+    },
+    {
+      "key": "rarity_rare",
+      "value": "Редкий"
+    },
+    {
+      "key": "tip_1",
+      "value": "Делайте рывок в противника чтобы победить его!"
+    },
+    {
+      "key": "tip_2",
+      "value": "Самурай блокирует пули автоматически!"
+    },
+    {
+      "key": "tip_3",
+      "value": "Меняй линии чтобы избежать столкновений!"
+    },
+    {
+      "key": "tip_4",
+      "value": "На некоторых катанах есть двойной прыжок!"
+    },
+    {
+      "key": "tip_5",
+      "value": "Собирай монеты чтобы открыть новые катаны!"
+    },
+    {
+      "key": "ui_back",
+      "value": "< назад"
+    },
+    {
+      "key": "ui_enabled",
+      "value": "Включено"
+    },
+    {
+      "key": "ui_go",
+      "value": "ПОГНАЛИ!"
+    },
+    {
+      "key": "ui_highscore",
+      "value": "рекорд"
+    },
+    {
+      "key": "ui_inventory",
+      "value": "Инвентарь"
+    },
+    {
+      "key": "ui_inventory_buy_now",
+      "value": "Купить эту"
+    },
+    {
+      "key": "ui_inventory_buy_random",
+      "value": "Случайный"
+    },
+    {
+      "key": "ui_language",
+      "value": "Язык"
+    },
+    {
+      "key": "ui_main_menu",
+      "value": "Закончить забег"
+    },
+    {
+      "key": "ui_music",
+      "value": "Музыка"
+    },
+    {
+      "key": "ui_quality",
+      "value": "Качество"
+    },
+    {
+      "key": "ui_resume",
+      "value": "Продолжить"
+    },
+    {
+      "key": "ui_settings",
+      "value": "Настройки"
+    },
+    {
+      "key": "ui_settings_quality_high",
+      "value": "Высокие"
+    },
+    {
+      "key": "ui_settings_quality_low",
+      "value": "Низкие"
+    },
+    {
+      "key": "ui_settings_quality_medium",
+      "value": "Средние"
+    },
+    {
+      "key": "ui_sfx",
+      "value": "SFX"
+    },
+    {
+      "key": "ui_tap_to_start",
+      "value": "Нажми, чтобы начать"
+    },
+    {
+      "key": "ui_vibration",
+      "value": "Вибрация"
+    }
+  ]
+}

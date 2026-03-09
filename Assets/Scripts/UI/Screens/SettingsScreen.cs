@@ -140,14 +140,14 @@ namespace Runner.UI
         {
             if (languageDropdown == null) return;
             if (LocalizationController.Singleton == null) return;
-            if (LocalizationController.Singleton.database == null) return;
+            if (LocalizationController.Singleton.Database == null) return;
 
             languageDropdown.ClearOptions();
             languageCodes.Clear();
 
             var options = new List<TMP_Dropdown.OptionData>();
 
-            foreach (var language in LocalizationController.Singleton.database.languages)
+            foreach (var language in LocalizationController.Singleton.Database.Languages)
             {
                 if (language == null) continue;
                 options.Add(new TMP_Dropdown.OptionData(language.displayName));
