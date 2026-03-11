@@ -198,10 +198,10 @@ public class LocalizationDatabaseWindow : EditorWindow
     {
         using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
         {
-            config = (LocalizationConfig)EditorGUILayout.ObjectField("Config", config, typeof(LocalizationConfig), false, GUILayout.MinWidth(200));
+            config = (LocalizationConfig)EditorGUILayout.ObjectField("Config", config, typeof(LocalizationConfig), false, GUILayout.MinWidth(600));
             if (config == null)
             {
-                folderPath = EditorGUILayout.TextField("Folder", folderPath, GUILayout.Width(150));
+                folderPath = EditorGUILayout.TextField("Folder", folderPath, GUILayout.Width(450));
             }
 
             if (GUILayout.Button("Reload", GUILayout.Width(60)))
@@ -239,11 +239,18 @@ public class LocalizationDatabaseWindow : EditorWindow
 
             using (new EditorGUILayout.HorizontalScope())
             {
-                newLanguageCode = EditorGUILayout.TextField("Code", newLanguageCode, GUILayout.Width(80));
-                newLanguageDisplayName = EditorGUILayout.TextField("Display Name", newLanguageDisplayName, GUILayout.Width(120));
+                using (new EditorGUILayout.HorizontalScope(GUILayout.Width(390), GUILayout.ExpandWidth(false)))
+                {
+                    newLanguageCode = EditorGUILayout.TextField("Code", newLanguageCode);
+                }
+                using (new EditorGUILayout.HorizontalScope(GUILayout.Width(400), GUILayout.ExpandWidth(false)))
+                {
+                    newLanguageDisplayName = EditorGUILayout.TextField("Display Name", newLanguageDisplayName);
+                }
+                GUILayout.FlexibleSpace();
                 using (new EditorGUI.DisabledScope(string.IsNullOrWhiteSpace(newLanguageCode)))
                 {
-                    if (GUILayout.Button("Add Language", GUILayout.Width(110)))
+                    if (GUILayout.Button("Add Language", GUILayout.Width(110), GUILayout.ExpandWidth(false)))
                     {
                         AddLanguage(newLanguageCode.Trim(), newLanguageDisplayName.Trim());
                         newLanguageCode = "";
