@@ -81,6 +81,7 @@ namespace Runner.Core
         public float RunDistance => Player != null ? Player.transform.position.z - startZ : 0f;
         public int Score { get; private set; }
         public int ScoreMultiplier { get; private set; } = 1;
+        public float CombinedScoreMultiplier => ScoreMultiplier * (AbilityManager.Instance != null ? AbilityManager.Instance.GetScoreMultiplier() : 1f);
         public bool IsMagnetActive { get; private set; }
         public bool IsSpeedBoostActive { get; private set; }
 
@@ -110,7 +111,7 @@ namespace Runner.Core
         public event Action OnGameOver;
         public event Action OnGameRestarted;
         public event Action<BiomeData> OnBiomeChanged;
-        public event Action<int> OnMultiplierChanged;
+        public event Action<float> OnMultiplierChanged;
         public event Action<bool> OnMagnetChanged;
         public event Action<bool> OnSpeedBoostChanged;
         public event Action<int> OnScoreChanged;
@@ -510,7 +511,7 @@ namespace Runner.Core
                 if (multiplierTimer <= 0f)
                 {
                     ScoreMultiplier = 1;
-                    OnMultiplierChanged?.Invoke(ScoreMultiplier);
+                    OnMultiplierChanged?.Invoke(CombinedScoreMultiplier);
                 }
             }
 
@@ -714,7 +715,7 @@ namespace Runner.Core
             multiplierTimer = duration;
             multiplierDuration = duration;
             Sound?.PlayPowerupCollect();
-            OnMultiplierChanged?.Invoke(ScoreMultiplier);
+            OnMultiplierChanged?.Invoke(CombinedScoreMultiplier);
         }
 
         public void ActivateMagnet(float duration)

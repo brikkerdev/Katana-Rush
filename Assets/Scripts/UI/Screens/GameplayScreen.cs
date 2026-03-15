@@ -131,7 +131,7 @@ namespace Runner.UI
             displayedScore = Game.Instance.Score;
             lastScoreValue = displayedScore;
             UpdateScoreDisplay(displayedScore);
-            ShowMultiplier(Game.Instance.ScoreMultiplier);
+            ShowMultiplier(Game.Instance.CombinedScoreMultiplier);
         }
 
         private void ResetDisplay()
@@ -150,7 +150,8 @@ namespace Runner.UI
 
             if (multiplierContainer != null)
             {
-                multiplierContainer.SetActive(false);
+                multiplierContainer.SetActive(true);
+                ShowMultiplier(1f);
             }
 
             magnetActive = false;
@@ -210,11 +211,11 @@ namespace Runner.UI
             }
         }
 
-        private void HandleMultiplierChanged(int multiplier)
+        private void HandleMultiplierChanged(float multiplier)
         {
             ShowMultiplier(multiplier);
 
-            if (multiplier > 1)
+            if (multiplier > 1f)
             {
                 multiplierActive = true;
                 if (multiplierTimerBar != null)
@@ -252,44 +253,43 @@ namespace Runner.UI
             }
         }
 
-        public void ShowMultiplier(int multiplier)
+        public void ShowMultiplier(float multiplier)
         {
             if (multiplierContainer == null) return;
 
             multiplierScaleTween?.Kill();
             multiplierPunchTween?.Kill();
 
-            if (multiplier > 1)
+            string multiplierString;
+            if (multiplier == Mathf.FloorToInt(multiplier))
             {
-                if (multiplierText != null)
-                {
-                    multiplierText.text = $"x{multiplier}";
-                }
-
-                if (!multiplierContainer.activeSelf)
-                {
-                    multiplierContainer.SetActive(true);
-                    multiplierContainer.transform.localScale = Vector3.zero;
-                    multiplierScaleTween = multiplierContainer.transform
-                        .DOScale(1f, 0.4f)
-                        .SetUpdate(true)
-                        .SetEase(Ease.OutBack);
-                }
-                else
-                {
-                    multiplierContainer.transform.localScale = Vector3.one;
-                    multiplierPunchTween = multiplierContainer.transform
-                        .DOPunchScale(Vector3.one * 0.3f, 0.3f, 5, 0.5f)
-                        .SetUpdate(true);
-                }
+                multiplierString = $"x{Mathf.FloorToInt(multiplier)}";
             }
             else
             {
+                multiplierString = $"x{multiplier:F1}";
+            }
+
+            if (multiplierText != null)
+            {
+                multiplierText.text = multiplierString;
+            }
+
+            if (!multiplierContainer.activeSelf)
+            {
+                multiplierContainer.SetActive(true);
+                multiplierContainer.transform.localScale = Vector3.zero;
                 multiplierScaleTween = multiplierContainer.transform
-                    .DOScale(0f, 0.3f)
+                    .DOScale(1f, 0.4f)
                     .SetUpdate(true)
-                    .SetEase(Ease.InBack)
-                    .OnComplete(() => multiplierContainer.SetActive(false));
+                    .SetEase(Ease.OutBack);
+            }
+            else
+            {
+                multiplierContainer.transform.localScale = Vector3.one;
+                multiplierPunchTween = multiplierContainer.transform
+                    .DOPunchScale(Vector3.one * 0.3f, 0.3f, 5, 0.5f)
+                    .SetUpdate(true);
             }
         }
 

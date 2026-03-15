@@ -1,6 +1,7 @@
 using UnityEngine;
 using Runner.Player.Data;
 using Runner.Player.Core;
+using DG.Tweening;
 
 namespace Runner.Player.Visual
 {
@@ -13,8 +14,15 @@ namespace Runner.Player.Visual
         [Header("Katana Mount")]
         [SerializeField] private Transform katanaMountPoint;
 
+        [Header("Shield")]
+        [SerializeField] private Color shieldColor = new Color(0, 1, 1, 1);
+        [SerializeField] private Material shieldMaterial;
+        [SerializeField] private float shieldFadeInDuration = 0.3f;
+        [SerializeField] private float shieldFadeOutDuration = 0.2f;
+
         private MovementSettings settings;
         private PlayerController controller;
+        private Tween shieldTween;
 
         private float currentTilt;
         private Vector3 currentScale;
@@ -42,6 +50,12 @@ namespace Runner.Player.Visual
             if (meshTransform == null && modelRoot != null)
             {
                 meshTransform = modelRoot.GetChild(0);
+            }
+
+            if (shieldMaterial != null)
+            {
+                shieldMaterial.SetColor("_ShieldColor", shieldColor);
+                shieldMaterial.SetFloat("_ShieldOpacity", 0);
             }
 
             EnsureVisible();
@@ -73,6 +87,7 @@ namespace Runner.Player.Visual
 
             UpdateTilt();
             UpdateScale();
+            UpdateShield();
         }
 
         private void UpdateTilt()
@@ -171,6 +186,24 @@ namespace Runner.Player.Visual
             currentKatanaVisual.transform.localRotation = Quaternion.identity;
         }
 
+        private void UpdateShield()
+        {
+            if (shieldMaterial == null || controller == null) return;
+
+            bool shouldBeVisible = controller.IsInvincible;
+            float targetOpacity = shouldBeVisible ? 1f : 0f;
+            float currentOpacity = shieldMaterial.GetFloat("_ShieldOpacity");
+
+            if (currentOpacity != targetOpacity)
+            {
+                shieldTween?.Kill();
+                float duration = shouldBeVisible ? shieldFadeInDuration : shieldFadeOutDuration;
+                shieldTween = DOTween.To(() => currentOpacity,
+                    x => shieldMaterial.SetFloat("_ShieldOpacity", x),
+                    targetOpacity, duration);
+            }
+        }
+
         public void Reset()
         {
             currentTilt = 0f;
@@ -189,7 +222,18 @@ namespace Runner.Player.Visual
                 meshTransform.localScale = Vector3.one;
             }
 
+            if (shieldMaterial != null)
+            {
+                shieldTween?.Kill();
+                shieldMaterial.SetFloat("_ShieldOpacity", 0);
+            }
+
             EnsureVisible();
+        }
+
+        private void OnDestroy()
+        {
+            shieldTween?.Kill();
         }
     }
 }

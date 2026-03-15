@@ -15,12 +15,12 @@ MonoBehaviour:
   id: 90eb75cb-7a3f-450c-8cf0-23a5494997dd
   nameKey: katana_name_aegis
   descriptionKey: katana_description_aegis
-  icon: {fileID: 0}
+  icon: {fileID: -844685581, guid: 3c9fc62214c273347a6525d85927bce3, type: 3}
   rarity: 2
   playerPreset: {fileID: 11400000, guid: a9744b8ec27e1da46af3c0b525c6fa0b, type: 2}
-  modelPrefab: {fileID: 0}
-  bladeMaterial: {fileID: 0}
-  slashEffectPrefab: {fileID: 0}
+  modelPrefab: {fileID: 1721231793724535351, guid: 8e8dfa8c0d69e114f9018f8438474404, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 62b830f29ce75af44bfbb617841b7a8e, type: 2}
+  slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
   trailEffectPrefab: {fileID: 0}
   ability: {fileID: 11400000, guid: 56865efa7cf68464db98b2440d0df5fa, type: 2}
   challengeRequirement:
