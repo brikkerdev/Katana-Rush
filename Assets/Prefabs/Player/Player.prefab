@@ -133,6 +133,9 @@ MonoBehaviour:
   movementSettings: {fileID: 11400000, guid: cbb98b435cb2ab94eb8c006a7087a257, type: 2}
   defaultPreset: {fileID: 11400000, guid: 0f2d79442bc27c4479a4ba9c774ad02f, type: 2}
   showDebug: 0
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &3538244201773722387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +176,7 @@ MonoBehaviour:
   obstacleTag: Obstacle
   collectibleTag: Collectable
   enemyTag: Enemy
+  destructibleObstacleTag: DestructibleObstacle
   detectionRadius: 1.5
   detectionOffset: {x: 0, y: 1, z: 0}
   enemyLayer:
@@ -316,6 +320,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 25, y: 25, z: 0}
 --- !u!212 &4783913001941736469
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -361,6 +366,7 @@ SpriteRenderer:
   m_SortingLayerID: -1728537709
   m_SortingLayer: 1
   m_SortingOrder: 100
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -370,7 +376,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &3813736586831433055
 MonoBehaviour:
@@ -455,7 +460,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1834630474355312853}
