@@ -44,7 +44,7 @@ Material:
     - _ShadowStep: 0.328
     - _ShadowStepSmooth: 0.04
     - _ShieldOffset: 0.45
-    - _ShieldOpacity: 0.000000020029344
+    - _ShieldOpacity: 0
     - _ShieldSize: 1
     - _ShieldSpeed: 1
     - _SpecularStep: 0

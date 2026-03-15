@@ -15,12 +15,12 @@ MonoBehaviour:
   id: 5dd8d130-73db-4236-9b6e-68f7b7bf9194
   nameKey: katana_name_aurora
   descriptionKey: katana_description_aurora
-  icon: {fileID: 0}
+  icon: {fileID: 1878849340, guid: 1e0cf91f0f2eb5a42880086283d192ae, type: 3}
   rarity: 3
   playerPreset: {fileID: 11400000, guid: b73a12c734d11fb4da770260518584a8, type: 2}
-  modelPrefab: {fileID: 0}
-  bladeMaterial: {fileID: 0}
-  slashEffectPrefab: {fileID: 0}
+  modelPrefab: {fileID: 4297758989861615065, guid: 36e3988d1c7afe748b169516f5ebbd59, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: c4878d56d17bc964895e1b938f8d87b9, type: 2}
+  slashEffectPrefab: {fileID: 174940048960636371, guid: a7c5179f5d6f652459bc5b20deeacd69, type: 3}
   trailEffectPrefab: {fileID: 0}
   ability: {fileID: 11400000, guid: e6fd70564340a744db6e7e36989b8430, type: 2}
   challengeRequirement:

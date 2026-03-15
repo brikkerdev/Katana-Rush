@@ -15,12 +15,12 @@ MonoBehaviour:
   id: 8536f0c1-2575-434e-ad31-be63d592c1ca
   nameKey: katana_name_bamboo
   descriptionKey: katana_description_bamboo
-  icon: {fileID: 0}
+  icon: {fileID: -955775987, guid: 8ee91d670505c4b4b8cd35a22165c591, type: 3}
   rarity: 0
   playerPreset: {fileID: 11400000, guid: 06c4aa9e533ecc641a9fdb4b82cecd91, type: 2}
-  modelPrefab: {fileID: 0}
-  bladeMaterial: {fileID: 0}
-  slashEffectPrefab: {fileID: 0}
+  modelPrefab: {fileID: 8300137342455662438, guid: 850e3271f3c8d2440947225ae0f35dff, type: 3}
+  bladeMaterial: {fileID: 2100000, guid: 8be2d074fe3468849b0f6adf33a4ec32, type: 2}
+  slashEffectPrefab: {fileID: 6389406066330802589, guid: c17219c0ba5e3eb4cb4900a68b5a144e, type: 3}
   trailEffectPrefab: {fileID: 0}
   ability: {fileID: 11400000, guid: 4b9459f7bb57a394cbeb69299f2dfa08, type: 2}
   challengeRequirement:
